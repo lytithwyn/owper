@@ -131,7 +131,7 @@ struct lf_key {
   short no_keys;    /* 0x0002	Word	number of keys          */
                     /* 0x0004	????	Hash-Records            */
   
- union {
+ /*union { */ //removed by Matthew Morgan to fix g++ errors
 
     struct lf_hash {
       long ofs_nk;    /* 0x0000	D-Word	Offset of corresponding "nk"-Record  */
@@ -145,7 +145,7 @@ struct lf_key {
       long ofs_nk;    /* 0x0000	D-Word	Offset of corresponding "nk"-Record  */
       long hash;      /* 0x0004	D-Word	ASCII: the first 4 characters of the key-name,  */
     } lh_hash[1];
-  };
+/*  }; */ //removed by Matthew Morgan to fix g++ errors
 
 };
 
