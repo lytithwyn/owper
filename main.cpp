@@ -29,7 +29,7 @@
 
 extern "C"
 {
-	#include "include/ntreg.h"
+    #include "include/ntreg.h"
 }
 
 using std::cout;
@@ -44,16 +44,16 @@ using std::transform;
  * @return string The file name with the proper case (as it exists in the filesystem) or an empty string if it wasn't found.
  */
 string findFileCaseInsensitive(string directory, string fileName){
-	DIR *dirTest;
-	dirent *dirEntry;
+    DIR *dirTest;
+    dirent *dirEntry;
 
-	//make sure "directory" exists and is a directory
-	if(!(dirTest = opendir(directory.c_str()))){
-		return ""; //not a directory
-	}
+    //make sure "directory" exists and is a directory
+    if(!(dirTest = opendir(directory.c_str()))){
+        return ""; //not a directory
+    }
 
-	//convert the filename we were given to lower case before searching
-	string fileNameLower = fileName; // to fix freakiness in transform
+    //convert the filename we were given to lower case before searching
+    string fileNameLower = fileName; // to fix freakiness in transform
     transform(fileName.begin(), fileName.end(), fileNameLower.begin(),
         static_cast < int(*)(int) > (tolower));
 
@@ -79,13 +79,13 @@ string findFileCaseInsensitive(string directory, string fileName){
 }
 
 int main(int argc, char* argv[]){
-	string testDir = "/media/disk/WINDOWS/system32/config/";
-	string samFile = findFileCaseInsensitive(testDir, "sam");
-	string systemFile = findFileCaseInsensitive(testDir, "system");
+    string testDir = "/media/disk/WINDOWS/system32/config/";
+    string samFile = findFileCaseInsensitive(testDir, "sam");
+    string systemFile = findFileCaseInsensitive(testDir, "system");
 
-	cout << "Found SAM file: " << samFile << endl;
-	cout << "Found SYSTEM file: " << systemFile << endl;
+    cout << "Found SAM file: " << samFile << endl;
+    cout << "Found SYSTEM file: " << systemFile << endl;
 
-	return 1;
+    return 1;
 
 }
