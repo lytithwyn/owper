@@ -30,6 +30,7 @@
 extern "C"
 {
     #include "include/ntreg.h"
+    #include "include/sam.h"
 }
 
 using std::cout;
