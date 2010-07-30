@@ -38,6 +38,20 @@ using std::string;
 using std::transform;
 
 /**
+ * Take a string, and return a copy of it all lower case
+ * @param string The string to convert to lower case
+ * @return string The string in all lower case
+ */
+string stringToLower(string inString)
+{
+    string stringLower = inString; // to fix freakiness in transform
+    transform(inString.begin(), inString.end(), stringLower.begin(),
+        static_cast < int(*)(int) > (tolower));
+
+    return stringLower;
+}
+
+/**
  * Find a file in the specified directory, ignoring case.
  * @param string directory The directory in which to search
  * @param string fileName The file name to look for (case ignored)
@@ -53,9 +67,7 @@ string findFileCaseInsensitive(string directory, string fileName){
     }
 
     //convert the filename we were given to lower case before searching
-    string fileNameLower = fileName; // to fix freakiness in transform
-    transform(fileName.begin(), fileName.end(), fileNameLower.begin(),
-        static_cast < int(*)(int) > (tolower));
+    string fileNameLower = stringToLower(fileName);
 
     string testFileName;
     string testFileNameLower;
@@ -65,10 +77,7 @@ string findFileCaseInsensitive(string directory, string fileName){
         testFileNameLower.erase();
 
         testFileName = dirEntry->d_name;
-        testFileNameLower = testFileName; // to fix freakiness in transform
-
-        transform(testFileName.begin(), testFileName.end(), testFileNameLower.begin(),
-            static_cast < int(*)(int) > (tolower));
+        testFileNameLower = stringToLower(testFileName);
 
         if(testFileNameLower == fileNameLower)
             return testFileName;
