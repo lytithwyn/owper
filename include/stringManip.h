@@ -8,7 +8,7 @@
 using std::string;
 using std::transform;
 
-namespace stringManip{
+namespace stringManip {
     string stringToLower(string inString);
 }
 

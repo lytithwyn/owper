@@ -7,7 +7,7 @@
 #include "include/stringManip.h"
 using stringManip::stringToLower;
 
-namespace fileManip{
+namespace fileManip {
     string findFileCaseInsensitive(string directory, string fileName);
 }
 

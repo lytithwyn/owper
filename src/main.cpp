@@ -27,8 +27,7 @@
 #include <vector>
 #include <algorithm>
 
-extern "C"
-{
+extern "C" {
     #include "include/ntreg.h"
     #include "include/sam.h"
 }
@@ -42,7 +41,7 @@ using std::cout;
 using std::endl;
 using std::string;
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
     string testDir = "/media/disk/WINDOWS/system32/config/";
     string samFile = findFileCaseInsensitive(testDir, "sam");
     string systemFile = findFileCaseInsensitive(testDir, "system");
