@@ -8,7 +8,8 @@
 using std::string;
 using std::transform;
 
-string stringToLower(string inString);
-string findFileCaseInsensitive(string directory, string fileName);
+namespace stringManip{
+    string stringToLower(string inString);
+}
 
 #endif

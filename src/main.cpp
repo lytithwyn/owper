@@ -34,6 +34,9 @@ extern "C"
 }
 
 #include "include/stringManip.h"
+#include "include/fileManip.h"
+
+using fileManip::findFileCaseInsensitive;
 
 using std::cout;
 using std::endl;

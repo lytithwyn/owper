@@ -5,7 +5,10 @@
 #include <dirent.h>
 
 #include "include/stringManip.h"
+using stringManip::stringToLower;
 
-string findFileCaseInsensitive(string directory, string fileName);
+namespace fileManip{
+    string findFileCaseInsensitive(string directory, string fileName);
+}
 
 #endif
