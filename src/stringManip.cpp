@@ -14,4 +14,24 @@ namespace stringManip {
 
         return stringLower;
     }
+
+    /**
+     * Take an int and convert it to a string
+     * @param int to convert
+     * @return string
+     */
+    char* intToString(int num)
+    {
+        char *castingString;
+        int len;
+
+        len = snprintf(NULL, 0, "%d", num);
+
+        if(!(castingString = (char *)calloc(1, (len + 1) * sizeof(char))))
+                return string((char *)"");
+
+        snprintf(castingString, len + 1, "%d", num);
+
+        return string(returnString);
+    }
 }

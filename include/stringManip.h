@@ -10,6 +10,7 @@ using std::transform;
 
 namespace stringManip {
     string stringToLower(string inString);
+    string intToString(int num)
 }
 
 #endif
