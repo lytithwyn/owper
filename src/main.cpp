@@ -34,20 +34,23 @@ extern "C" {
 
 #include "include/stringManip.h"
 #include "include/fileManip.h"
-
-using fileManip::findFileCaseInsensitive;
+#include "include/owpException.h"
+#include "include/hive.h"
 
 using std::cout;
 using std::endl;
 using std::string;
 
-int main(int argc, char* argv[]) {
-    string testDir = "/media/disk/WINDOWS/system32/config/";
-    string samFile = findFileCaseInsensitive(testDir, "sam");
-    string systemFile = findFileCaseInsensitive(testDir, "system");
+using namespace owper;
 
-    cout << "Found SAM file: " << samFile << endl;
-    cout << "Found SYSTEM file: " << systemFile << endl;
+int main(int argc, char* argv[]) {
+    string testHive = "/media/disk/WINDOWS/system32/config/SAM";
+
+    try {
+        owper::hive myHive(testHive.c_str());
+    }catch(exception& e) {
+        cout << e.what() << endl;
+    }
 
     return 1;
 
