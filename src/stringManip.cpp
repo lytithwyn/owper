@@ -20,7 +20,7 @@ namespace stringManip {
      * @param int to convert
      * @return string
      */
-    char* intToString(int num)
+    string intToString(int num)
     {
         char *castingString;
         int len;
@@ -32,6 +32,6 @@ namespace stringManip {
 
         snprintf(castingString, len + 1, "%d", num);
 
-        return string(returnString);
+        return string(castingString);
     }
 }
