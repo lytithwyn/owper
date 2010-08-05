@@ -39,7 +39,7 @@ namespace owper {
 
     class hive {
     private:
-        char     *fileName;        /* Hives filename */
+        string   fileName;         /* Hive's filename */
         int      fileDesc;         /* File descriptor (only valid if state == OPEN) */
         int      state;            /* Current state of hive */
         int      type;             /* Suggested type of hive. NOTE: Library will guess when
@@ -55,10 +55,11 @@ namespace owper {
         char     *buffer;          /* Files raw contents */
 
     public:
-        hive(char* fileName, int hiveMode = HMODE_RW);
+        hive(const char* fileName, int hiveMode = HMODE_RW);
+        ~hive();
 
         // accessors/modifiers
-        char* getFileName(){ return this->fileName; };
+        string getFileName(){ return this->fileName; };
         int   getType(){ return this->type; };
 
         reg_off travPath(reg_off startingOffest, char* path, int type);
