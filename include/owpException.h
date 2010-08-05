@@ -19,29 +19,28 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#ifndef OWP_EXCEPTION_H
+#define OWP_EXCEPTION_H
+
 #include <iostream>
 #include <exception>
 
 #include "include/stringManip.h"
 
+using std::exception;
+
 namespace owper{
 
-    class owpException {
+    class owpException : public exception {
     public:
         string errorMessage;
         int errorCode;
+        string formattedMessage;
 
-        owpException(string message = (char*)"", int code = 0){ this->errorMessage = message; this->errorCode = code; };
-
-        char* what() {
-            string errorCodeString = stringManip::intToString(errorCode);
-
-            int messageLength = errorMessage.size() + errorCodeString.size();
-
-            char* outMessage[messageLength];
-            snprintf(outMessage, "%s [%s]", messageLength + 4, errorMessage, errorCodeString);
-
-            return outMessage;
-        }
+        owpException(string message = (char*)"", int code = 0);
+        virtual ~owpException() throw();
+        virtual const char* what() const throw();
     };
 }
+
+#endif
