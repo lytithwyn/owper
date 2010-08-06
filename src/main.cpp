@@ -1,8 +1,9 @@
 /*
- * owper - a graphical version of the well known chntpw password changer
+ * This file is part of owper - a graphical version of the well known chntpw password changer
  * Copyright (C) 2010 Matthew Morgan
  *
- * Much of this program is modified from chntpw by Petter Nordahl-Hagen
+ * Some code was borrowed/modified from the chntpw project
+ * Copyright (c) 1997-2007 Petter Nordahl-Hagen
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
