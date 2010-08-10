@@ -38,8 +38,8 @@ namespace owper{
         int errorCode;
         string formattedMessage;
 
-        owpException(string message = (char*)"", int code = 0);
-        virtual ~owpException() throw();
+        owpException(string message = (char*)"", int code = -9999);
+        virtual ~owpException() throw(){ /* we have no heap variables--nothing to do */ };
         virtual const char* what() const throw();
     };
 }

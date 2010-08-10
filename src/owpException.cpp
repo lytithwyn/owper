@@ -23,26 +23,19 @@
 #include "include/owpException.h"
 
 namespace owper {
-    owpException::owpException(string message/* = (char*)""*/, int code/* = 0*/) {
+    owpException::owpException(string message/* = (char*)""*/, int code/* = -9999*/) {
         this->errorMessage = message;
         this->errorCode = code;
 
-        string errorCodeString = stringManip::intToString(errorCode);
+        string errorCodeString = "";
 
-        this->formattedMessage = this->errorMessage;
-        this->formattedMessage += " [Error#: ";
-        this->formattedMessage += errorCodeString;
-        this->formattedMessage += "]";
+        if(code != -9999) {
+            errorCodeString  = " [Error#: ";
+            errorCodeString += stringManip::intToString(errorCode);
+            errorCodeString += "]";
+        }
 
-        //int messageLength = errorMessage.size() + errorCodeString.size();
-
-        //this->formattedMessage = new char[messageLength];
-        //snprintf(this->formattedMessage, messageLength + 4, "%s [%s]", errorMessage.c_str(), errorCodeString.c_str());
-    }
-
-    owpException::~owpException() throw() {
-        //if(this->formattedMessage)
-        //    delete[] (this->formattedMessage);
+        this->formattedMessage = this->errorMessage + errorCodeString;
     }
 
     const char* owpException::what() const throw() {
