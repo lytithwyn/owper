@@ -28,19 +28,24 @@ using std::endl;
 
 namespace owper {
     hive::hive(const char* fileName, int hiveMode/* = HMODE_RW*/) {
-        int fileMode;
         //struct stat statBuff;
         //unsigned long pageOffset;
-        int curHiveMode;
 
         this->fileName = fileName;
         this->state = 0;
         this->size = 0;
         this->buffer = NULL;
 
-        if(hiveMode & HMODE_RO)
+        this->openHive(hiveMode);
+    }
+
+    void hive::openHive(int hiveMode) {
+        int fileMode;
+        int curHiveMode;
+
+        if(hiveMode & HMODE_RO) {
             fileMode = O_RDONLY;
-        else
+        } else {
             fileMode = O_RDWR;
 
         this->fileDesc = open(this->fileName.c_str(), fileMode);
@@ -50,7 +55,7 @@ namespace owper {
                 string errorMessage = "Could not open hive file: ";
                 errorMessage += this->fileName;
                 throw(owpException(errorMessage));
-            }else {
+            } else {
                 cerr << "Failed to open hive [" << this->fileName << "] in RW mode, attempting RO" << endl;
                 this->fileDesc = open(this->fileName.c_str(), O_RDONLY);
                 if(this->fileDesc < 0) {
@@ -58,6 +63,7 @@ namespace owper {
                     errorMessage += this->fileName;
                     throw(owpException(errorMessage));
                 }
+            }
 
                 cerr << "Opened in RO mode." << endl;
                 curHiveMode |= HMODE_RO;

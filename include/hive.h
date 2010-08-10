@@ -64,6 +64,8 @@ namespace owper {
         int   getType(){ return this->type; };
 
         reg_off travPath(reg_off startingOffest, char* path, int type);
+    private:
+        void openHive(int hiveMode);
     };
 }
 
