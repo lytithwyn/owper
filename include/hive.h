@@ -69,6 +69,7 @@ namespace owper {
         reg_off travPath(reg_off startingOffest, char* path, int type);
     private:
         void openHive(int hiveMode);
+        void readHiveToBuffer();
     };
 }
 
