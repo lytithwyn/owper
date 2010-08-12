@@ -28,7 +28,6 @@ using std::endl;
 
 namespace owper {
     hive::hive(const char* fileName, int hiveMode/* = HMODE_RW*/) {
-        //struct stat statBuff;
         //unsigned long pageOffset;
 
         this->fileName = fileName;
@@ -42,6 +41,7 @@ namespace owper {
     void hive::openHive(int hiveMode) {
         int fileMode;
         int curHiveMode;
+        struct stat statBuff;
 
         if(hiveMode & HMODE_RO) {
             fileMode = O_RDONLY;
@@ -52,16 +52,13 @@ namespace owper {
 
         if(this->fileDesc < 0) {
             if(fileMode == O_RDONLY) {
-                string errorMessage = "Could not open hive file: ";
-                errorMessage += this->fileName;
-                throw(owpException(errorMessage));
+                throw(owpException(stringPrintf("Could not open hive file: %s", this->fileName.c_str())));
             } else {
-                cerr << "Failed to open hive [" << this->fileName << "] in RW mode, attempting RO" << endl;
+                cerr << stringPrintf("Failed to open hive: [\"%s\"] in RW mode, attempting RO", this->fileName.c_str());
+                cerr << endl;
                 this->fileDesc = open(this->fileName.c_str(), O_RDONLY);
                 if(this->fileDesc < 0) {
-                    string errorMessage = "Could not open hive file: ";
-                    errorMessage += this->fileName;
-                    throw(owpException(errorMessage));
+                    throw(owpException(stringPrintf("Could not open hive file: %s", this->fileName.c_str())));
                 }
             }
 
@@ -71,12 +68,16 @@ namespace owper {
         }
 
         this->state |= (curHiveMode|HMODE_OPEN);
-        cerr << "Opened hive: " << this->fileName << endl;
+        cerr << stringPrintf("Opened hive: %s", this->fileName.c_str()) << endl;
+
+        if ( fstat(this->fileDesc, &statBuff) ) {
+            throw(owpException(stringPrintf("Failed to fstat() file: %s", this->fileName.c_str())));
+        }
     }
 
     hive::~hive() {
         if(this->state & HMODE_OPEN) {
-            cerr << "Closing hive: " << this->fileName << endl;
+            cerr << stringPrintf("Closing hive: %s", this->fileName.c_str()) << endl;
             close(this->fileDesc);
         } else {
             cerr << "Not closing hive...not open" << endl;

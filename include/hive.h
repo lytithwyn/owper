@@ -34,6 +34,9 @@ extern "C" {
 }
 
 #include "include/owpException.h"
+#include "include/stringManip.h"
+
+using stringManip::stringPrintf;
 
 namespace owper {
     typedef int reg_off;
