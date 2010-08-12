@@ -56,4 +56,30 @@ namespace stringManip {
 
         return string(castingString);
     }
+
+    /**
+     * c++ string version of snprintf
+     * Note, this actually calls vsnprintf, so string vars
+     * passed in to be formatted must be char*'s
+     * @param string Format specifier
+     * @param ... Variables to insert into string
+     * @return string Formatted string
+     */
+    string stringPrintf(string formatSpecifier, ...) {
+        va_list varList;
+
+        //find the final output length
+        va_start(varList, formatSpecifier);
+        int len = vsnprintf(NULL, 0, formatSpecifier.c_str(), varList);
+        va_end(varList);
+
+        //now actually get the string
+        //we must restart the va_list, because after calling vsnprintf it's boogered
+        char conversionCharString[len + 1];
+        va_start(varList, formatSpecifier);
+        vsnprintf(conversionCharString, len + 1, formatSpecifier.c_str(), varList);
+        va_end(varList);
+
+        return (string)conversionCharString;
+    }
 }

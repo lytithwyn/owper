@@ -26,6 +26,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cstdarg>
 
 using std::string;
 using std::transform;
@@ -33,6 +34,7 @@ using std::transform;
 namespace stringManip {
     string stringToLower(string inString);
     string intToString(int num);
+    string stringPrintf(string formatSpecifier, ...);
 }
 
 #endif
