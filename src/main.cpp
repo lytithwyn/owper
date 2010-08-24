@@ -48,6 +48,8 @@ using namespace owper;
 int main(int argc, char* argv[]) {
     string testHive = "/media/disk/WINDOWS/system32/config/SAM";
 
+    //adding comment to test branching
+
     try {
         owper::hive myHive(testHive.c_str());
     }catch(exception& e) {
