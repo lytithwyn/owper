@@ -41,6 +41,7 @@ extern "C" {
 using std::cout;
 using std::endl;
 using std::string;
+using stringManip::stringPrintf;
 
 using namespace owper;
 
