@@ -39,6 +39,11 @@
 #ifndef _INCLUDE_SAM_H
 #define _INCLUDE_SAM_H 1
 
+#ifdef __cplusplus
+namespace ntreg {  //namespace wrapper added by Matthew Morgan
+    extern "C" {
+#endif
+
 /* This contains some policy settings for the account database */
 
 #define ACCOUNTDB_F_PATH "\\SAM\\Domains\\Account\\F"
@@ -232,5 +237,11 @@ struct group_C {
   char data[];
 
 };
+
+//close namespace
+#ifdef __cplusplus
+    }
+}
+#endif
 
 #endif

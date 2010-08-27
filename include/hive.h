@@ -29,14 +29,12 @@
 #include <fcntl.h>
 
 
-extern "C" {
-    #include "include/ntreg.h"
-}
-
+#include "include/ntreg.h"
 #include "include/owpException.h"
 #include "include/stringManip.h"
 
 using stringManip::stringPrintf;
+using namespace ntreg;
 
 namespace owper {
     typedef int reg_off;

@@ -41,7 +41,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "ntreg.h"
+#include "include/ntreg.h"
 
 /* Set to abort() and debug on more critical errors */
 #define DOCORE 0

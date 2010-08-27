@@ -28,10 +28,8 @@
 #include <vector>
 #include <algorithm>
 
-extern "C" {
-    #include "include/ntreg.h"
-    #include "include/sam.h"
-}
+#include "include/ntreg.h"
+#include "include/sam.h"
 
 #include "include/stringManip.h"
 #include "include/fileManip.h"
@@ -48,7 +46,8 @@ using namespace owper;
 int main(int argc, char* argv[]) {
     string testHive = "/media/disk/WINDOWS/system32/config/SAM";
 
-    //adding comment to test branching
+    char* myChar = ntreg::str_dup("test");
+    cout << myChar << endl;
 
     try {
         owper::hive myHive(testHive.c_str());

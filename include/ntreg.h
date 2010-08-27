@@ -43,6 +43,11 @@
 #ifndef _INCLUDE_NTREG_H
 #define _INCLUDE_NTREG_H 1
 
+#ifdef __cplusplus
+namespace ntreg {  //namespace wrapper added by Matthew Morgan
+    extern "C" {
+#endif
+
 #define SZ_MAX     4096       /* Max unicode strlen before we truncate */
 
 #define KEY_ROOT   0x2c         /* Type ID of ROOT key node */
@@ -148,7 +153,7 @@ struct lf_key {
   short id;         /* 0x0000	Word	ID: ASCII-"lf" = 0x666C or "lh" = 0x686c */
   short no_keys;    /* 0x0002	Word	number of keys          */
                     /* 0x0004	????	Hash-Records            */
-  
+
  /*union { */ //removed by Matthew Morgan to fix g++ errors
 
     struct lf_hash {
@@ -306,7 +311,7 @@ struct hive {
   int  filedesc;         /* File descriptor (only valid if state == OPEN) */
   int  state;            /* Current state of hive */
   int  type;             /* Suggested type of hive. NOTE: Library will guess when
-			    it loads it, but application may change it if needed */
+                it loads it, but application may change it if needed */
   int  pages;            /* Number of pages, total */
   int  useblk;           /* Total # of used blocks */
   int  unuseblk;         /* Total # of unused blocks */
@@ -374,10 +379,10 @@ int get_val_type(struct hive *hdesc, int vofs, char *path);
 int get_val_len(struct hive *hdesc, int vofs, char *path);
 void *get_val_data(struct hive *hdesc, int vofs, char *path, int val_type);
 struct keyval *get_val2buf(struct hive *hdesc, struct keyval *kv,
-			   int vofs, char *path, int type );
+               int vofs, char *path, int type );
 int get_dword(struct hive *hdesc, int vofs, char *path);
 int put_buf2val(struct hive *hdesc, struct keyval *kv,
-		int vofs, char *path, int type );
+        int vofs, char *path, int type );
 int put_dword(struct hive *hdesc, int vofs, char *path, int dword);
 void closeHive(struct hive *hdesc);
 int writeHive(struct hive *hdesc);
@@ -392,6 +397,12 @@ struct nk_key *add_key(struct hive *hdesc, int nkofs, char *name);
 int del_key(struct hive *hdesc, int nkofs, char *name);
 void rdel_keys(struct hive *hdesc, char *path, int nkofs);
 struct keyval *get_class(struct hive *hdesc, int curnk, char *path);
+
+//close namespace
+#ifdef __cplusplus
+    }
+}
+#endif
 
 #endif
 
