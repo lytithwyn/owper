@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gcc -I ./ -c src/ntreg.c -o ntreg.o
+gcc -I ./ -g -c src/ntreg.c -o ntreg.o
 
 g++ -I ./ src/main.cpp \
           src/stringManip.cpp \
