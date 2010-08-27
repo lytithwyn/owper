@@ -34,41 +34,38 @@
 #include "include/stringManip.h"
 
 using stringManip::stringPrintf;
-using namespace ntreg;
 
 namespace owper {
     typedef int reg_off;
 
     class hive {
     private:
-        string   fileName;         /* Hive's filename */
-        int      fileDesc;         /* File descriptor (only valid if state == OPEN) */
-        int      state;            /* Current state of hive */
-        int      type;             /* Suggested type of hive. NOTE: Library will guess when
-                                  it loads it, but application may change it if needed */
-        int      pages;            /* Number of pages, total */
-        int      usedBlocks;       /* Total # of used blocks */
-        int      unusedBlocks;     /* Total # of unused blocks */
-        int      usedBytes;        /* total # of bytes in useblk */
-        int      unusedBytes;      /* total # of bytes in unuseblk */
-        int      size;             /* Hives size (filesise) in bytes */
-        reg_off  rootOffset;       /* Offset of root-node */
-        short    nkIndexType;      /* Subkey-indextype the root key uses */
-        char     *buffer;          /* Files raw contents */
+        ntreg::hive *regHive;
 
     public:
         hive(const char* fileName, int hiveMode = HMODE_RW);
         ~hive();
 
         // accessors/modifiers
-        string getFileName(){ return this->fileName; };
-        int   getType(){ return this->type; };
+        string getFileName(){ return string(this->regHive->filename); };
+        int    getFileDesc(){ return this->regHive->filedesc; };
+        int    getState(){ return this->regHive->state; };
+        int    getType(){ return this->regHive->type; };
+        int    getPages(){ return this->regHive->pages; };
+        int    getUsedBlocks(){ return this->regHive->useblk; };
+        int    getUnusedBlocks(){ return this->regHive->unuseblk; };
+        int    getUsedBytes(){ return this->regHive->usetot; };
+        int    getUnusedBytes(){ return this->regHive->unusetot; };
+        int    getSize(){ return this->regHive->size; };
+        int    getRootOffset(){ return this->regHive->rootofs; };
+        short  getNkIndexType(){ return this->regHive->nkindextype; };
+        char   *getBuffer(){ return this->regHive->buffer; };
 
-        reg_off travPath(reg_off startingOffest, char* path, int type);
     private:
-        void openHive(int hiveMode);
-        void readHiveToBuffer();
+        void openHive(const char* fileName, int hiveMode);
+        void closeHive();
     };
+
 }
 
 #endif
