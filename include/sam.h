@@ -1,25 +1,11 @@
 /*
  * sam.h - known structures in the SAM hive of NT registry
- * 
+ *
  *****
  *
  * NTREG - Window registry file reader / writer library
  * Copyright (c) 1997-2007 Petter Nordahl-Hagen.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation;
- * version 2.1 of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * See file LGPL.txt for the full license.
- *
- */ 
-
-/*
  * Edits by Matthew Morgan, as marked
  * Copyright (c) 2010 Matthew Morgan
  *
@@ -196,7 +182,7 @@ struct user_V {
   int unknowna_7;      /* 0xc8 - zero ? */
 
   char data[4];        /* Data starts here. All pointers above is relative to this,
-			  that is V + 0xCC */
+              that is V + 0xCC */
 
 };
 

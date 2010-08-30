@@ -1,6 +1,6 @@
 /*
  * ntreg.h - NT Registry Hive access library, constants & structures
- * 
+ *
  * NOTE: defines are not frozen. It can and will change every release.
  *
  *****
@@ -8,20 +8,6 @@
  * NTREG - Window registry file reader / writer library
  * Copyright (c) 1997-2007 Petter Nordahl-Hagen.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation;
- * version 2.1 of the License.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * See file LGPL.txt for the full license.
- * 
- */ 
-
-/*
  * Edits by Matthew Morgan, as marked
  * Copyright (c) 2010 Matthew Morgan
  *
@@ -148,7 +134,7 @@ struct lf_key {
   short id;         /* 0x0000	Word	ID: ASCII-"lf" = 0x666C or "lh" = 0x686c */
   short no_keys;    /* 0x0002	Word	number of keys          */
                     /* 0x0004	????	Hash-Records            */
-  
+
  /*union { */ //removed by Matthew Morgan to fix g++ errors
 
     struct lf_hash {
@@ -306,7 +292,7 @@ struct hive {
   int  filedesc;         /* File descriptor (only valid if state == OPEN) */
   int  state;            /* Current state of hive */
   int  type;             /* Suggested type of hive. NOTE: Library will guess when
-			    it loads it, but application may change it if needed */
+                it loads it, but application may change it if needed */
   int  pages;            /* Number of pages, total */
   int  useblk;           /* Total # of used blocks */
   int  unuseblk;         /* Total # of unused blocks */
@@ -374,10 +360,10 @@ int get_val_type(struct hive *hdesc, int vofs, char *path);
 int get_val_len(struct hive *hdesc, int vofs, char *path);
 void *get_val_data(struct hive *hdesc, int vofs, char *path, int val_type);
 struct keyval *get_val2buf(struct hive *hdesc, struct keyval *kv,
-			   int vofs, char *path, int type );
+               int vofs, char *path, int type );
 int get_dword(struct hive *hdesc, int vofs, char *path);
 int put_buf2val(struct hive *hdesc, struct keyval *kv,
-		int vofs, char *path, int type );
+        int vofs, char *path, int type );
 int put_dword(struct hive *hdesc, int vofs, char *path, int dword);
 void closeHive(struct hive *hdesc);
 int writeHive(struct hive *hdesc);
