@@ -47,7 +47,7 @@ namespace owper {
         closeHive();
     }
 
-    reg_off hive::travPath(reg_off startingOffest, char* path, int type) {
+    reg_off hive::travPath(reg_off startingOffset, char* path, int type) {
         return ntreg::trav_path(this->regHive, startingOffset, path, type);
     }
 }
