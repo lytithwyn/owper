@@ -28,6 +28,8 @@ using std::cerr;
 using std::endl;
 
 namespace owper {
+    typedef int reg_off;
+
     hive::hive(const char* fileName, int hiveMode/* = HMODE_RW*/) {
         this->openHive(fileName, hiveMode);
     }

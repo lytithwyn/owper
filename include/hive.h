@@ -36,7 +36,6 @@
 using stringManip::stringPrintf;
 
 namespace owper {
-    typedef int reg_off;
 
     enum hiveType {
         UNKNOWN = HTYPE_UNKNOWN,
