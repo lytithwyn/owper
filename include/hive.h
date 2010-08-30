@@ -36,6 +36,7 @@
 using stringManip::stringPrintf;
 
 namespace owper {
+    typedef int reg_off;
 
     enum hiveType {
         UNKNOWN = HTYPE_UNKNOWN,
@@ -67,6 +68,8 @@ namespace owper {
         int    getRootOffset(){ return this->regHive->rootofs; };
         short  getNkIndexType(){ return this->regHive->nkindextype; };
         char   *getBuffer(){ return this->regHive->buffer; };
+
+        reg_off travPath(reg_off startingOffest, char* path, int type);
 
     private:
         void openHive(const char* fileName, int hiveMode);

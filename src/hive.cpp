@@ -28,8 +28,6 @@ using std::cerr;
 using std::endl;
 
 namespace owper {
-    typedef int reg_off;
-
     hive::hive(const char* fileName, int hiveMode/* = HMODE_RW*/) {
         this->openHive(fileName, hiveMode);
     }
@@ -49,7 +47,7 @@ namespace owper {
         closeHive();
     }
 
-/*  reg_off hive::travPath(reg_off startingOffest, char* path, int type) {
-
-    }*/
+  reg_off hive::travPath(reg_off startingOffest, char* path, int type) {
+      return ntreg::trav_path(this->regHive, startingOffset, path, type);
+  }
 }
