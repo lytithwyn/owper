@@ -38,6 +38,14 @@ using stringManip::stringPrintf;
 namespace owper {
     typedef int reg_off;
 
+    enum hiveType {
+        UNKNOWN = HTYPE_UNKNOWN,
+        SAM = HTYPE_SAM,
+        SYSTEM = HTYPE_SYSTEM,
+        SECURITY = HTYPE_SECURITY,
+        SOFTWARE = HTYPE_SOFTWARE
+    };
+
     class hive {
     private:
         ntreg::hive *regHive;
