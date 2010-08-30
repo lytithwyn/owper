@@ -48,6 +48,14 @@ int main(int argc, char* argv[]) {
 
     try {
         owper::hive myHive(testHive.c_str());
+
+        reg_off nkofs = myHive.travPath(0,(char*)"\\SAM\\Domains\\Account\\Users\\Names\\",0);
+        if (!nkofs) {
+          printf("list_users: Cannot find usernames in registry! (is this a SAM-hive?)\n");
+          return(1);
+        }else {
+            printf("Nkofs: %d\n", nkofs);
+        }
     }catch(exception& e) {
         cout << e.what() << endl;
     }
