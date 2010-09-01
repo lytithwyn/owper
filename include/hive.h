@@ -46,6 +46,12 @@ namespace owper {
         SOFTWARE = HTYPE_SOFTWARE
     };
 
+    enum scanKeyResult {
+        ERROR = -1,
+        NO_MORE_ITEMS = 0,
+        MORE_ITEMS = 1
+    };
+
     class hive {
     private:
         ntreg::hive *regHive;
@@ -70,6 +76,13 @@ namespace owper {
         char   *getBuffer(){ return this->regHive->buffer; };
 
         reg_off travPath(reg_off startingOffest, char* path, int type);
+        scanKeyResult getNextSubKey(int nkofs, int *count, int *countri, struct ntreg::ex_data *sptr);
+
+        struct ntreg::keyval *copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type);
+        int getDword(int vofs, char *path);
+
+        void unicodetoAscii(char *src, char *dest, int l);
+        void asciiToUnicode(char *src, char *dest, int l);
 
     private:
         void openHive(const char* fileName, int hiveMode);

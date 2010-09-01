@@ -50,4 +50,24 @@ namespace owper {
     reg_off hive::travPath(reg_off startingOffset, char* path, int type) {
         return ntreg::trav_path(this->regHive, startingOffset, path, type);
     }
+
+    scanKeyResult hive::getNextSubKey(int nkofs, int *count, int *countri, struct ntreg::ex_data *sptr) {
+        return (scanKeyResult)ntreg::ex_next_n(this->regHive, nkofs, count, countri, sptr);
+    }
+
+    struct ntreg::keyval *hive::copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type) {
+        return ntreg::get_val2buf(this->regHive, kv, vofs, path, type);
+    }
+
+    int hive::getDword(int vofs, char* path) {
+        return ntreg::get_dword(this->regHive, vofs, path);
+    }
+
+    void hive::unicodetoAscii(char *src, char*dest, int l) {
+        ntreg::cheap_uni2ascii(src, dest, l);
+    }
+
+    void hive::asciiToUnicode(char *src, char*dest, int l) {
+        ntreg::cheap_ascii2uni(src, dest, l);
+    }
 }
