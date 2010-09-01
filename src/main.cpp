@@ -47,15 +47,68 @@ int main(int argc, char* argv[]) {
     string testHive = "/media/disk/WINDOWS/system32/config/SAM";
 
     try {
-        owper::hive myHive(testHive.c_str());
+        owper::hive *myHive = new hive(testHive.c_str());
 
-        reg_off nkofs = myHive.travPath(0,(char*)"\\SAM\\Domains\\Account\\Users\\Names\\",0);
+        char s[200];
+        struct ntreg::keyval *v;
+        int rid;
+        int count = 0, countri = 0;
+        struct ntreg::ex_data ex;
+        char admuser[129]="Administrator";
+
+        reg_off nkofs = myHive->travPath(0,(char*)"\\SAM\\Domains\\Account\\Users\\Names\\",0);
+
         if (!nkofs) {
           printf("list_users: Cannot find usernames in registry! (is this a SAM-hive?)\n");
           return(1);
         }else {
             printf("Nkofs: %d\n", nkofs);
         }
+
+        while ((myHive->getNextSubKey(nkofs+4, &count, &countri, &ex) > 0)) {
+            /* Extract the value out of the username-key, value is RID  */
+            snprintf(s,180,"\\SAM\\Domains\\Account\\Users\\Names\\%s\\@",ex.name);
+            rid = myHive->getDword(0, s);
+            if (rid == 500) strncpy(admuser,ex.name,128); /* Copy out admin-name */
+
+            /*    printf("name: %s, rid: %d (0x%0x)\n", ex.name, rid, rid); */
+
+            /* Now that we have the RID, build the path to, and get the V-value */
+            snprintf(s,180,"\\SAM\\Domains\\Account\\Users\\%08X\\V",rid);
+            v = myHive->copyValueToBuffer(NULL, 0, s, REG_BINARY);
+            if (!v) {
+              printf("Cannot find value <%s>\n",s);
+              return(1);
+            }
+
+            if (v->len < 0xcc) {
+              printf("list_users: Value <%s> is too short (only %d bytes) to be a SAM user V-struct!\n",
+                 s, v->len);
+            } else {
+                struct ntreg::user_V *v2;
+                v2 = (struct ntreg::user_V *)((char*)(&v->data));
+                char* vp = (char*)&(v->data);
+                int username_offset = v2->username_ofs;
+                int username_len = v2->username_len;
+                int vlen = v->len;
+
+                if(username_len <= 0 || username_len > vlen ||
+                      username_offset <= 0 || username_offset >= vlen) {
+                    printf("Can't get username!\n");
+                }
+
+                char username[128];
+                username_offset += 0xCC;
+                myHive->unicodetoAscii(vp + username_offset,username,username_len);
+
+                printf("Found username: %s\n", username);
+
+
+            }
+            FREE(v);
+            FREE(ex.name);
+        }
+
     }catch(exception& e) {
         cout << e.what() << endl;
     }
