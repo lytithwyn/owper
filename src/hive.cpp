@@ -54,8 +54,8 @@ namespace owper {
         return ntreg::trav_path(this->regHive, startingOffset, path, type);
     }
 
-    scanKeyResult hive::getNextSubKey(int nkofs, int *count, int *countri, struct ntreg::ex_data *sptr) {
-        return (scanKeyResult)ntreg::ex_next_n(this->regHive, nkofs, count, countri, sptr);
+    SCAN_KEY_RESULT hive::getNextSubKey(int nkofs, int *count, int *countri, struct ntreg::ex_data *sptr) {
+        return (SCAN_KEY_RESULT)ntreg::ex_next_n(this->regHive, nkofs, count, countri, sptr);
     }
 
     struct ntreg::keyval *hive::copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type) {

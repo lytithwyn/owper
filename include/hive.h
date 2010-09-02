@@ -38,7 +38,7 @@ using stringManip::stringPrintf;
 namespace owper {
     typedef int reg_off;
 
-    enum hiveType {
+    enum HIVE_TYPE {
         UNKNOWN = HTYPE_UNKNOWN,
         SAM = HTYPE_SAM,
         SYSTEM = HTYPE_SYSTEM,
@@ -46,7 +46,7 @@ namespace owper {
         SOFTWARE = HTYPE_SOFTWARE
     };
 
-    enum scanKeyResult {
+    enum SCAN_KEY_RESULT {
         ERROR = -1,
         NO_MORE_ITEMS = 0,
         MORE_ITEMS = 1
@@ -61,22 +61,22 @@ namespace owper {
         ~hive();
 
         // accessors/modifiers
-        string getFileName(){ return string(this->regHive->filename); };
-        int    getFileDesc(){ return this->regHive->filedesc; };
-        int    getState(){ return this->regHive->state; };
-        int    getType(){ return this->regHive->type; };
-        int    getPages(){ return this->regHive->pages; };
-        int    getUsedBlocks(){ return this->regHive->useblk; };
-        int    getUnusedBlocks(){ return this->regHive->unuseblk; };
-        int    getUsedBytes(){ return this->regHive->usetot; };
-        int    getUnusedBytes(){ return this->regHive->unusetot; };
-        int    getSize(){ return this->regHive->size; };
-        int    getRootOffset(){ return this->regHive->rootofs; };
-        short  getNkIndexType(){ return this->regHive->nkindextype; };
-        char   *getBuffer(){ return this->regHive->buffer; };
+        string    getFileName(){ return string(this->regHive->filename); };
+        int       getFileDesc(){ return this->regHive->filedesc; };
+        int       getState(){ return this->regHive->state; };
+        HIVE_TYPE getType(){ return (HIVE_TYPE)this->regHive->type; };
+        int       getPages(){ return this->regHive->pages; };
+        int       getUsedBlocks(){ return this->regHive->useblk; };
+        int       getUnusedBlocks(){ return this->regHive->unuseblk; };
+        int       getUsedBytes(){ return this->regHive->usetot; };
+        int       getUnusedBytes(){ return this->regHive->unusetot; };
+        int       getSize(){ return this->regHive->size; };
+        int       getRootOffset(){ return this->regHive->rootofs; };
+        short     getNkIndexType(){ return this->regHive->nkindextype; };
+        char      *getBuffer(){ return this->regHive->buffer; };
 
         reg_off travPath(reg_off startingOffest, char* path, int type);
-        scanKeyResult getNextSubKey(int nkofs, int *count, int *countri, struct ntreg::ex_data *sptr);
+        SCAN_KEY_RESULT getNextSubKey(int nkofs, int *count, int *countri, struct ntreg::ex_data *sptr);
 
         struct ntreg::keyval *copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type);
         int getDword(int vofs, char *path);
