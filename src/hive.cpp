@@ -40,7 +40,10 @@ namespace owper {
     }
 
     void hive::closeHive() {
-        ntreg::closeHive(this->regHive);
+        if(this->regHive != NULL) {
+            ntreg::closeHive(this->regHive);
+            this->regHive = NULL;
+        }
     }
 
     hive::~hive() {
