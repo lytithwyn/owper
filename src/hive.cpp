@@ -66,7 +66,7 @@ namespace owper {
         return ntreg::get_dword(this->regHive, vofs, path);
     }
 
-    void hive::unicodetoAscii(char *src, char*dest, int l) {
+    void hive::unicodeToAscii(char *src, char*dest, int l) {
         ntreg::cheap_uni2ascii(src, dest, l);
     }
 
