@@ -39,17 +39,17 @@ namespace owper {
     typedef int reg_off;
 
     enum HIVE_TYPE {
-        UNKNOWN = HTYPE_UNKNOWN,
-        SAM = HTYPE_SAM,
-        SYSTEM = HTYPE_SYSTEM,
-        SECURITY = HTYPE_SECURITY,
-        SOFTWARE = HTYPE_SOFTWARE
+        HIVE_TYPE_UNKNOWN = HTYPE_UNKNOWN,
+        HIVE_TYPE_SAM = HTYPE_SAM,
+        HIVE_TYPE_SYSTEM = HTYPE_SYSTEM,
+        HIVE_TYPE_SECURITY = HTYPE_SECURITY,
+        HIVE_TYPE_SOFTWARE = HTYPE_SOFTWARE
     };
 
     enum SCAN_KEY_RESULT {
-        ERROR = -1,
-        NO_MORE_ITEMS = 0,
-        MORE_ITEMS = 1
+        SCAN_KEY_ERROR = -1,
+        SCAN_KEY_NO_MORE_ITEMS = 0,
+        SCAN_KEY_MORE_ITEMS = 1
     };
 
     class hive {
@@ -81,11 +81,13 @@ namespace owper {
         struct ntreg::keyval *copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type);
         int getDword(int vofs, char *path);
 
-        void unicodetoAscii(char *src, char *dest, int l);
+        void unicodeToAscii(char *src, char *dest, int l);
         void asciiToUnicode(char *src, char *dest, int l);
 
     private:
         void openHive(const char* fileName, int hiveMode);
+
+    protected:
         void closeHive();
     };
 
