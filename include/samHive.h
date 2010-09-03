@@ -20,43 +20,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
-#include <cstring>
-#include <dirent.h>
-#include <vector>
-#include <algorithm>
+#ifndef SAM_HIVE_H
+#define SAM_HIVE_H
 
-#include "include/ntreg.h"
+#include <iostream>
+#include <vector>
+#include "include/hive.h"
+#include "include/stringManip.h"
 #include "include/sam.h"
 
-#include "include/stringManip.h"
-#include "include/fileManip.h"
-#include "include/owpException.h"
-#include "include/samHive.h"
-
-using std::cout;
-using std::endl;
+using std::vector;
 using std::string;
-using stringManip::stringPrintf;
+using std::cout;
+using std::cerr;
+using std::endl;
 
-using namespace owper;
+namespace owper {
+    class samHive : public hive {
+    public:
+        samHive(const char* fileName, int hiveMode = HMODE_RW);
 
-int main(int argc, char* argv[]) {
-    string testHive = "/media/disk/WINDOWS/system32/config/SAM";
-
-    try {
-        owper::samHive *myHive = new samHive(testHive.c_str());
-        vector<string> userNames = myHive->getUserList();
-
-        for(unsigned int i = 0; i < userNames.size(); i++) {
-            cout << stringPrintf("Found user: %s", userNames.at(i).c_str()) << endl;
-        }
-    }catch(exception& e) {
-        cout << e.what() << endl;
-    }
-
-    return 1;
+        vector<string> getUserList();
+    };
 
 }
+
+#endif
