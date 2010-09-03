@@ -8,5 +8,6 @@ g++ -I ./ src/main.cpp \
           src/hive.cpp \
           src/owpException.cpp \
           src/samHive.cpp \
+          src/samUser.cpp \
           ntreg.o \
           -g -Wall -o owper
