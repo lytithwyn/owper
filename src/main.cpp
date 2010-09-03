@@ -48,10 +48,15 @@ int main(int argc, char* argv[]) {
 
     try {
         owper::samHive *myHive = new samHive(testHive.c_str());
-        vector<string> userNames = myHive->getUserList();
 
-        for(unsigned int i = 0; i < userNames.size(); i++) {
-            cout << stringPrintf("Found user: %s", userNames.at(i).c_str()) << endl;
+        cout << "Users:\n";
+        cout << "----------------------------------------\n";
+        cout << "UserName\t\t\tFullName\n";
+        cout << "----------------------------------------\n";
+        for(unsigned int i = 0; i < myHive->userList.size(); i++) {
+            cout << stringPrintf("Found user: %s\t%s",
+                    (myHive->userList.at(i))->getUserName().c_str(),
+                    (myHive->userList.at(i))->getFullName().c_str()) << endl;
         }
     }catch(exception& e) {
         cout << e.what() << endl;
