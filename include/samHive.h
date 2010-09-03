@@ -28,6 +28,7 @@
 #include "include/hive.h"
 #include "include/stringManip.h"
 #include "include/sam.h"
+#include "include/samUser.h"
 
 using std::vector;
 using std::string;
@@ -37,6 +38,14 @@ using std::endl;
 
 namespace owper {
     class samHive : public hive {
+    private:
+    public:
+        vector<samUser*> userList;
+
+        void     loadUserList();
+        int      getUserRID(char* userName);
+        samUser* getSamUser(int rid);
+        string   getUserValue(char* dataBuffer, int valueOffset, int valueLength);
     public:
         samHive(const char* fileName, int hiveMode = HMODE_RW);
 
