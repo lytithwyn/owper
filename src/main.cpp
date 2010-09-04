@@ -45,6 +45,9 @@ using namespace owper;
 
 int main(int argc, char* argv[]) {
     string testHive = "/media/disk/WINDOWS/system32/config/SAM";
+    if(argc == 2) {
+        testHive = argv[1];
+    }
 
     try {
         owper::samHive *myHive = new samHive(testHive.c_str());
