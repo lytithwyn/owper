@@ -27,6 +27,7 @@
 #include <vector>
 #include <algorithm>
 #include <cstdarg>
+#include <cstdio>
 
 using std::string;
 using std::transform;
