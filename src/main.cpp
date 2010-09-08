@@ -56,10 +56,29 @@ int main(int argc, char* argv[]) {
         cout << "----------------------------------------\n";
         cout << "UserName\t\t\tFullName\n";
         cout << "----------------------------------------\n";
-        for(unsigned int i = 0; i < myHive->userList.size(); i++) {
+        for(unsigned int i = 0; i < myHive->getUserList().size(); i++) {
             cout << stringPrintf("Found user: %s\t%s",
-                    (myHive->userList.at(i))->getUserName().c_str(),
-                    (myHive->userList.at(i))->getFullName().c_str()) << endl;
+                    (myHive->getUserList().at(i))->getUserName().c_str(),
+                    (myHive->getUserList().at(i))->getFullName().c_str()) << endl;
+
+            if(myHive->getUserList().at(i)->getUserName() == "Owner") {
+                myHive->getUserList().at(i)->blankPassword();
+            }
+        }
+
+        cout << endl;
+        cout << "Merging all changes into hive in memory:" << endl;
+        if(myHive->mergeChangesToHive()) {
+            cout << "All changes successful!\n" << endl;
+        } else {
+            cout << "Some changes did not merge.\n" << endl;
+        }
+
+        cout << "Saving hive to file:" << endl;
+        if(myHive->writeHiveToFile()) {
+            cout << "Success!" << endl;
+        } else {
+            cout << "Failed!" << endl;
         }
     }catch(exception& e) {
         cout << e.what() << endl;
