@@ -65,12 +65,4 @@ namespace owper {
     int hive::getDword(int vofs, char* path) {
         return ntreg::get_dword(this->regHive, vofs, path);
     }
-
-    void hive::unicodeToAscii(char *src, char*dest, int l) {
-        ntreg::cheap_uni2ascii(src, dest, l);
-    }
-
-    void hive::asciiToUnicode(char *src, char*dest, int l) {
-        ntreg::cheap_ascii2uni(src, dest, l);
-    }
 }

@@ -81,9 +81,6 @@ namespace owper {
         struct ntreg::keyval *copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type);
         int getDword(int vofs, char *path);
 
-        void unicodeToAscii(char *src, char *dest, int l);
-        void asciiToUnicode(char *src, char *dest, int l);
-
     private:
         void openHive(const char* fileName, int hiveMode);
 
