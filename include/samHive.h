@@ -39,7 +39,6 @@ using std::endl;
 namespace owper {
     class samHive : public hive {
     private:
-    public:
         vector<samUser*> userList;
 
         void     loadUserList();
@@ -48,8 +47,8 @@ namespace owper {
         string   getUserValue(char* dataBuffer, int valueOffset, int valueLength);
     public:
         samHive(const char* fileName, int hiveMode = HMODE_RW);
-
-        vector<string> getUserList();
+        vector<samUser*> getUserList(){ return userList; };
+        bool     mergeChangesToHive();
     };
 
 }

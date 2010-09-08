@@ -44,7 +44,7 @@ namespace owper {
 
         samUser *newSamUser;
         try{
-            newSamUser = new samUser(vValue);
+            newSamUser = new samUser(vValue, vValuePath);
         }catch(owpException e) {
             cerr << e.formattedMessage;
             newSamUser = NULL;
@@ -81,5 +81,29 @@ namespace owper {
 
             FREE(exData.name);
         }
+    }
+
+    /**
+     * Merges changes made with samUser objects back into the hive in memory
+     * @return bool Whether or not all changes were merged
+     */
+    bool samHive::mergeChangesToHive() {
+        bool allSuccessful = true;
+        for(unsigned int i = 0; i < userList.size(); i++) {
+            if(userList.at(i)->needsToSave()) {
+                ntreg::keyval *keyValue = userList.at(i)->getVStructRegValue();
+                string path = userList.at(i)->getVStructPath().c_str();
+                int size = copyBufferToValue(keyValue, 0, (char*)path.c_str(), VAL_TYPE_REG_BINARY);
+
+                if(size < 1) {
+                    allSuccessful = false;
+                }
+
+                cout << stringPrintf("Merging into %s: wrote %d bytes", path.c_str(), size) << endl;
+            }
+        }
+
+        regHive->state |= HMODE_DIRTY;
+        return allSuccessful;
     }
 }
