@@ -22,8 +22,77 @@
 #include "include/samUser.h"
 
 namespace owper {
-    samUser::samUser(string inUserName, string inFullName) {
-        userName = inUserName;
-        fullName = inFullName;
+    samUser::samUser(ntreg::keyval *inVStructRegValue) {
+        vStruct = (struct ntreg::user_V *)((char*)(&inVStructRegValue->data));
+        char* vBuffer = (char*)&(inVStructRegValue->data);
+        int userNameOffset = vStruct->username_ofs;
+        int userNameLength = vStruct->username_len;
+        int fullNameOffset = vStruct->fullname_ofs;
+        int fullNameLength = vStruct->fullname_len;
+        int vStructLength = inVStructRegValue->len;
+
+        if(!hasValidUserName(userNameOffset, userNameLength, vStructLength)) {
+            FREE(vStruct);
+            throw(new owpException("VStruct has invalid user name field"));
+        }
+
+        if(!hasValidFullName(fullNameOffset, fullNameLength, vStructLength)) {
+            FREE(vStruct);
+            throw(new owpException("VStruct has invalid full name field"));
+        }
+
+        userName = this->getUserValue(vBuffer, userNameOffset, userNameLength);
+        fullName = this->getUserValue(vBuffer, fullNameOffset, fullNameLength);
+    }
+
+    /**
+     * Takes a keyval struct and decides whether it contains a valid VStruct
+     * @param keval vValue The registry value to test
+     * @return bool
+     */
+    bool samUser::hasValidVStructData(ntreg::keyval *vValue) {
+        if(!vValue) {
+            return false;
+        }
+
+        //too short
+        if(vValue->len < 0xcc) {
+            return false;
+        }
+
+        return true;
+    }
+
+    bool samUser::hasValidUserName(int userNameOffset, int userNameLength, int vStructLength) {
+        if(userNameLength <= 0 || //username cannot have 0 length
+           userNameLength > vStructLength ||
+           userNameOffset <= 0 ||
+           userNameOffset >= vStructLength) {
+            return false;
+        }
+
+        return true;
+    }
+
+    bool samUser::hasValidFullName(int fullNameOffset, int fullNameLength, int vStructLength) {
+        if(fullNameLength < 0 || //fullname can have 0 length
+           fullNameLength > vStructLength ||
+           fullNameOffset <= 0 ||
+           fullNameOffset >= vStructLength) {
+            return false;
+        }
+
+        return true;
+    }
+
+    string samUser::getUserValue(char* dataBuffer, int valueOffset, int valueLength) {
+        valueOffset += 0xCC; //chntpw says we need to do this
+                             //something about the offset being relative to the pointers
+
+
+        char value[128];
+        binaryManip::unicodeToAscii(dataBuffer + valueOffset, value, valueLength);
+
+        return (string)value;
     }
 }

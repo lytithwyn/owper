@@ -42,90 +42,15 @@ namespace owper {
         string vValuePath = stringPrintf("\\SAM\\Domains\\Account\\Users\\%08X\\V",rid);
         ntreg::keyval *vValue = this->copyValueToBuffer(NULL, 0, (char*)vValuePath.c_str(), REG_BINARY);
 
-        if(!hasValidVStructData(vValue)) {
-            cerr << stringPrintf("List Users: Key %s does not contain valid VStruct Data!\n",
-                    vValuePath.c_str());
-            FREE(vValue);
-            return NULL;
+        samUser *newSamUser;
+        try{
+            newSamUser = new samUser(vValue);
+        }catch(owpException e) {
+            cerr << e.formattedMessage;
+            newSamUser = NULL;
         }
 
-        ntreg::user_V *userV;
-        userV = (struct ntreg::user_V *)((char*)(&vValue->data));
-        char* vBuffer = (char*)&(vValue->data);
-        int userNameOffset = userV->username_ofs;
-        int userNameLength = userV->username_len;
-        int fullNameOffset = userV->fullname_ofs;
-        int fullNameLength = userV->fullname_len;
-        int vValueLength = vValue->len;
-
-        if(!hasValidUserName(userNameOffset, userNameLength, vValueLength)) {
-            cerr << "VStruct has invalid user name field" << endl;
-            FREE(vValue);
-            return NULL;
-        }
-
-        if(!hasValidFullName(fullNameOffset, fullNameLength, vValueLength)) {
-            cerr << "VStruct has invalid full name field" << endl;
-            FREE(vValue);
-            return NULL;
-        }
-
-        string userName = this->getUserValue(vBuffer, userNameOffset, userNameLength);
-        string fullName = this->getUserValue(vBuffer, fullNameOffset, fullNameLength);
-
-        FREE(vValue);
-        return new samUser(userName, fullName);
-    }
-
-    string samHive::getUserValue(char* dataBuffer, int valueOffset, int valueLength) {
-        valueOffset += 0xCC; //chntpw says we need to do this
-                             //something about the offset being relative to the pointers
-
-
-        char value[128];
-        this->unicodeToAscii(dataBuffer + valueOffset, value, valueLength);
-
-        return (string)value;
-    }
-
-    /**
-     * Takes a keyval struct and decides whether it contains a valid VStruct
-     * @param keval vValue The registry value to test
-     * @return bool
-     */
-    bool samHive::hasValidVStructData(ntreg::keyval *vValue) {
-        if(!vValue) {
-            return false;
-        }
-
-        //too short
-        if(vValue->len < 0xcc) {
-            return false;
-        }
-
-        return true;
-    }
-
-    bool samHive::hasValidUserName(int userNameOffset, int userNameLength, int vStructLength) {
-        if(userNameLength <= 0 || //username cannot have 0 length
-           userNameLength > vStructLength ||
-           userNameOffset <= 0 ||
-           userNameOffset >= vStructLength) {
-            return false;
-        }
-
-        return true;
-    }
-
-    bool samHive::hasValidFullName(int fullNameOffset, int fullNameLength, int vStructLength) {
-        if(fullNameLength < 0 || //fullname can have 0 length
-           fullNameLength > vStructLength ||
-           fullNameOffset <= 0 ||
-           fullNameOffset >= vStructLength) {
-            return false;
-        }
-
-        return true;
+        return newSamUser;
     }
 
     void samHive::loadUserList() {

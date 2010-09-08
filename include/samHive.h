@@ -46,9 +46,6 @@ namespace owper {
         int      getUserRID(char* userName);
         samUser* getSamUser(int rid);
         string   getUserValue(char* dataBuffer, int valueOffset, int valueLength);
-        bool     hasValidVStructData(ntreg::keyval *vValue);
-        bool     hasValidUserName(int userNameOffset, int userNameLength, int vStructLength);
-        bool     hasValidFullName(int fullNameOffset, int fullNameLength, int vStructlength);
     public:
         samHive(const char* fileName, int hiveMode = HMODE_RW);
 

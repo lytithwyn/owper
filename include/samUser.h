@@ -24,18 +24,31 @@
 #define SAM_USER_H
 
 #include <iostream>
+#include <cstdlib>
 #include <string>
+
+#include "include/ntreg.h"
+#include "include/sam.h"
+#include "include/binaryManip.h"
+#include "include/owpException.h"
 
 using std::string;
 
 namespace owper {
     class samUser {
     private:
-        string userName;
-        string fullName;
+        string         userName;
+        string         fullName;
+        ntreg::keyval *vStructRegValue;
+        ntreg::user_V *vStruct;
+
+        bool   hasValidVStructData(ntreg::keyval *vValue);
+        bool   hasValidUserName(int userNameOffset, int userNameLength, int vStructLength);
+        bool   hasValidFullName(int fullNameOffset, int fullNameLength, int vStructlength);
+        string getUserValue(char* dataBuffer, int valueOffset, int valueLength);
 
     public:
-        samUser(string inUserName, string inFullName);
+        samUser(ntreg::keyval *inVStructRegValue);
 
         string getFullName() const
         {
