@@ -52,8 +52,22 @@ namespace owper {
         SCAN_KEY_MORE_ITEMS = 1
     };
 
+    enum REG_VALUE_TYPE {
+        VAL_TYPE_REG_NONE = REG_NONE,
+        VAL_TYPE_REG_SZ = REG_SZ,
+        VAL_TYPE_REG_EXPAND_SZ = REG_EXPAND_SZ,
+        VAL_TYPE_REG_BINARY = REG_BINARY,
+        VAL_TYPE_REG_DWORD = REG_DWORD,
+        VAL_TYPE_REG_DWORD_BIG_ENDIAN,
+        VAL_TYPE_REG_LINK = REG_LINK,
+        VAL_TYPE_REG_MULTI_SZ = REG_MULTI_SZ,
+        VAL_TYPE_REG_RESOURCE_LIST = REG_RESOURCE_LIST,
+        VAL_TYPE_REG_FULL_RESOURCE_DESCRIPTOR  =  REG_FULL_RESOURCE_DESCRIPTOR,
+        VAL_TYPE_REG_RESOURCE_REQUIREMENTS_LIST = REG_RESOURCE_REQUIREMENTS_LIST,
+    };
+
     class hive {
-    private:
+    protected:
         ntreg::hive *regHive;
 
     public:
@@ -79,7 +93,9 @@ namespace owper {
         SCAN_KEY_RESULT getNextSubKey(int nkofs, int *count, int *countri, struct ntreg::ex_data *sptr);
 
         struct ntreg::keyval *copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type);
+        int copyBufferToValue(struct ntreg::keyval *regValue, int valueOffset, char *path, REG_VALUE_TYPE type);
         int getDword(int vofs, char *path);
+        bool writeHiveToFile();
 
     private:
         void openHive(const char* fileName, int hiveMode);

@@ -62,7 +62,29 @@ namespace owper {
         return ntreg::get_val2buf(this->regHive, kv, vofs, path, type);
     }
 
+    /**
+     * Copy the data from the supplied registry value object into the actual hive
+     * @param keyval* regValue Registry value to copy
+     * @param int valueOffset Offset within the value?
+     * @param char* path The path to which the value will be copied
+     * @param REG_VALUE_TYPE type The type of registry value we'll be copying
+     * @return int The number of bytes copied
+     */
+    int hive::copyBufferToValue(struct ntreg::keyval *regValue, int valueOffset, char *path, REG_VALUE_TYPE type) {
+        return ntreg::put_buf2val(this->regHive, regValue, valueOffset, path, type);
+    }
+
     int hive::getDword(int vofs, char* path) {
         return ntreg::get_dword(this->regHive, vofs, path);
+    }
+
+    bool hive::writeHiveToFile() {
+        int errorsPresent = ntreg::writeHive(this->regHive);
+
+        if(errorsPresent) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
