@@ -39,8 +39,11 @@ namespace owper {
     private:
         string         userName;
         string         fullName;
+        string         vStructPath;
         ntreg::keyval *vStructRegValue;
         ntreg::user_V *vStruct;
+        bool           hasBlankPassword;
+        bool           regDataChanged;
 
         bool   hasValidVStructData(ntreg::keyval *vValue);
         bool   hasValidUserName(int userNameOffset, int userNameLength, int vStructLength);
@@ -48,7 +51,9 @@ namespace owper {
         string getUserValue(char* dataBuffer, int valueOffset, int valueLength);
 
     public:
-        samUser(ntreg::keyval *inVStructRegValue);
+        samUser(ntreg::keyval *inVStructRegValue, string inVStructPath);
+        ~samUser();
+        void blankPassword();
 
         string getFullName() const
         {
@@ -58,6 +63,29 @@ namespace owper {
         string getUserName() const
         {
             return userName;
+        }
+
+        bool passwordIsBlank() const
+        {
+            return hasBlankPassword;
+        }
+
+        bool needsToSave() const
+        {
+            return regDataChanged;
+        }
+
+        void hasSaved() {
+            regDataChanged = false;
+        }
+
+        string getVStructPath() const
+        {
+            return vStructPath;
+        }
+
+        ntreg::keyval *getVStructRegValue() {
+            return vStructRegValue;
         }
     };
 }

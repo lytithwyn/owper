@@ -22,7 +22,9 @@
 #include "include/samUser.h"
 
 namespace owper {
-    samUser::samUser(ntreg::keyval *inVStructRegValue) {
+    samUser::samUser(ntreg::keyval *inVStructRegValue, string inVStructPath) {
+        vStructPath = inVStructPath;
+        vStructRegValue = inVStructRegValue;
         vStruct = (struct ntreg::user_V *)((char*)(&inVStructRegValue->data));
         char* vBuffer = (char*)&(inVStructRegValue->data);
         int userNameOffset = vStruct->username_ofs;
@@ -43,6 +45,14 @@ namespace owper {
 
         userName = this->getUserValue(vBuffer, userNameOffset, userNameLength);
         fullName = this->getUserValue(vBuffer, fullNameOffset, fullNameLength);
+
+        if(vStruct->ntpw_len < 16 && vStruct->lmpw_len < 16) {
+            hasBlankPassword = true;
+        }else {
+            hasBlankPassword = false;
+        }
+
+        regDataChanged = false;
     }
 
     /**
@@ -94,5 +104,20 @@ namespace owper {
         binaryManip::unicodeToAscii(dataBuffer + valueOffset, value, valueLength);
 
         return (string)value;
+    }
+
+    void samUser::blankPassword() {
+        if(hasBlankPassword) {
+            return;
+        }
+
+        vStruct->lmpw_len = 0;
+        vStruct->ntpw_len = 0;
+        hasBlankPassword = true;
+        regDataChanged = true;
+    }
+
+    samUser::~samUser() {
+        FREE(vStructRegValue);
     }
 }
