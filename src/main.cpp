@@ -54,19 +54,33 @@ int main(int argc, char* argv[]) {
 
         cout << "Users:\n";
         cout << "----------------------------------------\n";
-        cout << "UserName\t\t\tFullName\n";
+        cout << "User                          Password\n";
         cout << "----------------------------------------\n";
-        for(unsigned int i = 0; i < myHive->getUserList().size(); i++) {
-            cout << stringPrintf("Found user: %s\t%s",
-                    (myHive->getUserList().at(i))->getUserName().c_str(),
-                    (myHive->getUserList().at(i))->getFullName().c_str()) << endl;
 
-            if(myHive->getUserList().at(i)->getUserName() == "Owner") {
-                myHive->getUserList().at(i)->blankPassword();
+        int testUserIndex1 = -1;
+        int testUserIndex2 = -1;
+
+        for(unsigned int i = 0; i < myHive->getUserList().size(); i++) {
+            samUser *currentUser = myHive->getUserList().at(i);
+
+            cout << stringPrintf("Found user: %-17s %s",
+                    currentUser->getUserName().c_str(),
+                    ((currentUser->passwordIsBlank())?("Blank"):("Set"))) << endl;
+
+            if(currentUser->getUserName() == "Tracy") {
+                testUserIndex1 = i;
+            }
+
+            if(currentUser->getUserName() == "Bob") {
+                testUserIndex2 = i;
             }
         }
 
         cout << endl;
+
+        cout << "Clearing Tracy's password" << endl;
+        myHive->getUserList().at(testUserIndex1)->blankPassword();
+
         cout << "Merging all changes into hive in memory:" << endl;
         if(myHive->mergeChangesToHive()) {
             cout << "All changes successful!\n" << endl;
@@ -79,6 +93,31 @@ int main(int argc, char* argv[]) {
             cout << "Success!" << endl;
         } else {
             cout << "Failed!" << endl;
+        }
+
+        cout << "\nClearing Bob's password" << endl;
+        myHive->getUserList().at(testUserIndex2)->blankPassword();
+
+        cout << "Merging all changes into hive in memory:" << endl;
+        if(myHive->mergeChangesToHive()) {
+            cout << "All changes successful!\n" << endl;
+        } else {
+            cout << "Some changes did not merge.\n" << endl;
+        }
+
+        cout << "Saving hive to file:" << endl;
+        if(myHive->writeHiveToFile()) {
+            cout << "Success!" << endl;
+        } else {
+            cout << "Failed!" << endl;
+        }
+
+        for(unsigned int i = 0; i < myHive->getUserList().size(); i++) {
+            samUser *currentUser = myHive->getUserList().at(i);
+
+            cout << stringPrintf("Found user: %-17s %s",
+                    currentUser->getUserName().c_str(),
+                    ((currentUser->passwordIsBlank())?("Blank"):("Set"))) << endl;
         }
     }catch(exception& e) {
         cout << e.what() << endl;
