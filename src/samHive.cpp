@@ -97,6 +97,8 @@ namespace owper {
 
                 if(size < 1) {
                     allSuccessful = false;
+                } else {
+                    userList.at(i)->hasSaved();
                 }
 
                 cout << stringPrintf("Merging into %s: wrote %d bytes", path.c_str(), size) << endl;
