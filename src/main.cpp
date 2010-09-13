@@ -1,5 +1,5 @@
 /*
- * This file is part of owper - a graphical version of the well known chntpw password changer
+ * This file is part of owper-gui - a graphical front-end to owper
  * Copyright (C) 2010 Matthew Morgan
  *
  * Some code was borrowed/modified from the chntpw project
