@@ -28,10 +28,7 @@
 #include <fcntl.h>
 
 
-extern "C" {
-    #include "include/ntreg.h"
-}
-
+#include "include/ntreg.h"
 #include "include/owpException.h"
 #include "include/stringManip.h"
 
@@ -40,36 +37,72 @@ using stringManip::stringPrintf;
 namespace owper {
     typedef int reg_off;
 
+    enum HIVE_TYPE {
+        HIVE_TYPE_UNKNOWN = HTYPE_UNKNOWN,
+        HIVE_TYPE_SAM = HTYPE_SAM,
+        HIVE_TYPE_SYSTEM = HTYPE_SYSTEM,
+        HIVE_TYPE_SECURITY = HTYPE_SECURITY,
+        HIVE_TYPE_SOFTWARE = HTYPE_SOFTWARE
+    };
+
+    enum SCAN_KEY_RESULT {
+        SCAN_KEY_ERROR = -1,
+        SCAN_KEY_NO_MORE_ITEMS = 0,
+        SCAN_KEY_MORE_ITEMS = 1
+    };
+
+    enum REG_VALUE_TYPE {
+        VAL_TYPE_REG_NONE = REG_NONE,
+        VAL_TYPE_REG_SZ = REG_SZ,
+        VAL_TYPE_REG_EXPAND_SZ = REG_EXPAND_SZ,
+        VAL_TYPE_REG_BINARY = REG_BINARY,
+        VAL_TYPE_REG_DWORD = REG_DWORD,
+        VAL_TYPE_REG_DWORD_BIG_ENDIAN,
+        VAL_TYPE_REG_LINK = REG_LINK,
+        VAL_TYPE_REG_MULTI_SZ = REG_MULTI_SZ,
+        VAL_TYPE_REG_RESOURCE_LIST = REG_RESOURCE_LIST,
+        VAL_TYPE_REG_FULL_RESOURCE_DESCRIPTOR  =  REG_FULL_RESOURCE_DESCRIPTOR,
+        VAL_TYPE_REG_RESOURCE_REQUIREMENTS_LIST = REG_RESOURCE_REQUIREMENTS_LIST,
+    };
+
     class hive {
-    private:
-        string   fileName;         /* Hive's filename */
-        int      fileDesc;         /* File descriptor (only valid if state == OPEN) */
-        int      state;            /* Current state of hive */
-        int      type;             /* Suggested type of hive. NOTE: Library will guess when
-                                  it loads it, but application may change it if needed */
-        int      pages;            /* Number of pages, total */
-        int      usedBlocks;       /* Total # of used blocks */
-        int      unusedBlocks;     /* Total # of unused blocks */
-        int      usedBytes;        /* total # of bytes in useblk */
-        int      unusedBytes;      /* total # of bytes in unuseblk */
-        int      size;             /* Hives size (filesise) in bytes */
-        reg_off  rootOffset;       /* Offset of root-node */
-        short    nkIndexType;      /* Subkey-indextype the root key uses */
-        char     *buffer;          /* Files raw contents */
+    protected:
+        ntreg::hive *regHive;
 
     public:
         hive(const char* fileName, int hiveMode = HMODE_RW);
         ~hive();
 
         // accessors/modifiers
-        string getFileName(){ return this->fileName; };
-        int   getType(){ return this->type; };
+        string    getFileName(){ return string(this->regHive->filename); };
+        int       getFileDesc(){ return this->regHive->filedesc; };
+        int       getState(){ return this->regHive->state; };
+        HIVE_TYPE getType(){ return (HIVE_TYPE)this->regHive->type; };
+        int       getPages(){ return this->regHive->pages; };
+        int       getUsedBlocks(){ return this->regHive->useblk; };
+        int       getUnusedBlocks(){ return this->regHive->unuseblk; };
+        int       getUsedBytes(){ return this->regHive->usetot; };
+        int       getUnusedBytes(){ return this->regHive->unusetot; };
+        int       getSize(){ return this->regHive->size; };
+        int       getRootOffset(){ return this->regHive->rootofs; };
+        short     getNkIndexType(){ return this->regHive->nkindextype; };
+        char      *getBuffer(){ return this->regHive->buffer; };
 
         reg_off travPath(reg_off startingOffest, char* path, int type);
+        SCAN_KEY_RESULT getNextSubKey(int nkofs, int *count, int *countri, struct ntreg::ex_data *sptr);
+
+        struct ntreg::keyval *copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type);
+        int copyBufferToValue(struct ntreg::keyval *regValue, int valueOffset, char *path, REG_VALUE_TYPE type);
+        int getDword(int vofs, char *path);
+        bool writeHiveToFile();
+
     private:
-        void openHive(int hiveMode);
-        void readHiveToBuffer();
+        void openHive(const char* fileName, int hiveMode);
+
+    protected:
+        void closeHive();
     };
+
 }
 
 #endif

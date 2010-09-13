@@ -22,92 +22,68 @@
 #include "include/hive.h"
 #include "include/owpException.h"
 
+using std::cout;
 using std::cerr;
 using std::endl;
 
 namespace owper {
     hive::hive(const char* fileName, int hiveMode/* = HMODE_RW*/) {
-        //unsigned long pageOffset;
-
-        this->fileName = fileName;
-        this->state = 0;
-        this->size = 0;
-        this->buffer = NULL;
-
-        this->openHive(hiveMode);
-        this->readHiveToBuffer();
+        this->openHive(fileName, hiveMode);
     }
 
-    void hive::openHive(int hiveMode) {
-        int fileMode;
-        int curHiveMode;
-
-        if(hiveMode & HMODE_RO) {
-            fileMode = O_RDONLY;
-        } else {
-            fileMode = O_RDWR;
-
-        this->fileDesc = open(this->fileName.c_str(), fileMode);
-
-        if(this->fileDesc < 0) {
-            if(fileMode == O_RDONLY) {
-                throw(owpException(stringPrintf("Could not open hive file: %s", this->fileName.c_str())));
-            } else {
-                cerr << stringPrintf("Failed to open hive: [\"%s\"] in RW mode, attempting RO", this->fileName.c_str());
-                cerr << endl;
-                this->fileDesc = open(this->fileName.c_str(), O_RDONLY);
-                if(this->fileDesc < 0) {
-                    throw(owpException(stringPrintf("Could not open hive file: %s", this->fileName.c_str())));
-                }
-            }
-
-                cerr << "Opened in RO mode." << endl;
-                curHiveMode |= HMODE_RO;
-            }
+    void hive::openHive(const char* fileName, int hiveMode) {
+        if((this->regHive = ntreg::openHive((char *)fileName, hiveMode)) == NULL) {
+            //ntreg::openHive automatically calls closeHive on failure
+            throw(owpException(stringPrintf("Failed to open/read hive file: %s", fileName)));
         }
-
-        this->state |= (curHiveMode|HMODE_OPEN);
-        cerr << stringPrintf("Opened hive: %s", this->fileName.c_str()) << endl;
     }
 
-    void hive::readHiveToBuffer() {
-        struct stat statBuff;
-
-        if ( fstat(this->fileDesc, &statBuff) ) {
-            throw(owpException(stringPrintf("Failed to fstat() file: %s", this->fileName.c_str())));
-        }
-
-        this->size = statBuff.st_size;
-
-        try {
-            this->buffer = new char[this->size];
-        }catch(exception e) {
-            throw(owpException(stringPrintf("Failed to allocate %d bytes to hold hive: ",
-                               this->size, this->fileName.c_str())));
-        }
-
-        cerr << stringPrintf("Attempting to read %d bytes from hive: %s", this->size, this->fileName.c_str());
-        cerr << endl;
-        int bytesRead = read(this->fileDesc, this->buffer, this->size);
-        if(bytesRead != this->size) {
-            throw owpException(stringPrintf("Failed to read entire hive file.  Expected %d bytes, got %d",
-                                            this->size, bytesRead));
+    void hive::closeHive() {
+        if(this->regHive != NULL) {
+            ntreg::closeHive(this->regHive);
+            this->regHive = NULL;
         }
     }
 
     hive::~hive() {
-        if(this->state & HMODE_OPEN) {
-            cerr << stringPrintf("Closing hive: %s", this->fileName.c_str()) << endl;
-            close(this->fileDesc);
-        } else {
-            cerr << "Not closing hive...not open" << endl;
-        }
-
-        if(this->buffer)
-            delete[] buffer;
+        closeHive();
     }
 
-/*  reg_off hive::travPath(reg_off startingOffest, char* path, int type) {
+    reg_off hive::travPath(reg_off startingOffset, char* path, int type) {
+        return ntreg::trav_path(this->regHive, startingOffset, path, type);
+    }
 
-    }*/
+    SCAN_KEY_RESULT hive::getNextSubKey(int nkofs, int *count, int *countri, struct ntreg::ex_data *sptr) {
+        return (SCAN_KEY_RESULT)ntreg::ex_next_n(this->regHive, nkofs, count, countri, sptr);
+    }
+
+    struct ntreg::keyval *hive::copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type) {
+        return ntreg::get_val2buf(this->regHive, kv, vofs, path, type);
+    }
+
+    /**
+     * Copy the data from the supplied registry value object into the actual hive
+     * @param keyval* regValue Registry value to copy
+     * @param int valueOffset Offset within the value?
+     * @param char* path The path to which the value will be copied
+     * @param REG_VALUE_TYPE type The type of registry value we'll be copying
+     * @return int The number of bytes copied
+     */
+    int hive::copyBufferToValue(struct ntreg::keyval *regValue, int valueOffset, char *path, REG_VALUE_TYPE type) {
+        return ntreg::put_buf2val(this->regHive, regValue, valueOffset, path, type);
+    }
+
+    int hive::getDword(int vofs, char* path) {
+        return ntreg::get_dword(this->regHive, vofs, path);
+    }
+
+    bool hive::writeHiveToFile() {
+        int errorsPresent = ntreg::writeHive(this->regHive);
+
+        if(errorsPresent) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

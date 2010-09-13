@@ -19,15 +19,14 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef BINARY_MANIP_H
-#define BINARY_MANIP_H
-
-#include "include/ntreg.h"
-#include "include/sam.h"
+#include "include/binaryManip.h"
 
 namespace binaryManip {
-    void unicodeToAscii(char *src, char *dest, int l);
-    void asciiToUnicode(char *src, char *dest, int l);
-}
+    void unicodeToAscii(char *src, char*dest, int l) {
+        ntreg::cheap_uni2ascii(src, dest, l);
+    }
 
-#endif
+    void asciiToUnicode(char *src, char*dest, int l) {
+        ntreg::cheap_ascii2uni(src, dest, l);
+    }
+}

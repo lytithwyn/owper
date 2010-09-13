@@ -25,6 +25,11 @@
 #ifndef _INCLUDE_SAM_H
 #define _INCLUDE_SAM_H 1
 
+#ifdef __cplusplus
+namespace ntreg {  //namespace wrapper added by Matthew Morgan
+    extern "C" {
+#endif
+
 /* This contains some policy settings for the account database */
 
 #define ACCOUNTDB_F_PATH "\\SAM\\Domains\\Account\\F"
@@ -89,24 +94,24 @@ struct user_F {
 /* Seems not to be used on failed console logins at least */
 #define ACB_AUTOLOCK   0x0400  /* Account auto locked */
 
-char *acb_fields[16] = { /* explicit casts to char* added by Matthew Morgan */
-   (char *)"Disabled" ,
-   (char *)"Homedir req." ,
-   (char *)"Passwd not req." ,
-   (char *)"Temp. duplicate" ,
-   (char *)"Normal account" ,
-   (char *)"NMS account" ,
-   (char *)"Domain trust act." ,
-   (char *)"Wks trust act." ,
-   (char *)"Srv trust act" ,
-   (char *)"Pwd don't expire" ,
-   (char *)"Auto lockout" ,
-   (char *)"(unknown 0x08)" ,
-   (char *)"(unknown 0x10)" ,
-   (char *)"(unknown 0x20)" ,
-   (char *)"(unknown 0x40)" ,
-   (char *)"(unknown 0x80)" ,
-};
+//char *acb_fields[16] = { /* explicit casts to char* added by Matthew Morgan */
+//   (char *)"Disabled" ,
+//   (char *)"Homedir req." ,
+//   (char *)"Passwd not req." ,
+//   (char *)"Temp. duplicate" ,
+//   (char *)"Normal account" ,
+//   (char *)"NMS account" ,
+//   (char *)"Domain trust act." ,
+//   (char *)"Wks trust act." ,
+//   (char *)"Srv trust act" ,
+//   (char *)"Pwd don't expire" ,
+//   (char *)"Auto lockout" ,
+//   (char *)"(unknown 0x08)" ,
+//   (char *)"(unknown 0x10)" ,
+//   (char *)"(unknown 0x20)" ,
+//   (char *)"(unknown 0x40)" ,
+//   (char *)"(unknown 0x80)" ,
+//};
 
 /* Users V data struct */
 /* First 0xCC bytes is pointer & len table, rest is data which
@@ -218,5 +223,11 @@ struct group_C {
   char data[];
 
 };
+
+//close namespace
+#ifdef __cplusplus
+    }
+}
+#endif
 
 #endif

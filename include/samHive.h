@@ -7,7 +7,8 @@
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; version 2 of the License.
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,15 +20,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef BINARY_MANIP_H
-#define BINARY_MANIP_H
+#ifndef SAM_HIVE_H
+#define SAM_HIVE_H
 
-#include "include/ntreg.h"
+#include <iostream>
+#include <vector>
+#include "include/hive.h"
+#include "include/stringManip.h"
 #include "include/sam.h"
+#include "include/samUser.h"
 
-namespace binaryManip {
-    void unicodeToAscii(char *src, char *dest, int l);
-    void asciiToUnicode(char *src, char *dest, int l);
+using std::vector;
+using std::string;
+using std::cout;
+using std::cerr;
+using std::endl;
+
+namespace owper {
+    class samHive : public hive {
+    private:
+        vector<samUser*> userList;
+
+        void     loadUserList();
+        int      getUserRID(char* userName);
+        samUser* getSamUser(int rid);
+        string   getUserValue(char* dataBuffer, int valueOffset, int valueLength);
+    public:
+        samHive(const char* fileName, int hiveMode = HMODE_RW);
+        vector<samUser*> getUserList(){ return userList; };
+        bool     mergeChangesToHive();
+    };
+
 }
 
 #endif

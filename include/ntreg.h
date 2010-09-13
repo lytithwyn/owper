@@ -29,6 +29,11 @@
 #ifndef _INCLUDE_NTREG_H
 #define _INCLUDE_NTREG_H 1
 
+#ifdef __cplusplus
+namespace ntreg {  //namespace wrapper added by Matthew Morgan
+    extern "C" {
+#endif
+
 #define SZ_MAX     4096       /* Max unicode strlen before we truncate */
 
 #define KEY_ROOT   0x2c         /* Type ID of ROOT key node */
@@ -378,6 +383,12 @@ struct nk_key *add_key(struct hive *hdesc, int nkofs, char *name);
 int del_key(struct hive *hdesc, int nkofs, char *name);
 void rdel_keys(struct hive *hdesc, char *path, int nkofs);
 struct keyval *get_class(struct hive *hdesc, int curnk, char *path);
+
+//close namespace
+#ifdef __cplusplus
+    }
+}
+#endif
 
 #endif
 
