@@ -1,24 +1,26 @@
-CC = gcc
-CPP = g++
+include makeconfig.mk
+
 CFLAGS = -I ./owper -I ./owper-gui -g -Wall
 GUICFLAGS = `pkg-config --cflags gtk+-2.0`
 GUILIBS = `pkg-config --libs gtk+-2.0`
-RM = rm -rf
 OBJS = *.o
-LIBSRCS = owper/src/*.cpp
-GUISRCS = owper-gui/src/*.cpp
+LIBOWPER_DIR = owper
+GUISRCS = main.cpp owper-gui/src/*.cpp
 PROG = owpergui
 
 all: $(PROG)
 
-owper: $(OBJS) $(LIBSRCS)
-	$(CPP) $(CFLAGS) $(LIBSRCS) -c
+$(LIBOWPER): 
+	$(ECHO) "Making all in $(LIBOWPER_DIR)"
+	cd $(LIBOWPER_DIR) ; $(MAKE)
 
-owpergui: $(OBJS) $(GUISRCS)
-	$(CPP) $(CFLAGS) $(GUICFLAGS) $(GUILIBS) $(GUISRCS) $(OBJS) -o $(PROG)
+owpergui: $(LIBOWPER) $(GUISRCS)
+	$(CPP) $(CFLAGS) $(GUICFLAGS) $(GUILIBS) $(GUISRCS) $(LIBOWPER_DIR)/$(LIBOWPER) -o $(PROG)
 
 %.o: owper/src/%.c
 	$(CC) $(CFLAGS) -c $<
 
 clean:
 	$(RM) $(PROG) $(OBJS) $(PROG).dSYM
+	$(ECHO) "Making clean in $(LIBOWPER_DIR)"
+	cd $(LIBOWPER_DIR) ; $(MAKE) clean
