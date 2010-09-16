@@ -1,6 +1,6 @@
 include ../makeconfig.mk
 
-CFLAGS = -I ./ -g -Wall
+CFLAGS = -I ./ -g -Wall -Werror
 OBJS = *.o
 SRCS = src/*.cpp
 LIBNAME = libowper.a

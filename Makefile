@@ -1,6 +1,6 @@
 include makeconfig.mk
 
-CFLAGS = -I ./owper -I ./owper-gui -g -Wall
+CFLAGS = -I ./owper -I ./owper-gui -g -Wall -Werror
 GUICFLAGS = `pkg-config --cflags gtk+-2.0`
 GUILIBS = `pkg-config --libs gtk+-2.0`
 OBJS = *.o
