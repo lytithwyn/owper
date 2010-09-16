@@ -33,7 +33,7 @@ namespace owper {
     void hive::openHive(const char* fileName, int hiveMode) {
         if((this->regHive = ntreg::openHive((char *)fileName, hiveMode)) == NULL) {
             //ntreg::openHive automatically calls closeHive on failure
-            throw(owpException(stringPrintf("Failed to open/read hive file: %s", fileName)));
+            throw(new owpException(stringPrintf("Failed to open/read hive file: %s", fileName)));
         }
     }
 
