@@ -21,6 +21,8 @@
 #include "include/owperGUI.h"
 
 owperGUI::owperGUI( string initHivePath/*=""*/) {
+    sam = NULL;
+
     winMain = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_container_set_border_width(GTK_CONTAINER(winMain), 5);
     gtk_window_set_default_size(GTK_WINDOW(winMain), 600, 400);
@@ -31,22 +33,22 @@ owperGUI::owperGUI( string initHivePath/*=""*/) {
 
 
     //section for setting the directory from which to retrieve registry files
-    frameDirectory = gtk_frame_new("Select Regsitry Files Directory");
-    gtk_box_pack_start(GTK_BOX(vboxMain), frameDirectory, false, false, 0);
+    frameSamFile = gtk_frame_new("Select Sam Registry File");
+    gtk_box_pack_start(GTK_BOX(vboxMain), frameSamFile, false, false, 0);
 
-    hboxDirectory = gtk_hbox_new(false, 0);
-    gtk_container_set_border_width(GTK_CONTAINER(hboxDirectory), 5);
-    gtk_container_add(GTK_CONTAINER(frameDirectory), hboxDirectory);
+    hboxSamFile = gtk_hbox_new(false, 0);
+    gtk_container_set_border_width(GTK_CONTAINER(hboxSamFile), 5);
+    gtk_container_add(GTK_CONTAINER(frameSamFile), hboxSamFile);
 
-    entryDirectory = gtk_entry_new();
-    gtk_entry_set_width_chars(GTK_ENTRY(entryDirectory), 30);
-    gtk_entry_set_editable(GTK_ENTRY(entryDirectory), false);
-    gtk_box_pack_start(GTK_BOX(hboxDirectory), entryDirectory, true, true, 5);
+    entrySamFile = gtk_entry_new();
+    gtk_entry_set_width_chars(GTK_ENTRY(entrySamFile), 30);
+    gtk_entry_set_editable(GTK_ENTRY(entrySamFile), false);
+    gtk_box_pack_start(GTK_BOX(hboxSamFile), entrySamFile, true, true, 5);
 
-    buttonBrowseDirectory = gtk_button_new_with_mnemonic("_Browse");
-    /*g_signal_connect (G_OBJECT(buttonBrowseDirectory), "clicked",
-        G_CALLBACK(directory_browse_event), NULL);*/
-    gtk_box_pack_start(GTK_BOX(hboxDirectory), buttonBrowseDirectory, false, false, 5);
+    buttonBrowseSamFile = gtk_button_new_with_mnemonic("_Browse");
+    g_signal_connect (G_OBJECT(buttonBrowseSamFile), "clicked",
+        G_CALLBACK(sam_file_browse_event), (gpointer)this);
+    gtk_box_pack_start(GTK_BOX(hboxSamFile), buttonBrowseSamFile, false, false, 5);
 
 
     //section for list of users
@@ -56,20 +58,23 @@ owperGUI::owperGUI( string initHivePath/*=""*/) {
     vboxUsers = gtk_vbox_new(false, 0);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrollwinUsers), vboxUsers);
 
-
     //commands across the bottom
     hboxCommands = gtk_hbox_new(false, 0);
     gtk_box_pack_start(GTK_BOX(vboxMain), hboxCommands, false, false, 0);
 
     buttonClearPasswords = gtk_button_new_with_mnemonic("_Clear Passwords");
-    /*gtk_signal_connect (GTK_OBJECT (buttonClearPasswords), "clicked",
-        GTK_SIGNAL_FUNC (clearPasswords), NULL);*/
+    g_signal_connect (G_OBJECT (buttonClearPasswords), "clicked",
+            G_CALLBACK(clearPasswords), (gpointer)this);
     gtk_box_pack_end(GTK_BOX(hboxCommands), buttonClearPasswords, false, false, 0);
 
 
     gtk_container_add(GTK_CONTAINER (winMain), vboxMain);
 
     gtk_widget_show_all(winMain);
+
+    if(initHivePath != "") {
+        changeHiveFile(initHivePath);
+    }
 }
 
 void owperGUI::delete_event(GtkWidget *widget, GdkEvent  *event, gpointer data)
@@ -81,4 +86,136 @@ void owperGUI::destroy(GtkWidget *widget, gpointer data )
 {
     gtk_main_quit ();
 }
+
+void owperGUI::sam_file_browse_event(GtkWidget *widget, gpointer owperGUIInstance)
+{
+    owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
+
+    GtkWidget *fileChooser = gtk_file_chooser_dialog_new ("Open File",
+                                GTK_WINDOW(thisOwperGUI->winMain),
+                                GTK_FILE_CHOOSER_ACTION_OPEN,
+                                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+
+    if (gtk_dialog_run(GTK_DIALOG(fileChooser)) == GTK_RESPONSE_ACCEPT)
+    {
+        string filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (fileChooser));
+        thisOwperGUI->changeHiveFile(filename);
+    }
+
+    gtk_widget_destroy (fileChooser);
+}
+
+bool owperGUI::changeHiveFile(string newFileName) {
+    gtk_entry_set_text(GTK_ENTRY(entrySamFile), "");
+    clearUsers();
+
+    if(sam) {
+        delete sam;
+    }
+
+    try {
+        sam = new samHive(newFileName.c_str());
+    }catch(owpException *exception) {
+        //if sam got assigned something, delete it!
+        if(sam) {
+            delete sam;
+            sam = NULL;
+        }
+
+        GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_ERROR,
+                                         GTK_BUTTONS_CLOSE,
+                                         "Error loading hive:\n%s",
+                                         exception->errorMessage.c_str());
+        gtk_dialog_run (GTK_DIALOG (errorDialog));
+        gtk_widget_destroy (errorDialog);
+        delete exception;
+        return false;
+    }
+
+    gtk_entry_set_text(GTK_ENTRY(entrySamFile), newFileName.c_str());
+    loadUsers();
+    return true;
+}
+
+void owperGUI::loadUsers() {
+    vector<samUser*> samUserList = sam->getUserList();
+
+    for(unsigned int i = 0; i < samUserList.size(); i++) {
+        userWidget *curUserWidget = new userWidget(samUserList.at(i), i);
+
+        vectUserWidgets.push_back(curUserWidget);
+        gtk_box_pack_start(GTK_BOX(this->vboxUsers), curUserWidget->getWidget(), false, false, 0);
+        gtk_widget_show(curUserWidget->getWidget());
+    }
+}
+
+void owperGUI::clearUsers() {
+    //we are using a vector of pointers, thus the destructors
+    //do NOT get called by vector.clear
+    for(unsigned int i = 0; i < vectUserWidgets.size(); i++) {
+        if(vectUserWidgets.at(i)) {
+            delete vectUserWidgets.at(i);
+            vectUserWidgets.at(i) = NULL;
+        }
+    }
+
+    vectUserWidgets.clear();
+}
+
+void owperGUI::clearPasswords(GtkWidget *widget, gpointer owperGUIInstance) {
+    owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
+
+    for(unsigned int i = 0; i < thisOwperGUI->vectUserWidgets.size(); i++) {
+        userWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
+        cout << curUserWidget->getUserName() << endl << flush;
+        if(curUserWidget->userIsSelected()) {
+            curUserWidget->blankPassword();
+            curUserWidget->deselectUser();
+            curUserWidget->resetLabel();
+        }
+    }
+
+    if(!thisOwperGUI->sam->mergeChangesToHive()) {
+        string errorMessage  = "Error clearing passwords!  Not all data was successfully ";
+        errorMessage        += "merged into the hive in memory.  We don't guarantee any particular ";
+        errorMessage        += "results at this point.";
+        GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(thisOwperGUI->winMain),
+                                                 GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                 GTK_MESSAGE_ERROR,
+                                                 GTK_BUTTONS_CLOSE,
+                                                 "%s",
+                                                 errorMessage.c_str());
+        gtk_dialog_run (GTK_DIALOG (errorDialog));
+        gtk_widget_destroy (errorDialog);
+        return;
+    }
+
+    if(!thisOwperGUI->sam->writeHiveToFile()) {
+        string errorMessage  = "Error clearing passwords!  Could not write data to hive file on disk. ";
+        errorMessage        += "We don't guarantee any particular results at this point.";
+        GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(thisOwperGUI->winMain),
+                                                 GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                 GTK_MESSAGE_ERROR,
+                                                 GTK_BUTTONS_CLOSE,
+                                                 "%s",
+                                                 errorMessage.c_str());
+        gtk_dialog_run (GTK_DIALOG (errorDialog));
+        gtk_widget_destroy (errorDialog);
+        return;
+    }
+
+    GtkWidget *infoDialog = gtk_message_dialog_new (GTK_WINDOW(thisOwperGUI->winMain),
+                                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                     GTK_MESSAGE_INFO,
+                                                     GTK_BUTTONS_CLOSE,
+                                                     "%s",
+                                                     "Passwords cleared!");
+    gtk_dialog_run (GTK_DIALOG (infoDialog));
+    gtk_widget_destroy (infoDialog);
+}
+
+
 

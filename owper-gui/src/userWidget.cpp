@@ -18,45 +18,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#include "include/userWidget.h"
 
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
-#include <cstring>
-#include <dirent.h>
-#include <vector>
-#include <algorithm>
-#include <gtk/gtk.h>
+userWidget::userWidget(samUser *inSamUser, unsigned int inUserIndex)
+{
+    user = inSamUser;
+    userIndex = inUserIndex;
+    chkbtnUser = gtk_check_button_new_with_label("");
+    resetLabel();
+}
 
-#include "include/ntreg.h"
-#include "include/sam.h"
+userWidget::~userWidget() {
+    gtk_widget_destroy(this->chkbtnUser);
+}
 
-#include "include/stringManip.h"
-#include "include/fileManip.h"
-#include "include/owpException.h"
-#include "include/samHive.h"
-#include "include/owperGUI.h"
-
-using std::cout;
-using std::endl;
-using std::string;
-using stringManip::stringPrintf;
-
-using namespace owper;
-
-int main(int argc, char* argv[]) {
-    gtk_init(&argc, &argv);
-
-    string initHive = "";
-    if(argc == 2) {
-        initHive = argv[1];
+void userWidget::resetLabel()
+{
+    string fullName = "";
+    if(user->getFullName() != "") {
+        fullName = stringPrintf(" (%s)", user->getFullName().c_str());
     }
 
-    owperGUI *passwordClearer;
-    passwordClearer = new owperGUI(initHive);
+    string isBlank = "";
+    if(user->passwordIsBlank()) {
+        isBlank = " [Blank]";
+    }
 
-    gtk_main();
-
-    return 1;
-
+    string label = stringPrintf("%s%s%s", user->getUserName().c_str(), fullName.c_str(), isBlank.c_str());
+    gtk_button_set_label(GTK_BUTTON(this->chkbtnUser), label.c_str());
 }

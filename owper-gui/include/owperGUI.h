@@ -24,37 +24,42 @@
 #include <gtk/gtk.h>
 #include <iostream>
 #include <string>
+#include <vector>
+
+#include "include/samHive.h"
+#include "include/userWidget.h"
+
 using namespace std;
+using namespace owper;
 
 class owperGUI
 {
     private:
         GtkWidget *winMain;
         GtkWidget *vboxMain;
-        GtkWidget *frameDirectory;
-        GtkWidget *hboxDirectory;
-        GtkWidget *entryDirectory;
-        GtkWidget *buttonBrowseDirectory;
+        GtkWidget *frameSamFile;
+        GtkWidget *hboxSamFile;
+        GtkWidget *entrySamFile;
+        GtkWidget *buttonBrowseSamFile;
         GtkWidget *scrollwinUsers;
         GtkWidget *vboxUsers;
         GtkWidget *hboxCommands;
         GtkWidget *buttonClearPasswords;
 
-        string             stringSamFileName;
-        string             stringSystemFileName;
-        //vector<userWidget*> vectUserWidgets;
+        string stringSamFileName;
+        samHive  *sam;
+        vector<userWidget*> vectUserWidgets;
 
     public:
         owperGUI(string stringInitHivePath = "");
 
         static void delete_event(GtkWidget *widget, GdkEvent  *event, gpointer data);
         static void destroy(GtkWidget *widget, gpointer data);
-        static void directory_browse_event(GtkWidget *widget, gpointer data);
-        void directory_change(string directory);
-        bool directory_test(string directory);
+        static void sam_file_browse_event(GtkWidget *widget, gpointer owperGUIInstance);
+        bool changeHiveFile(string newFileName);
         void clearUsers();
-        bool checkAddUser(string stringOutput);
-        static void clearPasswords(void);
+        void loadUsers();
+        static void clearPasswords(GtkWidget *widget, gpointer owperGUIInstance);
 };
 
 
