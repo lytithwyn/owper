@@ -18,6 +18,9 @@
  * NTREG - Window registry file reader / writer library
  * Copyright (c) 1997-2007 Petter Nordahl-Hagen.
  *
+ * Edits by Brandon Tilley, as marked
+ * Copyright (c) 2010 Brandon Tilley
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
@@ -378,7 +381,9 @@ void parse_nk(struct hive *hdesc, int vofs, int blen)
 
   printf("== nk at offset %0x\n",vofs);
 
-  /* #define D_OFFS2(o) ( (void *)&(key->o)-(void *)hdesc->buffer-vofs ) */
+  /* Brandon Tilley - fixed to be sure return type is cast to unsigned int
+   * tested on OSX
+   */
 #define D_OFFS(o) (unsigned int) ( (void *)&(key->o)-(void *)hdesc->buffer-vofs )
 
   key = (struct nk_key *)(hdesc->buffer + vofs);
