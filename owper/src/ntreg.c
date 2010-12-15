@@ -379,7 +379,7 @@ void parse_nk(struct hive *hdesc, int vofs, int blen)
   printf("== nk at offset %0x\n",vofs);
 
   /* #define D_OFFS2(o) ( (void *)&(key->o)-(void *)hdesc->buffer-vofs ) */
-#define D_OFFS(o) ( (void *)&(key->o)-(void *)hdesc->buffer-vofs )
+#define D_OFFS(o) (unsigned int) ( (void *)&(key->o)-(void *)hdesc->buffer-vofs )
 
   key = (struct nk_key *)(hdesc->buffer + vofs);
   printf("%04x   type              = 0x%02x %s\n", D_OFFS(type)  , key->type,
