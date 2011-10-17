@@ -15,4 +15,4 @@ $(LIBOWPER): $(OBJS) $(SRCS) $(CPPOBJS)
 	ar rcs libowper.a $(OBJS) $(CPPOBJS)
 	
 clean:
-	$(RM) $(OBJS) $(LIBNAME)
+	$(RM) $(OBJS) $(LIBNAME) $(CPPOBJS)
