@@ -1,6 +1,6 @@
 include makeconfig.mk
 
-CFLAGS = -I ./owper -I ./owper-gui -g -Wall -Werror
+CFLAGS = -I ./owper -I ./owper-gui -g -Wall -Werror -Wno-unused-but-set-variable
 GUICFLAGS = `pkg-config --cflags gtk+-2.0`
 GUILIBS = `pkg-config --libs gtk+-2.0`
 OBJS = *.o

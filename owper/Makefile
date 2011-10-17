@@ -1,16 +1,16 @@
 include ../makeconfig.mk
 
 CFLAGS = -I ./ -g -Wall -Werror
-OBJS = *.o
+CXXFLAGS = -I ./ -g -Wall
+OBJS = $(patsubst %.c,%.o,$(wildcard src/*.c))
+CPPOBJS = $(patsubst %.cpp,%.o,$(wildcard src/*.cpp))
 SRCS = src/*.cpp
 LIBNAME = libowper.a
 
-$(LIBOWPER): $(OBJS) $(SRCS)
-	$(CPP) $(CFLAGS) $(SRCS) -c
-	ar rcs libowper.a $(OBJS)
-	
-%.o: src/%.c
-	$(CC) $(CFLAGS) -c $<
+.PHONY: clean
 
+$(LIBOWPER): $(OBJS) $(SRCS) $(CPPOBJS)
+	ar rcs libowper.a $(OBJS) $(CPPOBJS)
+	
 clean:
 	$(RM) $(OBJS) $(LIBNAME)
