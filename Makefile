@@ -19,9 +19,6 @@ $(LIBOWPER):
 owpergui: $(LIBOWPER) $(GUISRCS)
 	$(CPP) $(CFLAGS) $(GUICFLAGS) $(GUILIBS) $(GUISRCS) $(LIBOWPER_DIR)/$(LIBOWPER) -o $(PROG)
 
-%.o: owper/src/%.c
-	$(CC) $(CFLAGS) -c $<
-
 clean:
 	$(RM) $(PROG) $(OBJS) $(PROG).dSYM
 	$(ECHO) "Making clean in $(LIBOWPER_DIR)"
