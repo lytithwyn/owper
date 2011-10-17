@@ -9,6 +9,8 @@ LIBNAME = libowper.a
 
 .PHONY: clean
 
+all: $(LIBOWPER)
+
 $(LIBOWPER): $(OBJS) $(SRCS) $(CPPOBJS)
 	ar rcs libowper.a $(OBJS) $(CPPOBJS)
 	
