@@ -8,6 +8,8 @@ LIBOWPER_DIR = owper
 GUISRCS = owper-gui/src/*.cpp
 PROG = owpergui
 
+.PHONY: all clean
+
 all: $(PROG)
 
 $(LIBOWPER): 
