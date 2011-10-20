@@ -1,3 +1,4 @@
 owpergui
 *.o
 owper/libowper.a
+*.swp
