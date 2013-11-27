@@ -56,8 +56,8 @@ namespace owper {
         return (SCAN_KEY_RESULT)ntreg::ex_next_n(this->regHive, nkofs, count, countri, sptr);
     }
 
-    struct ntreg::keyval *hive::copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type) {
-        return ntreg::get_val2buf(this->regHive, kv, vofs, path, type);
+    struct ntreg::keyval *hive::copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type, int exact/* =0 */) {
+        return ntreg::get_val2buf(this->regHive, kv, vofs, path, type, exact);
     }
 
     /**
@@ -66,14 +66,15 @@ namespace owper {
      * @param int valueOffset Offset within the value?
      * @param char* path The path to which the value will be copied
      * @param REG_VALUE_TYPE type The type of registry value we'll be copying
+     * @param int exact I have no idea - something Petter is doing now
      * @return int The number of bytes copied
      */
-    int hive::copyBufferToValue(struct ntreg::keyval *regValue, int valueOffset, char *path, REG_VALUE_TYPE type) {
-        return ntreg::put_buf2val(this->regHive, regValue, valueOffset, path, type);
+    int hive::copyBufferToValue(struct ntreg::keyval *regValue, int valueOffset, char *path, REG_VALUE_TYPE type, int exact/* = 0*/) {
+        return ntreg::put_buf2val(this->regHive, regValue, valueOffset, path, type, exact);
     }
 
-    int hive::getDword(int vofs, char* path) {
-        return ntreg::get_dword(this->regHive, vofs, path);
+    int hive::getDword(int vofs, char* path, int exact/* = 0*/) {
+        return ntreg::get_dword(this->regHive, vofs, path, exact);
     }
 
     bool hive::writeHiveToFile() {

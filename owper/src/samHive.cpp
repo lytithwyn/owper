@@ -33,12 +33,12 @@ namespace owper {
 
     reg_off samHive::getUserRID(char* userName) {
         string ridPath = stringManip::stringPrintf("\\SAM\\Domains\\Account\\Users\\Names\\%s\\@",userName);
-        return this->getDword(0, (char*)ridPath.c_str());
+        return this->getDword(0, (char*)ridPath.c_str(), TPF_VK_EXACT|TPF_VK_SHORT);
     }
 
     samUser* samHive::getSamUser(int rid) {
         string vValuePath = stringPrintf("\\SAM\\Domains\\Account\\Users\\%08X\\V",rid);
-        ntreg::keyval *vValue = this->copyValueToBuffer(NULL, 0, (char*)vValuePath.c_str(), REG_BINARY);
+        ntreg::keyval *vValue = this->copyValueToBuffer(NULL, 0, (char*)vValuePath.c_str(), REG_BINARY, TPF_VK_EXACT);
 
         samUser *newSamUser;
         try{
@@ -91,7 +91,7 @@ namespace owper {
             if(userList.at(i)->needsToSave()) {
                 ntreg::keyval *keyValue = userList.at(i)->getVStructRegValue();
                 string path = userList.at(i)->getVStructPath().c_str();
-                int size = copyBufferToValue(keyValue, 0, (char*)path.c_str(), VAL_TYPE_REG_BINARY);
+                int size = copyBufferToValue(keyValue, 0, (char*)path.c_str(), VAL_TYPE_REG_BINARY, TPF_VK_EXACT);
 
                 if(size < 1) {
                     allSuccessful = false;
