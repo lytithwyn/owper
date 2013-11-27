@@ -119,12 +119,12 @@ struct  hbin_page {
 */
 struct sk_key {
 
-  short id;          /* 0x0000	Word	ID: ASCII-"sk" = 0x6B73        */
-  short dummy1;      /* 0x0002	Word	Unused                         */
-  long  ofs_prevsk;  /* 0x0004	D-Word	Offset of previous "sk"-Record */
-  long  ofs_nextsk;  /* 0x0008	D-Word	Offset of next "sk"-Record     */
-  long  no_usage;    /* 0x000C	D-Word	usage-counter                  */
-  long  len_sk;      /* 0x0010	D-Word	Size of "sk"-record in bytes   */
+  uint16_t id;          /* 0x0000	Word	ID: ASCII-"sk" = 0x6B73        */
+  uint16_t dummy1;      /* 0x0002	Word	Unused                         */
+  uint32_t  ofs_prevsk;  /* 0x0004	D-Word	Offset of previous "sk"-Record */
+  uint32_t  ofs_nextsk;  /* 0x0008	D-Word	Offset of next "sk"-Record     */
+  uint32_t  no_usage;    /* 0x000C	D-Word	usage-counter                  */
+  uint32_t  len_sk;      /* 0x0010	D-Word	Size of "sk"-record in bytes   */
   char  data[4];     /* Security data up to len_sk bytes               */
 
 };
@@ -138,14 +138,14 @@ struct sk_key {
 
 struct lf_key {
 
-  short id;         /* 0x0000	Word	ID: ASCII-"lf" = 0x666C or "lh" = 0x686c */
-  short no_keys;    /* 0x0002	Word	number of keys          */
+  uint16_t id;         /* 0x0000	Word	ID: ASCII-"lf" = 0x666C or "lh" = 0x686c */
+  uint16_t no_keys;    /* 0x0002	Word	number of keys          */
                     /* 0x0004	????	Hash-Records            */
 
  /*union { */ //removed by Matthew Morgan to fix g++ errors
 
     struct lf_hash {
-      long ofs_nk;    /* 0x0000	D-Word	Offset of corresponding "nk"-Record  */
+      uint32_t ofs_nk;    /* 0x0000	D-Word	Offset of corresponding "nk"-Record  */
       char name[4];   /* 0x0004	D-Word	ASCII: the first 4 characters of the key-name,  */
     } hash[1];
 
@@ -153,8 +153,8 @@ struct lf_key {
       /* 		padded with 0's. Case sensitiv!                         */
 
     struct lh_hash {
-      long ofs_nk;    /* 0x0000	D-Word	Offset of corresponding "nk"-Record  */
-      long hash;      /* 0x0004	D-Word	ASCII: the first 4 characters of the key-name,  */
+      uint32_t ofs_nk;    /* 0x0000	D-Word	Offset of corresponding "nk"-Record  */
+      uint32_t hash;      /* 0x0004	D-Word	ASCII: the first 4 characters of the key-name,  */
     } lh_hash[1];
 /*  }; */ //removed by Matthew Morgan to fix g++ errors
 
@@ -165,11 +165,11 @@ struct lf_key {
  */
 struct li_key {
 
-  short id;         /* 0x0000	Word	ID: ASCII-"li" = 0x696C */
-  short no_keys;    /* 0x0002	Word	number of keys          */
+  uint16_t id;         /* 0x0000	Word	ID: ASCII-"li" = 0x696C */
+  uint16_t no_keys;    /* 0x0002	Word	number of keys          */
                     /* 0x0004	????	Hash-Records            */
   struct li_hash {
-    long ofs_nk;    /* 0x0000	D-Word	Offset of corresponding "nk"-Record  */
+    uint32_t ofs_nk;    /* 0x0000	D-Word	Offset of corresponding "nk"-Record  */
   } hash[1];
 };
 
@@ -207,13 +207,13 @@ struct ri_key {
 struct vk_key {
 
                     /* Offset	Size	Contents                 */
-  short id;         /* 0x0000	Word	ID: ASCII-"vk" = 0x6B76  */
-  short len_name;   /* 0x0002	Word	name length              */
-  long  len_data;   /* 0x0004	D-Word	length of the data       */
-  long  ofs_data;   /* 0x0008	D-Word	Offset of Data           */
-  long  val_type;   /* 0x000C	D-Word	Type of value            */
-  short flag;       /* 0x0010	Word	Flag                     */
-  short dummy1;     /* 0x0012	Word	Unused (data-trash)      */
+  uint16_t id;         /* 0x0000	Word	ID: ASCII-"vk" = 0x6B76  */
+  uint16_t len_name;   /* 0x0002	Word	name length              */
+  uint32_t  len_data;   /* 0x0004	D-Word	length of the data       */
+  uint32_t  ofs_data;   /* 0x0008	D-Word	Offset of Data           */
+  uint32_t  val_type;   /* 0x000C	D-Word	Type of value            */
+  uint16_t flag;       /* 0x0010	Word	Flag                     */
+  uint16_t dummy1;     /* 0x0012	Word	Unused (data-trash)      */
   char  keyname[1]; /* 0x0014	????	Name                     */
 
 };

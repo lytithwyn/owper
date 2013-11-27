@@ -421,10 +421,10 @@ void parse_vk(struct hive *hdesc, int vofs, int blen)
   key = (struct vk_key *)(hdesc->buffer + vofs);
   printf("%04x   name length       = %d (0x%0x)\n", D_OFFS(len_name),
                                  key->len_name, key->len_name  );
-  printf("%04x   length of data    = %ld (0x%0lx)\n", D_OFFS(len_data),
-                                 key->len_data, key->len_data  );
-  printf("%04x   data offset       = 0x%0lx\n",D_OFFS(ofs_data),key->ofs_data);
-  printf("%04x   value type        = 0x%0lx  %s\n", D_OFFS(val_type), key->val_type,
+  printf("%04x   length of data    = %jd (0x%0jx)\n", D_OFFS(len_data),
+                                 (uintmax_t)(key->len_data), (uintmax_t)(key->len_data)  );
+  printf("%04x   data offset       = 0x%0jx\n",D_OFFS(ofs_data),(uintmax_t)(key->ofs_data));
+  printf("%04x   value type        = 0x%0jx  %s\n", D_OFFS(val_type), (uintmax_t)(key->val_type),
                  (key->val_type <= REG_MAX ? val_types[key->val_type] : "(unknown)") ) ;
 
   printf("%04x   flag              = 0x%0x\n",D_OFFS(flag),key->flag);
@@ -449,12 +449,12 @@ void parse_sk(struct hive *hdesc, int vofs, int blen)
 
   key = (struct sk_key *)(hdesc->buffer + vofs);
   printf("%04x   *unused?*         = %d\n"   , D_OFFS(dummy1),     key->dummy1    );
-  printf("%04x   Offset to prev sk = 0x%0lx\n", D_OFFS(ofs_prevsk), key->ofs_prevsk);
-  printf("%04x   Offset to next sk = 0x%0lx\n", D_OFFS(ofs_nextsk), key->ofs_nextsk);
-  printf("%04x   Usage counter     = %ld (0x%0lx)\n", D_OFFS(no_usage),
-                                                key->no_usage,key->no_usage);
-  printf("%04x   Security data len = %ld (0x%0lx)\n", D_OFFS(len_sk),
-                                                key->len_sk,key->len_sk);
+  printf("%04x   Offset to prev sk = 0x%0jx\n", D_OFFS(ofs_prevsk), (uintmax_t)(key->ofs_prevsk));
+  printf("%04x   Offset to next sk = 0x%0jx\n", D_OFFS(ofs_nextsk), (uintmax_t)(key->ofs_nextsk));
+  printf("%04x   Usage counter     = %jd (0x%0jx)\n", D_OFFS(no_usage),
+                                                (uintmax_t)(key->no_usage),(uintmax_t)(key->no_usage));
+  printf("%04x   Security data len = %jd (0x%0jx)\n", D_OFFS(len_sk),
+                                                (uintmax_t)(key->len_sk),(uintmax_t)(key->len_sk));
 
   printf("== End of key info.\n");
 
@@ -475,9 +475,9 @@ void parse_lf(struct hive *hdesc, int vofs, int blen)
   printf("%04x   number of keys    = %d\n", D_OFFS(no_keys), key->no_keys  );
 
   for(i = 0; i < key->no_keys; i++) {
-    printf("%04x      %3d   Offset: 0x%0lx  - <%c%c%c%c>\n",
+    printf("%04x      %3d   Offset: 0x%0jx  - <%c%c%c%c>\n",
        D_OFFS(hash[i].ofs_nk), i,
-       key->hash[i].ofs_nk,
+       (uintmax_t)(key->hash[i].ofs_nk),
            key->hash[i].name[0],
            key->hash[i].name[1],
            key->hash[i].name[2],
@@ -503,10 +503,10 @@ void parse_lh(struct hive *hdesc, int vofs, int blen)
   printf("%04x   number of keys    = %d\n", D_OFFS(no_keys), key->no_keys  );
 
   for(i = 0; i < key->no_keys; i++) {
-    printf("%04x      %3d   Offset: 0x%0lx  - <hash: %08lx>\n",
+    printf("%04x      %3d   Offset: 0x%0jx  - <hash: %08jx>\n",
        D_OFFS(lh_hash[i].ofs_nk), i,
-       key->lh_hash[i].ofs_nk,
-           key->lh_hash[i].hash );
+       (uintmax_t)(key->lh_hash[i].ofs_nk),
+           (uintmax_t)(key->lh_hash[i].hash) );
   }
 
   printf("== End of key info.\n");
@@ -530,9 +530,9 @@ void parse_li(struct hive *hdesc, int vofs, int blen)
   printf("%04x   number of keys    = %d\n", D_OFFS(no_keys), key->no_keys  );
 
   for(i = 0; i < key->no_keys; i++) {
-    printf("%04x      %3d   Offset: 0x%0lx\n",
+    printf("%04x      %3d   Offset: 0x%0jx\n",
        D_OFFS(hash[i].ofs_nk), i,
-       key->hash[i].ofs_nk);
+       (uintmax_t)(key->hash[i].ofs_nk));
   }
   printf("== End of key info.\n");
 
