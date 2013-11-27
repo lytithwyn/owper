@@ -390,14 +390,14 @@ void parse_nk(struct hive *hdesc, int vofs, int blen)
   printf("%04x   type              = 0x%02x %s\n", D_OFFS(type)  , key->type,
                                (key->type == KEY_ROOT ? "ROOT_KEY" : "") );
   printf("%04x   timestamp skipped\n", D_OFFS(timestamp) );
-  printf("%04x   parent key offset = 0x%0lx\n", D_OFFS(ofs_parent) ,key->ofs_parent);
-  printf("%04x   number of subkeys = %ld\n", D_OFFS(no_subkeys),key->no_subkeys);
-  printf("%04x   lf-record offset  = 0x%0lx\n",D_OFFS(ofs_lf),key->ofs_lf);
-  printf("%04x   number of values  = %ld\n", D_OFFS(no_values),key->no_values);
-  printf("%04x   val-list offset   = 0x%0lx\n",D_OFFS(ofs_vallist),key->ofs_vallist);
-  printf("%04x   sk-record offset  = 0x%0lx\n",D_OFFS(ofs_sk),key->ofs_sk);
-  printf("%04x   classname offset  = 0x%0lx\n",D_OFFS(ofs_classnam),key->ofs_classnam);
-  printf("%04x   *unused?*         = 0x%0lx\n",D_OFFS(dummy4),key->dummy4);
+  printf("%04x   parent key offset = 0x%0jx\n", D_OFFS(ofs_parent) ,(uintmax_t)(key->ofs_parent));
+  printf("%04x   number of subkeys = %jd\n", D_OFFS(no_subkeys),(uintmax_t)(key->no_subkeys));
+  printf("%04x   lf-record offset  = 0x%0jx\n",D_OFFS(ofs_lf),(uintmax_t)(key->ofs_lf));
+  printf("%04x   number of values  = %jd\n", D_OFFS(no_values),(uintmax_t)(key->no_values));
+  printf("%04x   val-list offset   = 0x%0jx\n",D_OFFS(ofs_vallist),(uintmax_t)(key->ofs_vallist));
+  printf("%04x   sk-record offset  = 0x%0jx\n",D_OFFS(ofs_sk),(uintmax_t)(key->ofs_sk));
+  printf("%04x   classname offset  = 0x%0jx\n",D_OFFS(ofs_classnam),(uintmax_t)(key->ofs_classnam));
+  printf("%04x   *unused?*         = 0x%0jx\n",D_OFFS(dummy4),(uintmax_t)(key->dummy4));
   printf("%04x   name length       = %d\n", D_OFFS(len_name),key->len_name);
   printf("%04x   classname length  = %d\n", D_OFFS(len_classnam),key->len_classnam);
 
@@ -555,9 +555,9 @@ void parse_ri(struct hive *hdesc, int vofs, int blen)
   printf("%04x   number of subindices = %d\n", D_OFFS(no_lis), key->no_lis  );
 
   for(i = 0; i < key->no_lis; i++) {
-    printf("%04x      %3d   Offset: 0x%0lx\n",
+    printf("%04x      %3d   Offset: 0x%0jx\n",
        D_OFFS(hash[i].ofs_li), i,
-       key->hash[i].ofs_li);
+       (uintmax_t)(key->hash[i].ofs_li));
   }
   printf("== End of key info.\n");
 
@@ -1396,7 +1396,7 @@ void nk_ls(struct hive *hdesc, char *path, int vofs, int type)
 
   }
 
-  printf("Node has %ld subkeys and %ld values",key->no_subkeys,key->no_values);
+  printf("Node has %jd subkeys and %jd values",(uintmax_t)(key->no_subkeys),(uintmax_t)(key->no_values));
   if (key->len_classnam) printf(", and class-data of %d bytes",key->len_classnam);
   printf("\n");
 

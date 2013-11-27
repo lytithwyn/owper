@@ -29,6 +29,8 @@
 #ifndef _INCLUDE_NTREG_H
 #define _INCLUDE_NTREG_H 1
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 namespace ntreg {  //namespace wrapper added by Matthew Morgan
     extern "C" {
@@ -67,19 +69,19 @@ namespace ntreg {  //namespace wrapper added by Matthew Morgan
 
 struct regf_header {
 
-  long id;            /* 0x00000000	D-Word	ID: ASCII-"regf" = 0x66676572 */
-  long unknown1;      /* 0x00000004	D-Word	???? */
-  long unknown2;      /* 0x00000008	D-Word	???? Always the same value as at 0x00000004  */
+  uint32_t id;            /* 0x00000000	D-Word	ID: ASCII-"regf" = 0x66676572 */
+  uint32_t unknown1;      /* 0x00000004	D-Word	???? */
+  uint32_t unknown2;      /* 0x00000008	D-Word	???? Always the same value as at 0x00000004  */
   char timestamp[8];  /* 0x0000000C	Q-Word	last modify date in WinNT date-format */
-  long unknown3;      /* 0x00000014	D-Word	1 */
-  long unknown4;      /* 0x00000018	D-Word	3 - probably version #. 2 in NT3.51 */
-  long unknown5;      /* 0x0000001C	D-Word	0 */
-  long unknown6;      /* 0x00000020	D-Word	1 */
-  long ofs_rootkey;   /* 0x00000024	D-Word	Offset of 1st key record */
-  long filesize;      /* 0x00000028	D-Word	Size of the data-blocks (Filesize-4kb) */
-  long unknown7;      /* 0x0000002C	D-Word	1 */
+  uint32_t unknown3;      /* 0x00000014	D-Word	1 */
+  uint32_t unknown4;      /* 0x00000018	D-Word	3 - probably version #. 2 in NT3.51 */
+  uint32_t unknown5;      /* 0x0000001C	D-Word	0 */
+  uint32_t unknown6;      /* 0x00000020	D-Word	1 */
+  uint32_t ofs_rootkey;   /* 0x00000024	D-Word	Offset of 1st key record */
+  uint32_t filesize;      /* 0x00000028	D-Word	Size of the data-blocks (Filesize-4kb) */
+  uint32_t unknown7;      /* 0x0000002C	D-Word	1 */
   char name[0x1fc-0x2c];   /* Seems like the hive's name is buried here, max len unknown */
-  long checksum;      /* 0x000001FC	D-Word	Sum of all D-Words from 0x00000000 to 0x000001FB */
+  uint32_t checksum;      /* 0x000001FC	D-Word	Sum of all D-Words from 0x00000000 to 0x000001FB */
 };
 
 /* The page header, I don't know if the 14 "dummy" bytes has a meaning,
@@ -88,11 +90,11 @@ struct regf_header {
 
 struct  hbin_page {
 
-  long id;          /* 0x0000	D-Word	ID: ASCII-"hbin" = 0x6E696268  */
-  long ofs_from1;   /* 0x0004	D-Word	Offset from the 1st hbin-Block */
-  long ofs_next;    /* 0x0008	D-Word	Offset to the next hbin-Block (from THIS ONE)  */
+  uint32_t id;          /* 0x0000	D-Word	ID: ASCII-"hbin" = 0x6E696268  */
+  uint32_t ofs_from1;   /* 0x0004	D-Word	Offset from the 1st hbin-Block */
+  uint32_t ofs_next;    /* 0x0008	D-Word	Offset to the next hbin-Block (from THIS ONE)  */
   char dummy1[14];
-  long len_page;    /* 0x001C	D-Word	Block-size??? Don't look like it,
+  uint32_t len_page;    /* 0x001C	D-Word	Block-size??? Don't look like it,
                                         I only use the next-offset in this program  */
   char data[1];     /* 0x0020   First data block starts here           */
 
@@ -184,11 +186,11 @@ struct li_key {
  */
 struct ri_key {
 
-  short id;         /* 0x0000	Word	ID: ASCII-"ri" = 0x6972 */
-  short no_lis;    /* 0x0002	Word	number of pointers to li */
+  uint16_t id;         /* 0x0000	Word	ID: ASCII-"ri" = 0x6972 */
+  uint16_t no_lis;    /* 0x0002	Word	number of pointers to li */
                     /* 0x0004	????	Hash-Records            */
   struct ri_hash {
-      long ofs_li;    /* 0x0000	D-Word	Offset of corresponding "li"-Record  */
+      uint32_t ofs_li;    /* 0x0000	D-Word	Offset of corresponding "li"-Record  */
   } hash[1];
 };
 
@@ -226,22 +228,22 @@ struct vk_key {
 struct nk_key {
 
                         /* Offset	Size	Contents */
-  short id;             /*  0x0000	Word	ID: ASCII-"nk" = 0x6B6E                */
-  short type;           /*  0x0002	Word	for the root-key: 0x2C, otherwise 0x20 */
+  uint16_t id;             /*  0x0000	Word	ID: ASCII-"nk" = 0x6B6E                */
+  uint16_t type;           /*  0x0002	Word	for the root-key: 0x2C, otherwise 0x20 */
   char  timestamp[12];  /*  0x0004	Q-Word	write-date/time in windows nt notation */
-  long  ofs_parent;     /*  0x0010	D-Word	Offset of Owner/Parent key             */
-  long  no_subkeys;     /*  0x0014	D-Word	number of sub-Keys                     */
+  uint32_t  ofs_parent;     /*  0x0010	D-Word	Offset of Owner/Parent key             */
+  uint32_t  no_subkeys;     /*  0x0014	D-Word	number of sub-Keys                     */
   char  dummy1[4];
-  long  ofs_lf;         /*  0x001C	D-Word	Offset of the sub-key lf-Records       */
+  uint32_t  ofs_lf;         /*  0x001C	D-Word	Offset of the sub-key lf-Records       */
   char  dummy2[4];
-  long  no_values;      /*  0x0024	D-Word	number of values                       */
-  long  ofs_vallist;    /*  0x0028	D-Word	Offset of the Value-List               */
-  long  ofs_sk;         /*  0x002C	D-Word	Offset of the sk-Record                */
-  long  ofs_classnam;   /*  0x0030	D-Word	Offset of the Class-Name               */
+  uint32_t  no_values;      /*  0x0024	D-Word	number of values                       */
+  uint32_t  ofs_vallist;    /*  0x0028	D-Word	Offset of the Value-List               */
+  uint32_t  ofs_sk;         /*  0x002C	D-Word	Offset of the sk-Record                */
+  uint32_t  ofs_classnam;   /*  0x0030	D-Word	Offset of the Class-Name               */
   char  dummy3[16];
-  long  dummy4;         /*  0x0044	D-Word	Unused (data-trash)                    */
-  short len_name;       /*  0x0048	Word	name-length                            */
-  short len_classnam;   /*  0x004A	Word	class-name length                      */
+  uint32_t  dummy4;         /*  0x0044	D-Word	Unused (data-trash)                    */
+  uint16_t len_name;       /*  0x0048	Word	name-length                            */
+  uint16_t len_classnam;   /*  0x004A	Word	class-name length                      */
   char  keyname[1];     /*  0x004C	????	key-name                               */
 };
 
