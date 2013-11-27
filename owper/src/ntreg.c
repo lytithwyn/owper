@@ -1,6 +1,7 @@
 /*
  * ntreg.c - NT Registry Hive access library
  *
+ * 2013-nov: Edits by Matthew Morgan to make the integer sizes platform-change resistent (aka, 32 bit vs 64 bit)
  * 2007-sep: Verbosity/debug messages minor changes
  * 2007-apr: LGPL license.
  * 2004-aug: Deep indirect index support. NT351 support. Recursive delete.

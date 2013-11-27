@@ -1,5 +1,6 @@
 /*
  * ntreg.h - NT Registry Hive access library, constants & structures
+ * 2013-nov: Edits by Matthew Morgan to make the integer sizes platform-change resistent (aka, 32 bit vs 64 bit)
  *
  * NOTE: defines are not frozen. It can and will change every release.
  *
