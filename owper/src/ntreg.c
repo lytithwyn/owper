@@ -1215,9 +1215,9 @@ int vlist_find(struct hive *hdesc, int vlistofs, int numval, char *name)
 {
   struct vk_key *vkkey;
   int i,vkofs;
-  long *vlistkey;
+  uint32_t *vlistkey;
 
-  vlistkey = (long *)(hdesc->buffer + vlistofs);
+  vlistkey = (uint32_t *)(hdesc->buffer + vlistofs);
 
   for (i = 0; i < numval; i++) {
     vkofs = vlistkey[i] + 0x1004;
@@ -1248,7 +1248,7 @@ int trav_path(struct hive *hdesc, int vofs, char *path, int type)
   struct li_key *likey;
   struct ri_key *rikey;
 
-  long *vlistkey;
+  uint32_t *vlistkey;
   int newnkofs, plen, i, lfofs, vlistofs, adjust, r, ricnt, subs;
   char *buf;
   char part[ABSPATHLEN+1];
@@ -1297,7 +1297,7 @@ int trav_path(struct hive *hdesc, int vofs, char *path, int type)
   if (!path[plen] && type == 1 && key->no_values) {
     /*    printf("VK namematch for <%s>\n",part); */
     vlistofs = key->ofs_vallist + 0x1004;
-    vlistkey = (long *)(buf + vlistofs);
+    vlistkey = (uint32_t *)(buf + vlistofs);
     i = vlist_find(hdesc, vlistofs, key->no_values, part);
     if (i != -1) {
       return(vlistkey[i] + 0x1000);
