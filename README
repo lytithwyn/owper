@@ -1,1 +1,1 @@
-This program hopes to be a graphical version of chntpw, for those unskilled in command line use.
+This program hopes to be a graphical version of Petter Nordahl-Hagen's chntpw, and indeed incorporates (a slightly modified version of) Petter's ntreg library.  It has been developed and tested on 32 and 64 bit versions of Linux Mint and should theoretically work on any x86 or x86_64 Linux platform.  This program will likely NOT work on Big Endian systems (such as PowerPC), mainly because I don't have the time or inclination to worry about them.

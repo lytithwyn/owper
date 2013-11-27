@@ -8,6 +8,9 @@
  * NTREG - Window registry file reader / writer library
  * Copyright (c) 1997-2011 Petter Nordahl-Hagen.
  *
+ * includes some edits by Matthew Morgan to isolate the code from the global namespace
+ * when used in a c++ program and to make it compile without warnings or errors
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation;
