@@ -19,8 +19,10 @@
  * NTREG - Window registry file reader / writer library
  * Copyright (c) 1997-2007 Petter Nordahl-Hagen.
  *
- * Edits by Brandon Tilley, as marked
- * Copyright (c) 2010 Brandon Tilley
+ * Contributors:
+ * Brandon Tilley <brandon@brandontilley.com>
+ * Matthew Morgan <matthew@lifandi.org>
+ *
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
