@@ -67,6 +67,11 @@ owperGUI::owperGUI( string initHivePath/*=""*/) {
             G_CALLBACK(clearPasswords), (gpointer)this);
     gtk_box_pack_end(GTK_BOX(hboxCommands), buttonClearPasswords, false, false, 0);
 
+    buttonEnableAccounts = gtk_button_new_with_mnemonic("_Enable Accounts");
+    g_signal_connect (G_OBJECT (buttonEnableAccounts), "clicked",
+            G_CALLBACK(enableAccounts), (gpointer)this);
+    gtk_box_pack_end(GTK_BOX(hboxCommands), buttonEnableAccounts, false, false, 0);
+
 
     gtk_container_add(GTK_CONTAINER (winMain), vboxMain);
 
@@ -213,6 +218,58 @@ void owperGUI::clearPasswords(GtkWidget *widget, gpointer owperGUIInstance) {
                                                      GTK_BUTTONS_CLOSE,
                                                      "%s",
                                                      "Passwords cleared!");
+    gtk_dialog_run (GTK_DIALOG (infoDialog));
+    gtk_widget_destroy (infoDialog);
+}
+
+void owperGUI::enableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
+    owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
+
+    for(unsigned int i = 0; i < thisOwperGUI->vectUserWidgets.size(); i++) {
+        userWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
+        cout << curUserWidget->getUserName() << endl << flush;
+        if(curUserWidget->userIsSelected()) {
+            curUserWidget->enableAccount();
+            curUserWidget->deselectUser();
+            curUserWidget->resetLabel();
+        }
+    }
+
+    if(!thisOwperGUI->sam->mergeChangesToHive()) {
+        string errorMessage  = "Enabling accounts!  Not all data was successfully ";
+        errorMessage        += "merged into the hive in memory.  We don't guarantee any particular ";
+        errorMessage        += "results at this point.";
+        GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(thisOwperGUI->winMain),
+                                                 GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                 GTK_MESSAGE_ERROR,
+                                                 GTK_BUTTONS_CLOSE,
+                                                 "%s",
+                                                 errorMessage.c_str());
+        gtk_dialog_run (GTK_DIALOG (errorDialog));
+        gtk_widget_destroy (errorDialog);
+        return;
+    }
+
+    if(!thisOwperGUI->sam->writeHiveToFile()) {
+        string errorMessage  = "Error enabling accounts!  Could not write data to hive file on disk. ";
+        errorMessage        += "We don't guarantee any particular results at this point.";
+        GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(thisOwperGUI->winMain),
+                                                 GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                 GTK_MESSAGE_ERROR,
+                                                 GTK_BUTTONS_CLOSE,
+                                                 "%s",
+                                                 errorMessage.c_str());
+        gtk_dialog_run (GTK_DIALOG (errorDialog));
+        gtk_widget_destroy (errorDialog);
+        return;
+    }
+
+    GtkWidget *infoDialog = gtk_message_dialog_new (GTK_WINDOW(thisOwperGUI->winMain),
+                                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                     GTK_MESSAGE_INFO,
+                                                     GTK_BUTTONS_CLOSE,
+                                                     "%s",
+                                                     "Accounts enabled!");
     gtk_dialog_run (GTK_DIALOG (infoDialog));
     gtk_widget_destroy (infoDialog);
 }

@@ -44,6 +44,11 @@ void userWidget::resetLabel()
         isBlank = " [Blank]";
     }
 
-    string label = stringPrintf("%s%s%s", user->getUserName().c_str(), fullName.c_str(), isBlank.c_str());
+    string isDisabled = "";
+    if(user->accountIsDisabled()) {
+        isDisabled = " [Disabled]";
+    }
+
+    string label = stringPrintf("%s%s%s%s", user->getUserName().c_str(), fullName.c_str(), isBlank.c_str(), isDisabled.c_str());
     gtk_button_set_label(GTK_BUTTON(this->chkbtnUser), label.c_str());
 }

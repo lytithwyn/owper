@@ -45,6 +45,7 @@ class owperGUI
         GtkWidget *vboxUsers;
         GtkWidget *hboxCommands;
         GtkWidget *buttonClearPasswords;
+        GtkWidget *buttonEnableAccounts;
 
         string stringSamFileName;
         samHive  *sam;
@@ -60,6 +61,7 @@ class owperGUI
         void clearUsers();
         void loadUsers();
         static void clearPasswords(GtkWidget *widget, gpointer owperGUIInstance);
+        static void enableAccounts(GtkWidget *widget, gpointer owperGUIInstance);
 };
 
 

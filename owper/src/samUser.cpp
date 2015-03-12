@@ -9,12 +9,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -23,11 +23,17 @@
 #include "include/samUser.h"
 
 namespace owper {
-    samUser::samUser(ntreg::keyval *inVStructRegValue, string inVStructPath) {
+    samUser::samUser(ntreg::keyval *inVStructRegValue, string inVStructPath, ntreg::keyval *inFStructRegValue, string inFStructPath) {
         vStructPath = inVStructPath;
         vStructRegValue = inVStructRegValue;
+        fStructPath = inFStructPath;
+        fStructRegValue = inFStructRegValue;
+
         vStruct = (struct ntreg::user_V *)((char*)(&inVStructRegValue->data));
         char* vBuffer = (char*)&(inVStructRegValue->data);
+
+        fStruct = (struct ntreg::user_F *)((char*)(&inFStructRegValue->data));
+
         int userNameOffset = vStruct->username_ofs;
         int userNameLength = vStruct->username_len;
         int fullNameOffset = vStruct->fullname_ofs;
@@ -35,11 +41,13 @@ namespace owper {
         int vStructLength = inVStructRegValue->len;
 
         if(!hasValidUserName(userNameOffset, userNameLength, vStructLength)) {
+            FREE(fStruct);
             FREE(vStruct);
             throw(new owpException("VStruct has invalid user name field"));
         }
 
         if(!hasValidFullName(fullNameOffset, fullNameLength, vStructLength)) {
+            FREE(fStruct);
             FREE(vStruct);
             throw(new owpException("VStruct has invalid full name field"));
         }
@@ -118,7 +126,27 @@ namespace owper {
         regDataChanged = true;
     }
 
+    bool samUser::accountIsDisabled() const {
+        std::cout << "RID " << fStruct->rid << " ACB_bits: 0x" << std::hex << fStruct->ACB_bits << std::endl;
+        return (fStruct->ACB_bits & ACB_DISABLED || fStruct->ACB_bits & ACB_AUTOLOCK)?(true):(false);
+    }
+
+    void samUser::enableAccount() {
+        if(!accountIsDisabled()) {
+            return;
+        }
+
+        unsigned short acb = fStruct->ACB_bits;
+        acb |= ACB_PWNOEXP;
+        acb &= ~ACB_DISABLED;
+        acb &= ~ACB_AUTOLOCK;
+        fStruct->ACB_bits = acb;
+        fStruct->failedcnt = 0;
+        regDataChanged = true;
+    }
+
     samUser::~samUser() {
         FREE(vStructRegValue);
+        FREE(fStructRegValue);
     }
 }

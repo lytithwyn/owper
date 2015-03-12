@@ -9,12 +9,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -41,8 +41,11 @@ namespace owper {
         string         userName;
         string         fullName;
         string         vStructPath;
+        string         fStructPath;
         ntreg::keyval *vStructRegValue;
+        ntreg::keyval *fStructRegValue;
         ntreg::user_V *vStruct;
+        ntreg::user_F *fStruct;
         bool           hasBlankPassword;
         bool           regDataChanged;
 
@@ -52,7 +55,7 @@ namespace owper {
         string getUserValue(char* dataBuffer, int valueOffset, int valueLength);
 
     public:
-        samUser(ntreg::keyval *inVStructRegValue, string inVStructPath);
+        samUser(ntreg::keyval *inVStructRegValue, string inVStructPath, ntreg::keyval *inFStructRegValue, string inFStructPath);
         ~samUser();
         void blankPassword();
 
@@ -71,6 +74,10 @@ namespace owper {
             return hasBlankPassword;
         }
 
+        bool accountIsDisabled() const;
+
+        void enableAccount();
+
         bool needsToSave() const
         {
             return regDataChanged;
@@ -87,6 +94,15 @@ namespace owper {
 
         ntreg::keyval *getVStructRegValue() {
             return vStructRegValue;
+        }
+
+        string getFStructPath() const
+        {
+            return fStructPath;
+        }
+
+        ntreg::keyval *getFStructRegValue() {
+            return fStructRegValue;
         }
     };
 }

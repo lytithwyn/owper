@@ -9,12 +9,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -43,9 +43,12 @@ namespace owper {
         string vValuePath = stringPrintf("\\SAM\\Domains\\Account\\Users\\%08X\\V",rid);
         ntreg::keyval *vValue = this->copyValueToBuffer(NULL, 0, (char*)vValuePath.c_str(), REG_BINARY, TPF_VK_EXACT);
 
+        string fValuePath = stringPrintf("\\SAM\\Domains\\Account\\Users\\%08X\\F",rid);
+        ntreg::keyval *fValue = this->copyValueToBuffer(NULL, 0, (char*)fValuePath.c_str(), REG_BINARY, TPF_VK_EXACT);
+
         samUser *newSamUser;
         try{
-            newSamUser = new samUser(vValue, vValuePath);
+            newSamUser = new samUser(vValue, vValuePath, fValue, fValuePath);
         }catch(owpException e) {
             cerr << e.formattedMessage;
             newSamUser = NULL;
@@ -98,10 +101,18 @@ namespace owper {
 
                 if(size < 1) {
                     allSuccessful = false;
+                }
+                cout << stringPrintf("Merging into %s: wrote %d bytes", path.c_str(), size) << endl;
+
+                keyValue = userList.at(i)->getFStructRegValue();
+                path = userList.at(i)->getFStructPath().c_str();
+                size = copyBufferToValue(keyValue, 0, (char*)path.c_str(), VAL_TYPE_REG_BINARY, TPF_VK_EXACT);
+
+                if(size < 1 || allSuccessful == false) {
+                    allSuccessful = false;
                 } else {
                     userList.at(i)->hasSaved();
                 }
-
                 cout << stringPrintf("Merging into %s: wrote %d bytes", path.c_str(), size) << endl;
             }
         }

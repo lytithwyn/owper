@@ -13,12 +13,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -74,12 +74,12 @@ struct user_F {
   char t_creation[8]; /* Time of account creation */
   char unknown3[8];
   char t_login[8];    /* Time of last login */
-  long rid;
+  uint32_t rid;
   char unknown4[4];
-  unsigned short ACB_bits;  /* Account type and status flags */
+  uint16_t ACB_bits;  /* Account type and status flags */
   char unknown5[6];
-  unsigned short failedcnt; /* Count of failed logins, if > than policy it is locked */
-  unsigned short logins;    /* Total logins since creation */
+  uint16_t failedcnt; /* Count of failed logins, if > than policy it is locked */
+  uint16_t logins;    /* Total logins since creation */
   char unknown6 [0xc];
   };
 
