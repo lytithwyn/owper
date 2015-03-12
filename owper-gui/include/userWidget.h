@@ -51,6 +51,7 @@ class userWidget
         GtkWidget   *getWidget()       { return this->chkbtnUser; };
         void         blankPassword()   { user->blankPassword(); };
         void         enableAccount()   { user->enableAccount(); };
+        void         disableAccount()  { user->disableAccount(); };
         void         selectUser()      { gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkbtnUser), true); };
         void         deselectUser()    { gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkbtnUser), false); };
 

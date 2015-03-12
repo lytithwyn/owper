@@ -77,6 +77,7 @@ namespace owper {
         bool accountIsDisabled() const;
 
         void enableAccount();
+        void disableAccount();
 
         bool needsToSave() const
         {

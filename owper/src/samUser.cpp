@@ -136,12 +136,23 @@ namespace owper {
             return;
         }
 
-        unsigned short acb = fStruct->ACB_bits;
+        ntreg::uint16_t acb = fStruct->ACB_bits;
         acb |= ACB_PWNOEXP;
         acb &= ~ACB_DISABLED;
         acb &= ~ACB_AUTOLOCK;
         fStruct->ACB_bits = acb;
         fStruct->failedcnt = 0;
+        regDataChanged = true;
+    }
+
+    void samUser::disableAccount() {
+        if(accountIsDisabled()) {
+            return;
+        }
+
+        ntreg::uint16_t acb = fStruct->ACB_bits;
+        acb |= ACB_DISABLED;
+        fStruct->ACB_bits = acb;
         regDataChanged = true;
     }
 
