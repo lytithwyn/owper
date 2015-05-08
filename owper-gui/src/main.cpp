@@ -44,19 +44,54 @@ using stringManip::stringPrintf;
 
 using namespace owper;
 
+void printUsage(char* progName) {
+    cout << progName << " [--testhive] [hivepath]" << endl;
+    cout << "Note: if --testhive is supplied, hivepath must be as well" << endl;
+}
+
+// returns:
+//     0 - success
+//     1 - incorrect arguments supplied
+//     2 - file supplied is not a sam type file and a check was requested
 int main(int argc, char* argv[]) {
     gtk_init(&argc, &argv);
 
-    string initHive = "";
+    string hiveFilePath = "";
+    samHive* sam = NULL;
     if(argc == 2) {
-        initHive = argv[1];
+        // if we have 1 argument, we expect it to be a hive file to load
+        if(strncmp("--testhive", argv[1], 10) == 0) {
+            // --testhive was specified without a file to test
+            printUsage(argv[0]);
+            return 1;
+        }
+
+        hiveFilePath = argv[1];
+    } else if(argc == 3) {
+        // if we have 2 arguments, we expect 1 to be the --testhive parameter
+        // and the other the be the hive file to load
+        char* hiveFilePath;
+        if(strncmp("--testhive", argv[1], 10) == 0) {
+            hiveFilePath = argv[2];
+        } else {
+            hiveFilePath = argv[1];
+        }
+
+        // we have been asked to test a file to see if it is a sam hive or not
+        try {
+            sam = new samHive(hiveFilePath);
+        } catch(owpException* e) {
+            // this is NOT a sam hive - bail out
+            delete e;
+            return 2;
+        }
     }
 
     owperGUI *passwordClearer;
-    passwordClearer = new owperGUI(initHive);
+    passwordClearer = new owperGUI(hiveFilePath, sam);
 
     gtk_main();
 
-    return 1;
+    return 0;
 
 }

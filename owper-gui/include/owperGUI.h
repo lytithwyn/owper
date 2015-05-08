@@ -52,13 +52,15 @@ class owperGUI
         samHive  *sam;
         vector<userWidget*> vectUserWidgets;
 
+        void loadGUI();
+
     public:
-        owperGUI(string stringInitHivePath = "");
+        owperGUI(string stringInitHivePath = "", samHive* preloadedSam = NULL);
 
         static void delete_event(GtkWidget *widget, GdkEvent  *event, gpointer data);
         static void destroy(GtkWidget *widget, gpointer data);
         static void sam_file_browse_event(GtkWidget *widget, gpointer owperGUIInstance);
-        bool changeHiveFile(string newFileName);
+        bool changeHiveFile(string newFileName, samHive* newSam = NULL);
         void clearUsers();
         void loadUsers();
         static void clearPasswords(GtkWidget *widget, gpointer owperGUIInstance);

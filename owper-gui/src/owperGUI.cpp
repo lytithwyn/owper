@@ -20,9 +20,16 @@
  */
 #include "include/owperGUI.h"
 
-owperGUI::owperGUI( string initHivePath/*=""*/) {
+owperGUI::owperGUI(string initHivePath/*=""*/, samHive* preloadedSam/*=NULL*/) {
     sam = NULL;
+    loadGUI();
 
+    if(initHivePath != "") {
+        changeHiveFile(initHivePath, preloadedSam);
+    }
+}
+
+void owperGUI::loadGUI() {
     winMain = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_container_set_border_width(GTK_CONTAINER(winMain), 5);
     gtk_window_set_default_size(GTK_WINDOW(winMain), 600, 400);
@@ -80,10 +87,6 @@ owperGUI::owperGUI( string initHivePath/*=""*/) {
     gtk_container_add(GTK_CONTAINER (winMain), vboxMain);
 
     gtk_widget_show_all(winMain);
-
-    if(initHivePath != "") {
-        changeHiveFile(initHivePath);
-    }
 }
 
 void owperGUI::delete_event(GtkWidget *widget, GdkEvent  *event, gpointer data)
@@ -115,7 +118,7 @@ void owperGUI::sam_file_browse_event(GtkWidget *widget, gpointer owperGUIInstanc
     gtk_widget_destroy (fileChooser);
 }
 
-bool owperGUI::changeHiveFile(string newFileName) {
+bool owperGUI::changeHiveFile(string newFileName, samHive* newSam/*=NULL*/) {
     gtk_entry_set_text(GTK_ENTRY(entrySamFile), "");
     clearUsers();
 
@@ -123,25 +126,33 @@ bool owperGUI::changeHiveFile(string newFileName) {
         delete sam;
     }
 
-    try {
-        sam = new samHive(newFileName.c_str());
-    }catch(owpException *exception) {
-        //if sam got assigned something, delete it!
-        if(sam) {
-            delete sam;
-            sam = NULL;
-        }
+    // see if we were passed an already-loaded SAM hive
+    // this may be the case if the program was asked to check
+    // a hive on startup
+    if(newSam != NULL) {
+        sam = newSam;
+    } else {
+        // no, the sam file isn't loaded yet - try to load it
+        try {
+            sam = new samHive(newFileName.c_str());
+        }catch(owpException *exception) {
+            //if sam got assigned something, delete it!
+            if(sam) {
+                delete sam;
+                sam = NULL;
+            }
 
-        GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
-                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                         GTK_MESSAGE_ERROR,
-                                         GTK_BUTTONS_CLOSE,
-                                         "Error loading hive:\n%s",
-                                         exception->errorMessage.c_str());
-        gtk_dialog_run (GTK_DIALOG (errorDialog));
-        gtk_widget_destroy (errorDialog);
-        delete exception;
-        return false;
+            GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
+                                             GTK_DIALOG_DESTROY_WITH_PARENT,
+                                             GTK_MESSAGE_ERROR,
+                                             GTK_BUTTONS_CLOSE,
+                                             "Error loading hive:\n%s",
+                                             exception->errorMessage.c_str());
+            gtk_dialog_run (GTK_DIALOG (errorDialog));
+            gtk_widget_destroy (errorDialog);
+            delete exception;
+            return false;
+        }
     }
 
     gtk_entry_set_text(GTK_ENTRY(entrySamFile), newFileName.c_str());
