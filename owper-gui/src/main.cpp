@@ -70,7 +70,6 @@ int main(int argc, char* argv[]) {
     } else if(argc == 3) {
         // if we have 2 arguments, we expect 1 to be the --testhive parameter
         // and the other the be the hive file to load
-        char* hiveFilePath;
         if(strncmp("--testhive", argv[1], 10) == 0) {
             hiveFilePath = argv[2];
         } else {
@@ -79,7 +78,7 @@ int main(int argc, char* argv[]) {
 
         // we have been asked to test a file to see if it is a sam hive or not
         try {
-            sam = new samHive(hiveFilePath);
+            sam = new samHive(hiveFilePath.c_str());
         } catch(owpException* e) {
             // this is NOT a sam hive - bail out
             delete e;

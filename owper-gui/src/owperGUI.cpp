@@ -24,7 +24,7 @@ owperGUI::owperGUI(string initHivePath/*=""*/, samHive* preloadedSam/*=NULL*/) {
     sam = NULL;
     loadGUI();
 
-    if(initHivePath != "") {
+    if(!initHivePath.empty()) {
         changeHiveFile(initHivePath, preloadedSam);
     }
 }
