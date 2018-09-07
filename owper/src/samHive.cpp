@@ -46,9 +46,23 @@ namespace owper {
         string fValuePath = stringPrintf("\\SAM\\Domains\\Account\\Users\\%08X\\F",rid);
         ntreg::keyval *fValue = this->copyValueToBuffer(NULL, 0, (char*)fValuePath.c_str(), REG_BINARY, TPF_VK_EXACT);
 
+        // this should be null for local accounts, and set for microsoft accounts
+        string internetUserNamePath = stringPrintf("\\SAM\\Domains\\Account\\Users\\%08X\\InternetUserName",rid);
+        ntreg::keyval *internetUserNameValue = this->copyValueToBuffer(NULL, 0, (char*)internetUserNamePath.c_str(), REG_BINARY, TPF_VK_EXACT);
+        string internetUserName = "";
+        if(internetUserNameValue != NULL) {
+            int inetUserNameLen = internetUserNameValue->len;
+            char* inetUserNameCString = new char[inetUserNameLen + 1];
+            inetUserNameCString[inetUserNameLen] = '\0';
+            binaryManip::unicodeToAscii((char*)&internetUserNameValue->data, inetUserNameCString, internetUserNameValue->len);
+            internetUserName = inetUserNameCString;
+            free(internetUserNameValue);
+            internetUserNameValue = NULL;
+        }
+
         samUser *newSamUser;
         try{
-            newSamUser = new samUser(vValue, vValuePath, fValue, fValuePath);
+            newSamUser = new samUser(vValue, vValuePath, fValue, fValuePath, internetUserName);
         }catch(owpException e) {
             cerr << e.formattedMessage;
             newSamUser = NULL;

@@ -23,7 +23,7 @@
 #include "include/samUser.h"
 
 namespace owper {
-    samUser::samUser(ntreg::keyval *inVStructRegValue, string inVStructPath, ntreg::keyval *inFStructRegValue, string inFStructPath) {
+    samUser::samUser(ntreg::keyval *inVStructRegValue, string inVStructPath, ntreg::keyval *inFStructRegValue, string inFStructPath, string msAccount/* = ""*/) {
         vStructPath = inVStructPath;
         vStructRegValue = inVStructRegValue;
         fStructPath = inFStructPath;
@@ -54,6 +54,7 @@ namespace owper {
 
         userName = this->getUserValue(vBuffer, userNameOffset, userNameLength);
         fullName = this->getUserValue(vBuffer, fullNameOffset, fullNameLength);
+        this->msAccount = msAccount;
 
         if(vStruct->ntpw_len < 16 && vStruct->lmpw_len < 16) {
             hasBlankPassword = true;
