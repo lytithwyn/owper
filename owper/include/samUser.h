@@ -47,7 +47,6 @@ namespace owper {
         ntreg::keyval *fStructRegValue;
         ntreg::user_V *vStruct;
         ntreg::user_F *fStruct;
-        bool           hasBlankPassword;
         bool           regDataChanged;
 
         bool   hasValidVStructData(ntreg::keyval *vValue);
@@ -58,7 +57,6 @@ namespace owper {
     public:
         samUser(ntreg::keyval *inVStructRegValue, string inVStructPath, ntreg::keyval *inFStructRegValue, string inFStructPath, string msAccount = "");
         ~samUser();
-        void blankPassword();
 
         string getFullName() const
         {
@@ -77,7 +75,7 @@ namespace owper {
 
         bool passwordIsBlank() const
         {
-            return hasBlankPassword;
+            return (vStruct->lmpw_len < 16 && vStruct->ntpw_len < 16 && msAccount.empty());
         }
 
         bool accountIsDisabled() const;
@@ -85,7 +83,9 @@ namespace owper {
         void enableAccount();
         void disableAccount();
 
-        bool needsToSave() const
+        void hasChanges(bool dataChanged){ regDataChanged = dataChanged; };
+
+        bool hasChanges() const
         {
             return regDataChanged;
         }

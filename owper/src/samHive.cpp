@@ -101,6 +101,20 @@ namespace owper {
         }
     }
 
+    void samHive::clearPassword(unsigned int userIndex) {
+        samUser* user = this->userList.at(userIndex);
+
+        if(user->passwordIsBlank()) {
+            return;
+        }
+
+        ntreg::keyval* vStructRegValue = user->getVStructRegValue();
+        ntreg::user_V *vStruct = (struct ntreg::user_V *)((char*)(&vStructRegValue->data));
+        vStruct->lmpw_len = 0;
+        vStruct->ntpw_len = 0;
+        user->hasChanges(true);
+    }
+
     /**
      * Merges changes made with samUser objects back into the hive in memory
      * @return bool Whether or not all changes were merged
@@ -108,7 +122,7 @@ namespace owper {
     bool samHive::mergeChangesToHive() {
         bool allSuccessful = true;
         for(unsigned int i = 0; i < userList.size(); i++) {
-            if(userList.at(i)->needsToSave()) {
+            if(userList.at(i)->hasChanges()) {
                 ntreg::keyval *keyValue = userList.at(i)->getVStructRegValue();
                 string path = userList.at(i)->getVStructPath().c_str();
                 int size = copyBufferToValue(keyValue, 0, (char*)path.c_str(), VAL_TYPE_REG_BINARY, TPF_VK_EXACT);

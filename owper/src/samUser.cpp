@@ -56,12 +56,6 @@ namespace owper {
         fullName = this->getUserValue(vBuffer, fullNameOffset, fullNameLength);
         this->msAccount = msAccount;
 
-        if(vStruct->ntpw_len < 16 && vStruct->lmpw_len < 16) {
-            hasBlankPassword = true;
-        }else {
-            hasBlankPassword = false;
-        }
-
         regDataChanged = false;
     }
 
@@ -114,17 +108,6 @@ namespace owper {
         binaryManip::unicodeToAscii(dataBuffer + valueOffset, value, valueLength);
 
         return (string)value;
-    }
-
-    void samUser::blankPassword() {
-        if(hasBlankPassword) {
-            return;
-        }
-
-        vStruct->lmpw_len = 0;
-        vStruct->ntpw_len = 0;
-        hasBlankPassword = true;
-        regDataChanged = true;
     }
 
     bool samUser::accountIsDisabled() const {
