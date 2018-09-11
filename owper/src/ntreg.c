@@ -54,12 +54,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -2241,8 +2241,8 @@ void del_allvalues(struct hive *hdesc, int nkofs)
 
 int del_value(struct hive *hdesc, int nkofs, char *name, int exact)
 {
-  int vlistofs, slot, o, n, vkofs, newlistofs;
-  int32_t *vlistkey, *tmplist, *newlistkey;
+  int vlistofs, slot, o, n, vkofs/*, newlistofs*/;
+  int32_t *vlistkey, *tmplist/*, *newlistkey*/;
   struct nk_key *nk;
   char *blank="";
 
@@ -2279,28 +2279,31 @@ int del_value(struct hive *hdesc, int nkofs, char *name, int exact)
   CREATE(tmplist,int32_t,nk->no_values);
   memcpy(tmplist, vlistkey, nk->no_values * sizeof(int32_t));
 
-  free_block(hdesc,vlistofs-4);  /* Get rid of old list */
-
   nk->no_values--;
 
   if (nk->no_values) {
+/*
+ * Petter was doing it this way, but we should really be overwriting the list in place.
+ * Through the rest of the function he uses newlistofs/newlistkey, but we are changing
+ * those references to use the old ones
+
     newlistofs = alloc_block(hdesc, vlistofs, nk->no_values * sizeof(int32_t));
     if (!newlistofs) {
       printf("del_value: FATAL: Was not able to alloc new index list\n");
       abort();
     }
-    nk = (struct nk_key *)(hdesc->buffer + nkofs); /* In case buffer was moved */
+    nk = (struct nk_key *)(hdesc->buffer + nkofs); // In case buffer was moved
+*/
 
     /* Now copy over, omitting deleted entry */
-    newlistkey = (int32_t *)(hdesc->buffer + newlistofs + 4);
     for (n = 0, o = 0; o < nk->no_values+1; o++, n++) {
       if (o == slot) o++;
-      newlistkey[n] = tmplist[o];
+      vlistkey[n] = tmplist[o];
     }
-    nk->ofs_vallist = newlistofs - 0x1000;
   } else {
     nk->ofs_vallist = -1;
   }
+  free(tmplist);
   return(0);
 }
 
