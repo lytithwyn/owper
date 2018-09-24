@@ -43,6 +43,7 @@ namespace owper {
         string         vStructPath;
         string         fStructPath;
         string         msAccount;
+        int            nkOffset;
         ntreg::keyval *vStructRegValue;
         ntreg::keyval *fStructRegValue;
         ntreg::user_V *vStruct;
@@ -55,7 +56,7 @@ namespace owper {
         string getUserValue(char* dataBuffer, int valueOffset, int valueLength);
 
     public:
-        samUser(ntreg::keyval *inVStructRegValue, string inVStructPath, ntreg::keyval *inFStructRegValue, string inFStructPath, string msAccount = "");
+        samUser(int inNKOffset, ntreg::keyval *inVStructRegValue, string inVStructPath, ntreg::keyval *inFStructRegValue, string inFStructPath, string msAccount = "");
         ~samUser();
 
         string getFullName() const
@@ -93,6 +94,8 @@ namespace owper {
         void hasSaved() {
             regDataChanged = false;
         }
+
+        int getNKOffset() const { return this->nkOffset; };
 
         string getVStructPath() const
         {

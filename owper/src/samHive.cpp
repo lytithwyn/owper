@@ -40,6 +40,8 @@ namespace owper {
     }
 
     samUser* samHive::getSamUser(int rid) {
+        string userNKPath = stringPrintf("\\SAM\\Domains\\Account\\Users\\%08X", rid);
+        reg_off userNKOffset = this->travPath(0, (char*)userNKPath.c_str(), 0) + 4;
         string vValuePath = stringPrintf("\\SAM\\Domains\\Account\\Users\\%08X\\V",rid);
         ntreg::keyval *vValue = this->copyValueToBuffer(NULL, 0, (char*)vValuePath.c_str(), REG_BINARY, TPF_VK_EXACT);
 
@@ -62,7 +64,7 @@ namespace owper {
 
         samUser *newSamUser;
         try{
-            newSamUser = new samUser(vValue, vValuePath, fValue, fValuePath, internetUserName);
+            newSamUser = new samUser(userNKOffset, vValue, vValuePath, fValue, fValuePath, internetUserName);
         }catch(owpException e) {
             cerr << e.formattedMessage;
             newSamUser = NULL;
@@ -103,6 +105,41 @@ namespace owper {
 
     void samHive::clearPassword(unsigned int userIndex) {
         samUser* user = this->userList.at(userIndex);
+
+        if(!user->getMSAccount().empty()) {
+            std::cout << "MS account detected.  Converting to local." << std::endl;
+            if(!this->deleteValue(user->getNKOffset(), (char*)"InternetUserName")) {
+                throw(new owpException("Failed to delete MS Account value!", 2));
+            }
+
+            if(!this->deleteValue(user->getNKOffset(), (char*)"InternetProviderGUID")) {
+                throw(new owpException("Failed to delete MS Account value!", 2));
+            }
+
+            if(!this->deleteValue(user->getNKOffset(), (char*)"GivenName")) {
+                throw(new owpException("Failed to delete MS Account value!", 2));
+            }
+
+            if(!this->deleteValue(user->getNKOffset(), (char*)"Surname")) {
+                throw(new owpException("Failed to delete MS Account value!", 2));
+            }
+
+            if(!this->deleteValue(user->getNKOffset(), (char*)"InternetSID")) {
+                throw(new owpException("Failed to delete MS Account value!", 2));
+            }
+
+            if(!this->deleteValue(user->getNKOffset(), (char*)"InternetUID")) {
+                throw(new owpException("Failed to delete MS Account value!", 2));
+            }
+
+            if(!this->deleteValue(user->getNKOffset(), (char*)"ComplexityPolicy")) {
+                throw(new owpException("Failed to delete MS Account value!", 2));
+            }
+
+            if(!this->deleteValue(user->getNKOffset(), (char*)"ComplexityLastUsed")) {
+                throw(new owpException("Failed to delete MS Account value!", 2));
+            }
+        }
 
         if(user->passwordIsBlank()) {
             return;

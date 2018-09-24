@@ -23,7 +23,8 @@
 #include "include/samUser.h"
 
 namespace owper {
-    samUser::samUser(ntreg::keyval *inVStructRegValue, string inVStructPath, ntreg::keyval *inFStructRegValue, string inFStructPath, string msAccount/* = ""*/) {
+    samUser::samUser(int inNKOffset, ntreg::keyval *inVStructRegValue, string inVStructPath, ntreg::keyval *inFStructRegValue, string inFStructPath, string msAccount/* = ""*/) {
+        nkOffset = inNKOffset;
         vStructPath = inVStructPath;
         vStructRegValue = inVStructRegValue;
         fStructPath = inFStructPath;
