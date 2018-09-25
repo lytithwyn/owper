@@ -25,7 +25,7 @@ owperGUI::owperGUI(string initHivePath/*=""*/, samHive* preloadedSam/*=NULL*/) {
     loadGUI();
 
     if(!initHivePath.empty()) {
-        changeHiveFile(initHivePath, preloadedSam);
+        changeHivePath(initHivePath, preloadedSam);
     }
 }
 
@@ -40,22 +40,22 @@ void owperGUI::loadGUI() {
 
 
     //section for setting the directory from which to retrieve registry files
-    frameSamFile = gtk_frame_new("Select Sam Registry File");
-    gtk_box_pack_start(GTK_BOX(vboxMain), frameSamFile, false, false, 0);
+    frameHivePath = gtk_frame_new("Registry File Directory");
+    gtk_box_pack_start(GTK_BOX(vboxMain), frameHivePath, false, false, 0);
 
-    hboxSamFile = gtk_hbox_new(false, 0);
-    gtk_container_set_border_width(GTK_CONTAINER(hboxSamFile), 5);
-    gtk_container_add(GTK_CONTAINER(frameSamFile), hboxSamFile);
+    hboxHivePath = gtk_hbox_new(false, 0);
+    gtk_container_set_border_width(GTK_CONTAINER(hboxHivePath), 5);
+    gtk_container_add(GTK_CONTAINER(frameHivePath), hboxHivePath);
 
-    entrySamFile = gtk_entry_new();
-    gtk_entry_set_width_chars(GTK_ENTRY(entrySamFile), 30);
-    gtk_entry_set_editable(GTK_ENTRY(entrySamFile), false);
-    gtk_box_pack_start(GTK_BOX(hboxSamFile), entrySamFile, true, true, 5);
+    entryHivePath = gtk_entry_new();
+    gtk_entry_set_width_chars(GTK_ENTRY(entryHivePath), 30);
+    gtk_entry_set_editable(GTK_ENTRY(entryHivePath), false);
+    gtk_box_pack_start(GTK_BOX(hboxHivePath), entryHivePath, true, true, 5);
 
-    buttonBrowseSamFile = gtk_button_new_with_mnemonic("_Browse");
-    g_signal_connect (G_OBJECT(buttonBrowseSamFile), "clicked",
-        G_CALLBACK(sam_file_browse_event), (gpointer)this);
-    gtk_box_pack_start(GTK_BOX(hboxSamFile), buttonBrowseSamFile, false, false, 5);
+    buttonBrowseHivePath = gtk_button_new_with_mnemonic("_Browse");
+    g_signal_connect (G_OBJECT(buttonBrowseHivePath), "clicked",
+        G_CALLBACK(hive_path_browse_event), (gpointer)this);
+    gtk_box_pack_start(GTK_BOX(hboxHivePath), buttonBrowseHivePath, false, false, 5);
 
 
     //section for list of users
@@ -99,32 +99,34 @@ void owperGUI::destroy(GtkWidget *widget, gpointer data )
     gtk_main_quit ();
 }
 
-void owperGUI::sam_file_browse_event(GtkWidget *widget, gpointer owperGUIInstance)
+void owperGUI::hive_path_browse_event(GtkWidget *widget, gpointer owperGUIInstance)
 {
     owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
 
-    GtkWidget *fileChooser = gtk_file_chooser_dialog_new ("Open File",
+    GtkWidget *fileChooser = gtk_file_chooser_dialog_new ("Select directory containing registry files",
                                 GTK_WINDOW(thisOwperGUI->winMain),
-                                GTK_FILE_CHOOSER_ACTION_OPEN,
+                                GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
                                 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                 GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 
     if (gtk_dialog_run(GTK_DIALOG(fileChooser)) == GTK_RESPONSE_ACCEPT)
     {
         string filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (fileChooser));
-        thisOwperGUI->changeHiveFile(filename);
+        thisOwperGUI->changeHivePath(filename);
     }
 
     gtk_widget_destroy (fileChooser);
 }
 
-bool owperGUI::changeHiveFile(string newFileName, samHive* newSam/*=NULL*/) {
-    gtk_entry_set_text(GTK_ENTRY(entrySamFile), "");
+bool owperGUI::changeHivePath(string newPath, samHive* newSam/*=NULL*/) {
+    gtk_entry_set_text(GTK_ENTRY(entryHivePath), "");
     clearUsers();
 
     if(sam) {
         delete sam;
     }
+
+    string samFileName = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "sam").c_str());
 
     // see if we were passed an already-loaded SAM hive
     // this may be the case if the program was asked to check
@@ -134,7 +136,7 @@ bool owperGUI::changeHiveFile(string newFileName, samHive* newSam/*=NULL*/) {
     } else {
         // no, the sam file isn't loaded yet - try to load it
         try {
-            sam = new samHive(newFileName.c_str());
+            sam = new samHive(samFileName.c_str());
         }catch(owpException *exception) {
             //if sam got assigned something, delete it!
             if(sam) {
@@ -155,7 +157,7 @@ bool owperGUI::changeHiveFile(string newFileName, samHive* newSam/*=NULL*/) {
         }
     }
 
-    gtk_entry_set_text(GTK_ENTRY(entrySamFile), newFileName.c_str());
+    gtk_entry_set_text(GTK_ENTRY(entryHivePath), newPath.c_str());
     loadUsers();
     return true;
 }

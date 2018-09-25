@@ -28,19 +28,21 @@
 
 #include "include/samHive.h"
 #include "include/userWidget.h"
+#include "include/fileManip.h"
 
 using namespace std;
 using namespace owper;
+using namespace fileManip;
 
 class owperGUI
 {
     private:
         GtkWidget *winMain;
         GtkWidget *vboxMain;
-        GtkWidget *frameSamFile;
-        GtkWidget *hboxSamFile;
-        GtkWidget *entrySamFile;
-        GtkWidget *buttonBrowseSamFile;
+        GtkWidget *frameHivePath;
+        GtkWidget *hboxHivePath;
+        GtkWidget *entryHivePath;
+        GtkWidget *buttonBrowseHivePath;
         GtkWidget *scrollwinUsers;
         GtkWidget *vboxUsers;
         GtkWidget *hboxCommands;
@@ -48,7 +50,10 @@ class owperGUI
         GtkWidget *buttonEnableAccounts;
         GtkWidget *buttonDisableAccounts;
 
+        string stringHivePath;
         string stringSamFileName;
+        string stringSystemFileName;
+        string stringDefaultFileName;
         samHive  *sam;
         vector<userWidget*> vectUserWidgets;
 
@@ -59,8 +64,8 @@ class owperGUI
 
         static void delete_event(GtkWidget *widget, GdkEvent  *event, gpointer data);
         static void destroy(GtkWidget *widget, gpointer data);
-        static void sam_file_browse_event(GtkWidget *widget, gpointer owperGUIInstance);
-        bool changeHiveFile(string newFileName, samHive* newSam = NULL);
+        static void hive_path_browse_event(GtkWidget *widget, gpointer owperGUIInstance);
+        bool changeHivePath(string newPath, samHive* newSam = NULL);
         void clearUsers();
         void loadUsers();
         static void clearPasswords(GtkWidget *widget, gpointer owperGUIInstance);
