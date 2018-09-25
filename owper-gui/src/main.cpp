@@ -79,9 +79,15 @@ int main(int argc, char* argv[]) {
             hiveFilePath = argv[1];
         }
 
-        // we have been asked to test a file to see if it is a sam hive or not
+        // we have been asked to test a path to see if it contains valid registry files or not
         try {
-            sam = new samHive(hiveFilePath.c_str());
+            string samFileName = fileManip::findFileCaseInsensitive(hiveFilePath, "sam");
+            if(samFileName.empty()) {
+                // the SAM file was not found - bail out
+                return 2;
+            }
+            string samFilePath = stringPrintf("%s/%s", hiveFilePath.c_str(), samFileName.c_str());
+            sam = new samHive(samFilePath.c_str());
         } catch(owpException* e) {
             // this is NOT a sam hive - bail out
             delete e;
