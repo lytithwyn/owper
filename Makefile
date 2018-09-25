@@ -1,6 +1,7 @@
 include makeconfig.mk
 
-CFLAGS = -I ./owper -I ./owper-gui -g -Wall -Werror -Wno-unused-but-set-variable
+CFLAGS = -I ./owper -I ./owper-gui -g -Wall -Werror -Wno-unused-but-set-variable `pkg-config --cflags openssl`
+LIBS = `pkg-config --libs openssl`
 GUICFLAGS = `pkg-config --cflags gtk+-2.0`
 GUILIBS = `pkg-config --libs gtk+-2.0`
 OBJS = *.o
@@ -12,12 +13,12 @@ PROG = owpergui
 
 all: $(PROG)
 
-$(LIBOWPER): 
+$(LIBOWPER):
 	$(ECHO) "Making all in $(LIBOWPER_DIR)"
 	cd $(LIBOWPER_DIR) ; $(MAKE)
 
 owpergui: $(LIBOWPER) $(GUISRCS)
-	$(CPP) $(GUISRCS) $(CFLAGS) $(GUICFLAGS) $(GUILIBS) $(LIBOWPER_DIR)/$(LIBOWPER) -o $(PROG)
+	$(CPP) $(GUISRCS) $(CFLAGS) $(GUICFLAGS) $(GUILIBS) $(LIBOWPER_DIR)/$(LIBOWPER) $(LIBS) -o $(PROG)
 
 clean:
 	$(RM) $(PROG) $(OBJS) $(PROG).dSYM

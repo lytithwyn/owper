@@ -87,7 +87,8 @@ int main(int argc, char* argv[]) {
                 return 2;
             }
             string samFilePath = stringPrintf("%s/%s", hiveFilePath.c_str(), samFileName.c_str());
-            sam = new samHive(samFilePath.c_str());
+            sam = new samHive(samFilePath.c_str(), NULL);
+            delete sam; // we're going to reload it with the bootkey from SYSTEM anyway
         } catch(owpException* e) {
             // this is NOT a sam hive - bail out
             delete e;
@@ -96,7 +97,7 @@ int main(int argc, char* argv[]) {
     }
 
     owperGUI *passwordClearer;
-    passwordClearer = new owperGUI(hiveFilePath, sam);
+    passwordClearer = new owperGUI(hiveFilePath);
 
     gtk_main();
 

@@ -92,6 +92,7 @@ namespace owper {
 
         reg_off travPath(reg_off startingOffest, char* path, int type);
         SCAN_KEY_RESULT getNextSubKey(int nkofs, int *count, int *countri, struct ntreg::ex_data *sptr);
+        struct ntreg::nk_key *getNkKeyAtOffset(reg_off);
 
         struct ntreg::keyval *copyValueToBuffer(struct ntreg::keyval *kv, int vofs, char *path, int type, int exact = 0);
         int copyBufferToValue(struct ntreg::keyval *regValue, int valueOffset, char *path, REG_VALUE_TYPE type, int exact = 0);

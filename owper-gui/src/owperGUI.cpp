@@ -20,12 +20,12 @@
  */
 #include "include/owperGUI.h"
 
-owperGUI::owperGUI(string initHivePath/*=""*/, samHive* preloadedSam/*=NULL*/) {
+owperGUI::owperGUI(string initHivePath/*=""*/) {
     sam = NULL;
     loadGUI();
 
     if(!initHivePath.empty()) {
-        changeHivePath(initHivePath, preloadedSam);
+        changeHivePath(initHivePath);
     }
 }
 
@@ -118,43 +118,45 @@ void owperGUI::hive_path_browse_event(GtkWidget *widget, gpointer owperGUIInstan
     gtk_widget_destroy (fileChooser);
 }
 
-bool owperGUI::changeHivePath(string newPath, samHive* newSam/*=NULL*/) {
-    gtk_entry_set_text(GTK_ENTRY(entryHivePath), "");
-    clearUsers();
+bool owperGUI::changeHivePath(string newPath) {
+    gtk_entry_set_text(GTK_ENTRY(this->entryHivePath), "");
+    this->clearUsers();
 
-    if(sam) {
-        delete sam;
+    if(this->sam) {
+        delete this->sam;
     }
 
-    string samFileName = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "sam").c_str());
+    if(this->system) {
+        delete this->system;
+    }
 
-    // see if we were passed an already-loaded SAM hive
-    // this may be the case if the program was asked to check
-    // a hive on startup
-    if(newSam != NULL) {
-        sam = newSam;
-    } else {
-        // no, the sam file isn't loaded yet - try to load it
-        try {
-            sam = new samHive(samFileName.c_str());
-        }catch(owpException *exception) {
-            //if sam got assigned something, delete it!
-            if(sam) {
-                delete sam;
-                sam = NULL;
-            }
+    this->stringSamFileName = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "sam").c_str());
+    this->stringSystemFileName = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "system").c_str());
 
-            GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
-                                             GTK_DIALOG_DESTROY_WITH_PARENT,
-                                             GTK_MESSAGE_ERROR,
-                                             GTK_BUTTONS_CLOSE,
-                                             "Error loading hive:\n%s",
-                                             exception->errorMessage.c_str());
-            gtk_dialog_run (GTK_DIALOG (errorDialog));
-            gtk_widget_destroy (errorDialog);
-            delete exception;
-            return false;
+    try {
+        this->system = new systemHive(this->stringSystemFileName.c_str());
+        this->sam = new samHive(this->stringSamFileName.c_str(), this->system->getBootKey());
+    } catch(owpException *exception) {
+        if(this->sam) {
+            delete this->sam;
+            this->system = NULL;
         }
+
+        if(this->system) {
+            delete this->system;
+            this->system = NULL;
+        }
+
+        GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
+                                         GTK_DIALOG_DESTROY_WITH_PARENT,
+                                         GTK_MESSAGE_ERROR,
+                                         GTK_BUTTONS_CLOSE,
+                                         "Error loading hive:\n%s",
+                                         exception->errorMessage.c_str());
+        gtk_dialog_run (GTK_DIALOG (errorDialog));
+        gtk_widget_destroy (errorDialog);
+        delete exception;
+        return false;
     }
 
     gtk_entry_set_text(GTK_ENTRY(entryHivePath), newPath.c_str());
@@ -289,5 +291,15 @@ void owperGUI::reportSuccess(string taskDesc, owperGUI *thisOwperGUI) {
     gtk_widget_destroy (infoDialog);
 }
 
+owperGUI::~owperGUI() {
+    this->clearUsers();
 
+    if(this->sam) {
+        delete sam;
+    }
+
+    if(this->system) {
+        delete system;
+    }
+}
 

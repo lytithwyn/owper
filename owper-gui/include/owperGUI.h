@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "include/samHive.h"
+#include "include/systemHive.h"
 #include "include/userWidget.h"
 #include "include/fileManip.h"
 
@@ -54,18 +55,20 @@ class owperGUI
         string stringSamFileName;
         string stringSystemFileName;
         string stringDefaultFileName;
-        samHive  *sam;
+        samHive    *sam;
+        systemHive *system;
         vector<userWidget*> vectUserWidgets;
 
         void loadGUI();
 
     public:
-        owperGUI(string stringInitHivePath = "", samHive* preloadedSam = NULL);
+        owperGUI(string stringInitHivePath = "");
+        ~owperGUI();
 
         static void delete_event(GtkWidget *widget, GdkEvent  *event, gpointer data);
         static void destroy(GtkWidget *widget, gpointer data);
         static void hive_path_browse_event(GtkWidget *widget, gpointer owperGUIInstance);
-        bool changeHivePath(string newPath, samHive* newSam = NULL);
+        bool changeHivePath(string newPath);
         void clearUsers();
         void loadUsers();
         static void clearPasswords(GtkWidget *widget, gpointer owperGUIInstance);

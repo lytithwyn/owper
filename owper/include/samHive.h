@@ -26,6 +26,8 @@
 
 #include <iostream>
 #include <vector>
+#include <openssl/md5.h>
+#include <openssl/rc4.h>
 #include "include/hive.h"
 #include "include/stringManip.h"
 #include "include/sam.h"
@@ -41,13 +43,17 @@ namespace owper {
     class samHive : public hive {
     private:
         vector<samUser*> userList;
+        unsigned char* hashedBootKey;
 
-        void     loadUserList();
-        int      getUserRID(char* userName);
-        samUser* getSamUser(int rid);
-        string   getUserValue(char* dataBuffer, int valueOffset, int valueLength);
+        unsigned char* generateHashedBootKey(unsigned char* bootKey);
+        unsigned char* getGlobalFValue();
+        void           loadUserList();
+        int            getUserRID(char* userName);
+        samUser*       getSamUser(int rid);
+        string         getUserValue(char* dataBuffer, int valueOffset, int valueLength);
     public:
-        samHive(const char* fileName, int hiveMode = HMODE_RW);
+        samHive(const char* fileName, unsigned char* bootKey, int hiveMode = HMODE_RW);
+        ~samHive();
         vector<samUser*> getUserList(){ return userList; };
         bool     mergeChangesToHive();
         void clearPassword(unsigned int userIndex);
