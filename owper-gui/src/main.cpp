@@ -45,7 +45,10 @@ using stringManip::stringPrintf;
 using namespace owper;
 
 void printUsage(char* progName) {
-    cout << progName << " [--testhive] [hivepath]" << endl;
+    cout << progName << " [--testhive] [HIVEPATH]" << endl;
+    cout << "\t--testhive - if this option is present, the program will simply test to see if the given directory contains valid registry hives." << std::endl;
+    cout << "\t             This may be useful for scanning multiple partitions on a system to find the hives, where some might \"dummy\" hives in recovery parititions." << std::endl;
+    cout << "\t[HIVEPATH] - the directory containing the system registry files (e.g., SAM, SYSTEM, DEFAULT, etc.)\n" << std::endl;
     cout << "Note: if --testhive is supplied, hivepath must be as well" << endl;
 }
 
