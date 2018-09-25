@@ -33,6 +33,7 @@ namespace owper {
 
         if(bootKey) {
             this->hashedBootKey = this->generateHashedBootKey(bootKey);
+            delete[] bootKey;
         } else {
             this->hashedBootKey = NULL;
         }
