@@ -64,6 +64,7 @@ namespace owper {
             inetUserNameCString[inetUserNameLen] = '\0';
             binaryManip::unicodeToAscii((char*)&internetUserNameValue->data, inetUserNameCString, internetUserNameValue->len);
             internetUserName = inetUserNameCString;
+            delete[] inetUserNameCString;
             free(internetUserNameValue);
             internetUserNameValue = NULL;
         }
