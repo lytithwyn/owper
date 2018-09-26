@@ -139,7 +139,7 @@ bool owperGUI::changeHivePath(string newPath) {
     } catch(owpException *exception) {
         if(this->sam) {
             delete this->sam;
-            this->system = NULL;
+            this->sam = NULL;
         }
 
         if(this->system) {
