@@ -52,9 +52,6 @@ class owperGUI
         GtkWidget *buttonDisableAccounts;
 
         string stringHivePath;
-        string stringSamFileName;
-        string stringSystemFileName;
-        string stringDefaultFileName;
         samHive    *sam;
         systemHive *system;
         vector<userWidget*> vectUserWidgets;

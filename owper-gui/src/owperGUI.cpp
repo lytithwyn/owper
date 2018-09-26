@@ -131,12 +131,12 @@ bool owperGUI::changeHivePath(string newPath) {
         delete this->system;
     }
 
-    this->stringSamFileName = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "sam").c_str());
-    this->stringSystemFileName = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "system").c_str());
+    string samFilePath = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "sam").c_str());
+    string systemFilePath = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "system").c_str());
 
     try {
-        this->system = new systemHive(this->stringSystemFileName.c_str());
-        this->sam = new samHive(this->stringSamFileName.c_str(), this->system->getBootKey());
+        this->system = new systemHive(systemFilePath.c_str());
+        this->sam = new samHive(samFilePath.c_str(), this->system->getBootKey());
     } catch(owpException *exception) {
         if(this->sam) {
             delete this->sam;
