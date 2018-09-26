@@ -101,6 +101,8 @@ int main(int argc, char* argv[]) {
 
     gtk_main();
 
+    delete passwordClearer;
+
     return 0;
 
 }

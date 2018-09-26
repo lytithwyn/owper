@@ -39,6 +39,8 @@ namespace owper {
         vStructRegValue = inVStructRegValue;
         fStructPath = inFStructPath;
         fStructRegValue = inFStructRegValue;
+        keySched1 = NULL;
+        keySched2 = NULL;
 
         if(inHashedBootKey) {
             hashedBootKey = new unsigned char[0x20];

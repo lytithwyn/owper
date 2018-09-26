@@ -40,7 +40,6 @@ class userWidget
 
     public:
         userWidget(samUser *inSamUser, unsigned int inUserIndex);
-        ~userWidget();
 
         void         resetLabel();
         unsigned int getUserIndex()    { return userIndex; };
@@ -49,6 +48,7 @@ class userWidget
         bool         passwordIsBlank() { return this->user->passwordIsBlank(); };
         bool         userIsSelected()  { return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(chkbtnUser)); };
         GtkWidget   *getWidget()       { return this->chkbtnUser; };
+        void         destroyWidget()   { gtk_widget_destroy(this->chkbtnUser); };
         void         enableAccount()   { user->enableAccount(); };
         void         disableAccount()  { user->disableAccount(); };
         void         selectUser()      { gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkbtnUser), true); };

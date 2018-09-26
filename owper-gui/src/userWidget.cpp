@@ -28,10 +28,6 @@ userWidget::userWidget(samUser *inSamUser, unsigned int inUserIndex)
     resetLabel();
 }
 
-userWidget::~userWidget() {
-    gtk_widget_destroy(this->chkbtnUser);
-}
-
 void userWidget::resetLabel()
 {
     string fullName = "";

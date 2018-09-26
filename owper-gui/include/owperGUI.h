@@ -69,7 +69,7 @@ class owperGUI
         static void destroy(GtkWidget *widget, gpointer data);
         static void hive_path_browse_event(GtkWidget *widget, gpointer owperGUIInstance);
         bool changeHivePath(string newPath);
-        void clearUsers();
+        void clearUsers(bool isShutdown = false);
         void loadUsers();
         static void clearPasswords(GtkWidget *widget, gpointer owperGUIInstance);
         static void enableAccounts(GtkWidget *widget, gpointer owperGUIInstance);

@@ -22,6 +22,7 @@
 
 owperGUI::owperGUI(string initHivePath/*=""*/) {
     sam = NULL;
+    system = NULL;
     loadGUI();
 
     if(!initHivePath.empty()) {
@@ -176,11 +177,14 @@ void owperGUI::loadUsers() {
     }
 }
 
-void owperGUI::clearUsers() {
+void owperGUI::clearUsers(bool isShutdown/* = false */) {
     //we are using a vector of pointers, thus the destructors
     //do NOT get called by vector.clear
     for(unsigned int i = 0; i < vectUserWidgets.size(); i++) {
         if(vectUserWidgets.at(i)) {
+            if(!isShutdown) {
+                vectUserWidgets.at(i)->destroyWidget();
+            }
             delete vectUserWidgets.at(i);
             vectUserWidgets.at(i) = NULL;
         }
@@ -292,7 +296,7 @@ void owperGUI::reportSuccess(string taskDesc, owperGUI *thisOwperGUI) {
 }
 
 owperGUI::~owperGUI() {
-    this->clearUsers();
+    this->clearUsers(true);
 
     if(this->sam) {
         delete sam;
