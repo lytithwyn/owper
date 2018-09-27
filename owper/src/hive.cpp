@@ -107,6 +107,13 @@ namespace owper {
         return (ntreg::del_value(this->regHive, nkofs, name, 0) == 0);
     }
 
+    // this will recursively delete all the stuff under the specified key as well!
+    void hive::deleteKey(int nkofs, char *name) {
+        // this looks weird compared to deleteValue because the parameter order is swapped in ntreg
+        // and because it's a void return - we don't get to know if it worked!
+        ntreg::rdel_keys(this->regHive, name, nkofs);
+    }
+
     bool hive::writeHiveToFile() {
         int errorsPresent = ntreg::writeHive(this->regHive);
 

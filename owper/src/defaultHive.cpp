@@ -31,6 +31,16 @@ namespace owper {
             this->closeHive();
             throw(new owpException("The filename given does not point to a USER type hive"));
         }
+
+        this->identityStoreNKOffset = this->travPath(0, (char*)"Software\\Microsoft\\IdentityCRL\\StoredIdentities\\", 0) + 4;
+        if(!identityStoreNKOffset) {
+            this->closeHive();
+            throw(new owpException("Could not find the StoredIdentities key in DEFAULT!"));
+        }
+    }
+
+    void defaultHive::deleteStoredIdentity(std::string identityName) {
+        this->deleteKey(this->identityStoreNKOffset, (char*)identityName.c_str());
     }
 }
 

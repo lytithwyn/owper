@@ -99,6 +99,7 @@ namespace owper {
         int copyBufferToValue(struct ntreg::keyval *regValue, int valueOffset, char *path, REG_VALUE_TYPE type, int exact = 0);
         int getDword(int vofs, char *path, int exact = 0);
         bool deleteValue(int nkofs, char *name);
+        void deleteKey(int nkofs, char *name);
         bool writeHiveToFile();
 
     private:

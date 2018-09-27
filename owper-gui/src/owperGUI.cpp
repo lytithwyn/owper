@@ -215,6 +215,10 @@ void owperGUI::clearPasswords(GtkWidget *widget, gpointer owperGUIInstance) {
         userWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
         cout << curUserWidget->getUserName() << endl << flush;
         if(curUserWidget->userIsSelected()) {
+            string msAccount = thisOwperGUI->sam->getUserAtIndex(i)->getMSAccount();
+            if(!msAccount.empty()) {
+                thisOwperGUI->deflt->deleteStoredIdentity(msAccount);
+            }
             thisOwperGUI->sam->clearPassword(i);
             curUserWidget->deselectUser();
             curUserWidget->resetLabel();
@@ -265,6 +269,13 @@ void owperGUI::applyChanges(string successMessage, owperGUI *thisOwperGUI) {
     if(!thisOwperGUI->sam->writeHiveToFile()) {
         reportSaveFailure(thisOwperGUI);
         return;
+    }
+
+    if(thisOwperGUI->deflt) {
+        if(!thisOwperGUI->deflt->writeHiveToFile()) {
+            reportSaveFailure(thisOwperGUI);
+            return;
+        }
     }
 
     reportSuccess(successMessage, thisOwperGUI);

@@ -55,6 +55,7 @@ namespace owper {
         samHive(const char* fileName, unsigned char* bootKey, int hiveMode = HMODE_RW);
         ~samHive();
         vector<samUser*> getUserList(){ return userList; };
+        samUser*       getUserAtIndex(int index) { return this->userList.at(index); };
         bool     mergeChangesToHive();
         void clearPassword(unsigned int userIndex);
     };
