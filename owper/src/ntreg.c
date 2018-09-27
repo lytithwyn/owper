@@ -4245,6 +4245,7 @@ struct hive *openHive(char *filename, int mode)
    else if (trav_path(hdesc, 0, "\\ControlSet", 0)) hdesc->type = HTYPE_SYSTEM;
    else if (trav_path(hdesc, 0, "\\Policy", 0)) hdesc->type = HTYPE_SECURITY;
    else if (trav_path(hdesc, 0, "\\Microsoft", 0)) hdesc->type = HTYPE_SOFTWARE;
+   else if (trav_path(hdesc, 0, "\\EUDC", 0)) hdesc->type = HTYPE_USER;
    if (verbose) printf("Type of hive guessed to be: %d\n",hdesc->type);
 
    return(hdesc);
