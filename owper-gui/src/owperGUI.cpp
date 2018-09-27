@@ -125,10 +125,12 @@ bool owperGUI::changeHivePath(string newPath) {
 
     if(this->sam) {
         delete this->sam;
+        this->sam = NULL;
     }
 
     if(this->system) {
         delete this->system;
+        this->system = NULL;
     }
 
     string samFilePath = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "sam").c_str());
