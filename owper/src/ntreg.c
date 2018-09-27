@@ -2863,11 +2863,10 @@ int del_key(struct hive *hdesc, int nkofs, char *name)
 
 /* Recursive delete keys
  * hdesc - usual..
- * nkofs - offset of current nk
+ * topNkofs - offset of current nk
  * name  - name of key to delete
- * return: 0 - ok, 1 fail
  */
-void rdel_keys(struct hive *hdesc, char *path, int vofs)
+void rdel_keys(struct hive *hdesc, char *path, int topNkofs)
 {
   struct nk_key *key;
   int nkofs;
@@ -2877,7 +2876,7 @@ void rdel_keys(struct hive *hdesc, char *path, int vofs)
 
   if (!path || !*path) return;
 
-  nkofs = trav_path(hdesc, vofs, path, TPF_NK_EXACT);
+  nkofs = trav_path(hdesc, topNkofs, path, TPF_NK_EXACT);
 
   if(!nkofs) {
     printf("rdel_keys: Key <%s> not found\n",path);
