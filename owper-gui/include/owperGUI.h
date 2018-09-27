@@ -28,6 +28,7 @@
 
 #include "include/samHive.h"
 #include "include/systemHive.h"
+#include "include/defaultHive.h"
 #include "include/userWidget.h"
 #include "include/fileManip.h"
 
@@ -52,8 +53,9 @@ class owperGUI
         GtkWidget *buttonDisableAccounts;
 
         string stringHivePath;
-        samHive    *sam;
-        systemHive *system;
+        samHive     *sam;
+        systemHive  *system;
+        defaultHive *deflt;
         vector<userWidget*> vectUserWidgets;
 
         void loadGUI();

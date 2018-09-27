@@ -23,6 +23,7 @@
 owperGUI::owperGUI(string initHivePath/*=""*/) {
     sam = NULL;
     system = NULL;
+    deflt = NULL;
     loadGUI();
 
     if(!initHivePath.empty()) {
@@ -133,12 +134,19 @@ bool owperGUI::changeHivePath(string newPath) {
         this->system = NULL;
     }
 
+    if(this->deflt) {
+        delete this->deflt;
+        this->deflt = NULL;
+    }
+
     string samFilePath = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "sam").c_str());
     string systemFilePath = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "system").c_str());
+    string defaultFilePath = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "default").c_str());
 
     try {
         this->system = new systemHive(systemFilePath.c_str());
         this->sam = new samHive(samFilePath.c_str(), this->system->getBootKey());
+        this->deflt = new defaultHive(defaultFilePath.c_str());
     } catch(owpException *exception) {
         if(this->sam) {
             delete this->sam;
@@ -148,6 +156,11 @@ bool owperGUI::changeHivePath(string newPath) {
         if(this->system) {
             delete this->system;
             this->system = NULL;
+        }
+
+        if(this->deflt) {
+            delete this->deflt;
+            this->deflt = NULL;
         }
 
         GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
@@ -306,6 +319,10 @@ owperGUI::~owperGUI() {
 
     if(this->system) {
         delete system;
+    }
+
+    if(this->deflt) {
+        delete deflt;
     }
 }
 
