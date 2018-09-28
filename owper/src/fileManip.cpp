@@ -62,4 +62,77 @@ namespace fileManip {
         return foundFileName;
 
     }
+
+    string buildUniqueBackupFileName(string originalName) {
+        struct stat statBuf;
+        string backupFileName;
+        int backupIndex = 0;
+        int statReturn = 0;
+
+        // find an unused file name for the backup
+        while(statReturn == 0) {
+            backupFileName = stringPrintf("%s.bak%d", originalName.c_str(), backupIndex);
+            statReturn = stat(backupFileName.c_str(), &statBuf);
+            ++backupIndex;
+        }
+
+        return backupFileName;
+    }
+
+    bool copyFile(string sourceFileName, string destFileName) {
+        struct stat statBuf;
+        if((stat(sourceFileName.c_str(), &statBuf)) != 0) {
+            return false;
+        }
+
+        int sourceFileDesc = open(sourceFileName.c_str(), O_RDONLY);
+        if(sourceFileDesc == -1) {
+            perror("Failed to open source file for reading!");
+            std::cerr << sourceFileName << std::endl;
+            return false;
+        }
+
+        int destFileDesc = creat(destFileName.c_str(), 00700);
+        if(destFileDesc == -1) {
+            perror("Failed to open dest file for writing!");
+            std::cerr << sourceFileName << std::endl;
+            close(sourceFileDesc);
+            return false;
+        }
+
+        const int RB_SIZE = 512*100;
+        char readBuf[RB_SIZE];
+        int bytesRead = 0;
+        int bytesWritten = 0;
+        int totalBytesTransferred = 0;
+        while(true) {
+            bytesRead = read(sourceFileDesc, readBuf, RB_SIZE);
+            if(bytesRead == -1) {
+                perror("Failed to read from source file!");
+                std::cerr << sourceFileName << std::endl;
+                break;
+            }
+
+            bytesWritten = write(destFileDesc, readBuf, bytesRead);
+            if(bytesWritten < bytesRead) {
+                std::cerr << "Incomplete write to dest file!\n" << destFileName << std::endl;
+                break;
+            }
+
+            totalBytesTransferred += bytesRead;
+            if(bytesRead < RB_SIZE) {
+                break;
+            }
+        }
+
+        close(sourceFileDesc);
+        close(destFileDesc);
+
+        if(totalBytesTransferred < statBuf.st_size) {
+            std::cerr << "Failed to completely transfer file contents!\n" << sourceFileName << " > " << destFileName << std::endl;
+            return false;
+        }
+
+        return true;
+    }
 }
