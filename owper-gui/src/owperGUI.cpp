@@ -33,6 +33,7 @@ owperGUI::owperGUI(string initHivePath/*=""*/) {
 
 void owperGUI::loadGUI() {
     winMain = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(winMain), "OWPEr - Manage Windows User Accounts");
     gtk_container_set_border_width(GTK_CONTAINER(winMain), 5);
     gtk_window_set_default_size(GTK_WINDOW(winMain), 600, 400);
     g_signal_connect (G_OBJECT(winMain), "delete_event", G_CALLBACK(delete_event), NULL);
