@@ -266,13 +266,13 @@ void owperGUI::applyChanges(string successMessage, owperGUI *thisOwperGUI) {
         return;
     }
 
-    if(!thisOwperGUI->sam->writeHiveToFile()) {
+    if(!thisOwperGUI->sam->writeHiveToFile(true)) {
         reportSaveFailure(thisOwperGUI);
         return;
     }
 
     if(thisOwperGUI->deflt) {
-        if(!thisOwperGUI->deflt->writeHiveToFile()) {
+        if(!thisOwperGUI->deflt->writeHiveToFile(true)) {
             reportSaveFailure(thisOwperGUI);
             return;
         }

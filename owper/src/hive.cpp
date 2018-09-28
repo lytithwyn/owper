@@ -114,7 +114,14 @@ namespace owper {
         ntreg::rdel_keys(this->regHive, name, nkofs);
     }
 
-    bool hive::writeHiveToFile() {
+    bool hive::writeHiveToFile(bool makeBackup) {
+        if(makeBackup) {
+            if(!this->backUpHiveFile()) {
+                std::cerr << "Failed to backup hive [ " << this->regHive->filename << "] before saving.  Bailed out!" << std::cerr;
+                return false;
+            }
+        }
+
         int errorsPresent = ntreg::writeHive(this->regHive);
 
         if(errorsPresent) {
@@ -122,5 +129,10 @@ namespace owper {
         } else {
             return true;
         }
+    }
+
+    bool hive::backUpHiveFile() {
+        string backupFileName = fileManip::buildUniqueBackupFileName(this->regHive->filename);
+        return fileManip::copyFile(this->regHive->filename, backupFileName);
     }
 }

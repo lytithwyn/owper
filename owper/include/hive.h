@@ -33,6 +33,7 @@
 #include "include/ntreg.h"
 #include "include/owpException.h"
 #include "include/stringManip.h"
+#include "include/fileManip.h"
 
 using stringManip::stringPrintf;
 
@@ -100,7 +101,8 @@ namespace owper {
         int getDword(int vofs, char *path, int exact = 0);
         bool deleteValue(int nkofs, char *name);
         void deleteKey(int nkofs, char *name);
-        bool writeHiveToFile();
+        bool writeHiveToFile(bool makeBackup);
+        bool backUpHiveFile();
 
     private:
         void openHive(const char* fileName, int hiveMode);
