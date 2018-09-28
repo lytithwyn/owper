@@ -83,6 +83,8 @@ namespace owper {
         string getFullName() const   { return fullName; };
         string getUserName() const   { return userName; };
         string getMSAccount() const  { return msAccount; };
+        void clearFullName() { this->fullName = ""; };
+        void clearMSAccount() { this->msAccount = ""; };
         bool passwordIsBlank();
         bool accountIsDisabled() const;
         void enableAccount();

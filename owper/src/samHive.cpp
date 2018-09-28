@@ -113,6 +113,8 @@ namespace owper {
 
     void samHive::clearPassword(unsigned int userIndex) {
         samUser* user = this->userList.at(userIndex);
+        ntreg::keyval* vStructRegValue = user->getVStructRegValue();
+        ntreg::user_V *vStruct = (struct ntreg::user_V *)((char*)(&vStructRegValue->data));
 
         if(!user->getMSAccount().empty()) {
             std::cout << "MS account detected.  Converting to local." << std::endl;
@@ -147,14 +149,12 @@ namespace owper {
             if(!this->deleteValue(user->getNKOffset(), (char*)"ComplexityLastUsed")) {
                 throw(new owpException("Failed to delete MS Account value!", 2));
             }
+
+            user->clearMSAccount();
+            user->clearFullName();
+            vStruct->fullname_len = 0;
         }
 
-        if(user->passwordIsBlank()) {
-            return;
-        }
-
-        ntreg::keyval* vStructRegValue = user->getVStructRegValue();
-        ntreg::user_V *vStruct = (struct ntreg::user_V *)((char*)(&vStructRegValue->data));
         vStruct->lmpw_len = 0;
         vStruct->ntpw_len = 0;
         user->hasChanges(true);

@@ -49,6 +49,9 @@ namespace owper {
             hashedBootKey = 0;
         }
 
+        // DEBUG disabling the reading of encrypted hashes for now, as it isn't working
+        hashedBootKey = 0;
+
         vStruct = (struct ntreg::user_V *)((char*)(&inVStructRegValue->data));
         char* vBuffer = (char*)&(inVStructRegValue->data);
 
@@ -244,6 +247,7 @@ namespace owper {
 
     bool samUser::passwordIsBlank() {
         bool hasBlankPassword = true;
+        std::cout << "LMPW len: " << vStruct->lmpw_len << ", NTPW len: " << vStruct->ntpw_len << std::endl;
 
         if(!this->msAccount.empty()) {
             hasBlankPassword = false;
@@ -257,7 +261,7 @@ namespace owper {
                     hasBlankPassword = false;
                 }
             } else {
-                if(vStruct->lmpw_len == 0x14 || vStruct->lmpw_len == 0x14) {
+                if(vStruct->lmpw_len >= 0x16 || vStruct->ntpw_len >= 0x16) {
                     hasBlankPassword = false;
                 }
             }
