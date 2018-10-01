@@ -7,7 +7,7 @@
  * Copyright (c) 1997-2011 Petter Nordahl-Hagen.
  *
  * Edits by Matthew Morgan, as marked
- * Copyright (c) 2010-2013 Matthew Morgan
+ * Copyright (c) 2010-2018 Matthew Morgan
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

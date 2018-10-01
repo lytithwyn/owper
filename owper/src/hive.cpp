@@ -1,6 +1,6 @@
 /*
  * This file is part of owper - a c++ windows password changing library based on chntpw
- * Copyright (C) 2010-2013 Matthew Morgan
+ * Copyright (C) 2010-2018 Matthew Morgan
  *
  * Some code was borrowed/modified from the chntpw project
  * Copyright (c) 1997-2011 Petter Nordahl-Hagen
