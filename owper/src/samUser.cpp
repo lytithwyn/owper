@@ -261,7 +261,7 @@ namespace owper {
                     hasBlankPassword = false;
                 }
             } else {
-                if(vStruct->lmpw_len >= 0x16 || vStruct->ntpw_len >= 0x16) {
+                if(vStruct->lmpw_len > 0 || vStruct->ntpw_len > 0) {
                     hasBlankPassword = false;
                 }
             }
