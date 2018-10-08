@@ -144,10 +144,34 @@ bool owperGUI::changeHivePath(string newPath) {
     string systemFilePath = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "system").c_str());
     string defaultFilePath = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "default").c_str());
 
+    unsigned char* bootKey = NULL;
     try {
-        this->system = new systemHive(systemFilePath.c_str());
-        this->sam = new samHive(samFilePath.c_str(), this->system->getBootKey());
-        this->deflt = new defaultHive(defaultFilePath.c_str());
+        try {
+            this->system = new systemHive(systemFilePath.c_str());
+            bootKey = this->system->getBootKey();
+        } catch(owpException *e) {
+            // we don't have a system file...that's OK
+            this->system = NULL;
+            delete e;
+        }
+
+        this->sam = new samHive(samFilePath.c_str(), bootKey);
+
+        try {
+            this->deflt = new defaultHive(defaultFilePath.c_str());
+        } catch(owpException *exception) {
+            // we don't have a default file...we can't clear MS accounts, but otherwise is OK
+            GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
+                                             GTK_DIALOG_DESTROY_WITH_PARENT,
+                                             GTK_MESSAGE_ERROR,
+                                             GTK_BUTTONS_CLOSE,
+                                             "DEFAULT hive could not be opened: \n%s\nClearing Microsoft Account passwords will be disabled",
+                                             exception->errorMessage.c_str());
+            gtk_dialog_run (GTK_DIALOG (errorDialog));
+            gtk_widget_destroy (errorDialog);
+            this->deflt = NULL;
+            delete exception;
+        }
     } catch(owpException *exception) {
         if(this->sam) {
             delete this->sam;
@@ -186,6 +210,10 @@ void owperGUI::loadUsers() {
 
     for(unsigned int i = 0; i < samUserList.size(); i++) {
         userWidget *curUserWidget = new userWidget(samUserList.at(i), i);
+
+        if(this->deflt == NULL && !(samUserList.at(i)->getMSAccount().empty())) {
+            gtk_widget_set_sensitive(curUserWidget->getWidget(), 0);
+        }
 
         vectUserWidgets.push_back(curUserWidget);
         gtk_box_pack_start(GTK_BOX(this->vboxUsers), curUserWidget->getWidget(), false, false, 0);
