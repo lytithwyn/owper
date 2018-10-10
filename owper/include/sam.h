@@ -124,70 +124,70 @@ struct user_F {
 
 struct user_V {
 
-  int unknown1_1;      /* 0x00 - always zero? */
-  int unknown1_2;      /* 0x04 - points to username? */
-  int unknown1_3;      /* 0x08 - always 0x02 0x00 0x01 0x00 ? */
+  uint32_t unknown1_1;      /* 0x00 - always zero? */
+  uint32_t unknown1_2;      /* 0x04 - points to username? */
+  uint32_t unknown1_3;      /* 0x08 - always 0x02 0x00 0x01 0x00 ? */
 
-  int username_ofs;    /* 0x0c */
-  int username_len;    /* 0x10 */
+  uint32_t username_ofs;    /* 0x0c */
+  uint32_t username_len;    /* 0x10 */
 
-  int unknown2_1;      /* 0x14 - always zero? */
+  uint32_t unknown2_1;      /* 0x14 - always zero? */
 
-  int fullname_ofs;    /* 0x18 */
-  int fullname_len;    /* 0x1c */
+  uint32_t fullname_ofs;    /* 0x18 */
+  uint32_t fullname_len;    /* 0x1c */
 
-  int unknown3_1;      /* 0x20 - always zero? */
+  uint32_t unknown3_1;      /* 0x20 - always zero? */
 
-  int comment_ofs;     /* 0x24 */
-  int comment_len;     /* 0x28 */
+  uint32_t comment_ofs;     /* 0x24 */
+  uint32_t comment_len;     /* 0x28 */
 
-  int unknown4_1;      /* 0x2c - alway zero? */
-  int unknown4_2;      /* 0x30 - points 4 or 8 byte field before hashes */
-  int unknown4_3;      /* 0x34 - zero? or size? */
-  int unknown4_4;      /* 0x38 - zero? */
-  int unknown4_5;      /* 0x3c - to field 8 bytes before hashes */
-  int unknown4_6;      /* 0x40 - zero? or size of above? */
-  int unknown4_7;      /* 0x44 - zero? */
+  uint32_t unknown4_1;      /* 0x2c - alway zero? */
+  uint32_t unknown4_2;      /* 0x30 - points 4 or 8 byte field before hashes */
+  uint32_t unknown4_3;      /* 0x34 - zero? or size? */
+  uint32_t unknown4_4;      /* 0x38 - zero? */
+  uint32_t unknown4_5;      /* 0x3c - to field 8 bytes before hashes */
+  uint32_t unknown4_6;      /* 0x40 - zero? or size of above? */
+  uint32_t unknown4_7;      /* 0x44 - zero? */
 
-  int homedir_ofs;     /* 0x48 */
-  int homedir_len;     /* 0x4c */
+  uint32_t homedir_ofs;     /* 0x48 */
+  uint32_t homedir_len;     /* 0x4c */
 
-  int unknown5_1;      /* 0x50 - zero? */
+  uint32_t unknown5_1;      /* 0x50 - zero? */
 
-  int drvletter_ofs;   /* 0x54 - drive letter for home dir */
-  int drvletter_len;   /* 0x58 - len of above, usually 4   */
+  uint32_t drvletter_ofs;   /* 0x54 - drive letter for home dir */
+  uint32_t drvletter_len;   /* 0x58 - len of above, usually 4   */
 
-  int unknown6_1;      /* 0x5c - zero? */
+  uint32_t unknown6_1;      /* 0x5c - zero? */
 
-  int logonscr_ofs;    /* 0x60 - users logon script path */
-  int logonscr_len;    /* 0x64 - length of string */
+  uint32_t logonscr_ofs;    /* 0x60 - users logon script path */
+  uint32_t logonscr_len;    /* 0x64 - length of string */
 
-  int unknown7_1;      /* 0x68 - zero? */
+  uint32_t unknown7_1;      /* 0x68 - zero? */
 
-  int profilep_ofs;    /* 0x6c - profile path string */
-  int profilep_len;    /* 0x70 - profile path stringlen */
+  uint32_t profilep_ofs;    /* 0x6c - profile path string */
+  uint32_t profilep_len;    /* 0x70 - profile path stringlen */
 
   char unknown7[0x90-0x74]; /* 0x74 */
 
-  int unknown8_1;      /* 0x90 - pointer to some place before hashes, after comments */
-  int unknown8_2;      /* 0x94 - size of above? */
-  int unknown8_3;      /* 0x98 - unknown? always 1? */
+  uint32_t unknown8_1;      /* 0x90 - pointer to some place before hashes, after comments */
+  uint32_t unknown8_2;      /* 0x94 - size of above? */
+  uint32_t unknown8_3;      /* 0x98 - unknown? always 1? */
 
-  int lmpw_ofs;        /* 0x9c */
-  int lmpw_len;        /* 0xa0 */
+  uint32_t lmpw_ofs;        /* 0x9c */
+  uint32_t lmpw_len;        /* 0xa0 */
 
-  int unknown9_1;      /* 0xa4 - zero? */
+  uint32_t unknown9_1;      /* 0xa4 - zero? */
 
-  int ntpw_ofs;        /* 0xa8 */
-  int ntpw_len;        /* 0xac */
+  uint32_t ntpw_ofs;        /* 0xa8 */
+  uint32_t ntpw_len;        /* 0xac */
 
-  int unknowna_1;      /* 0xb0 */
-  int unknowna_2;      /* 0xb4 - points to field after hashes */
-  int unknowna_3;      /* 0xb8 - size of above field */
-  int unknowna_4;      /* 0xbc - zero? */
-  int unknowna_5;      /* 0xc0 - points to field after that */
-  int unknowna_6;      /* 0xc4 - size of above */
-  int unknowna_7;      /* 0xc8 - zero ? */
+  uint32_t unknowna_1;      /* 0xb0 */
+  uint32_t unknowna_2;      /* 0xb4 - points to field after hashes */
+  uint32_t unknowna_3;      /* 0xb8 - size of above field */
+  uint32_t unknowna_4;      /* 0xbc - zero? */
+  uint32_t unknowna_5;      /* 0xc0 - points to field after that */
+  uint32_t unknowna_6;      /* 0xc4 - size of above */
+  uint32_t unknowna_7;      /* 0xc8 - zero ? */
 
   char data[4];        /* Data starts here. All pointers above is relative to this,
               that is V + 0xCC */
@@ -202,24 +202,24 @@ struct user_V {
 
 struct group_C {
 
-  int groupid;         /* 0x00 - Seems to be the group ID */
-  int unknown1_1;      /* 0x04 - always zero? */
-  int unknown1_2;      /* 0x08 - points to groupname? */
-  int unknown1_3;      /* 0x0c - always 0x02 0x00 0x01 0x00 ? */
+  uint32_t groupid;         /* 0x00 - Seems to be the group ID */
+  uint32_t unknown1_1;      /* 0x04 - always zero? */
+  uint32_t unknown1_2;      /* 0x08 - points to groupname? */
+  uint32_t unknown1_3;      /* 0x0c - always 0x02 0x00 0x01 0x00 ? */
 
-  int grpname_ofs;    /* 0x10 */
-  int grpname_len;    /* 0x14 */
+  uint32_t grpname_ofs;    /* 0x10 */
+  uint32_t grpname_len;    /* 0x14 */
 
-  int unknown2_1;      /* 0x18 - always zero? */
+  uint32_t unknown2_1;      /* 0x18 - always zero? */
 
-  int fullname_ofs;    /* 0x1c */
-  int fullname_len;    /* 0x20 */
+  uint32_t fullname_ofs;    /* 0x1c */
+  uint32_t fullname_len;    /* 0x20 */
 
-  int unknown3_1;      /* 0x24 - always zero? */
-  int unknown3_2;      /* 0x28 - always zero? */
-  int unknown3_3;      /* 0x2c - always zero? */
+  uint32_t unknown3_1;      /* 0x24 - always zero? */
+  uint32_t unknown3_2;      /* 0x28 - always zero? */
+  uint32_t unknown3_3;      /* 0x2c - always zero? */
 
-  int grp_members;     /* 0x30 - number of group members */
+  uint32_t grp_members;     /* 0x30 - number of group members */
 
   /* 0x34 - data starts here. pointers above are offset from this */
 
