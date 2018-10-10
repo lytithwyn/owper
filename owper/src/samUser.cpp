@@ -49,9 +49,6 @@ namespace owper {
             hashedBootKey = 0;
         }
 
-        // DEBUG disabling the reading of encrypted hashes for now, as it isn't working
-        hashedBootKey = 0;
-
         vStruct = (struct ntreg::user_V *)((char*)(&inVStructRegValue->data));
         char* vBuffer = (char*)&(inVStructRegValue->data);
 
@@ -136,6 +133,7 @@ namespace owper {
     }
 
     bool samUser::hashIsEmpty(unsigned const char* hash, const char* emptyHashPreset) {
+        // TODO: take the length of the hash as a param as an extra check and to prevent over-reading the hash
         if(!hash) {
             //the hash contains nothing
             return true;
@@ -261,10 +259,20 @@ namespace owper {
                     hasBlankPassword = false;
                 }
             } else {
-                if(vStruct->lmpw_len > 0 || vStruct->ntpw_len > 0) {
+                // lm passwords are always 0x14
+                // nt passwords are exactly 0x14 pre Win 10 v1607
+                // nt passwords are (always?) larger for Win 10 v1607 and higher
+                if(vStruct->lmpw_len == 0x14 || vStruct->ntpw_len >= 0x14) {
                     hasBlankPassword = false;
                 }
             }
+        }
+
+        // workaround for the fact that newer Windows 10 has a larger hash,
+        // but we don't support decrypting it yet;
+        // we can still clear it, we just can't decrypt it to see if it is a default pw
+        if(vStruct->ntpw_len > 0x14) {
+            hasBlankPassword = false;
         }
 
         return hasBlankPassword;
