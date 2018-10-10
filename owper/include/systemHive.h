@@ -40,12 +40,16 @@ namespace owper {
     class systemHive : public hive {
     private:
         int getDefaultControlSet();
+        void loadBootKey();
         void sortBootKey(unsigned char* unsortedBootKey, unsigned char* sortedBootKey);
         char* getClassName(char* nkKeyPath);
+
+        unsigned char* bootKey;
     public:
         systemHive(const char* fileName, int hiveMode = HMODE_RO);
+        ~systemHive();
 
-        unsigned char* getBootKey();
+        unsigned char* getBootKey(){ return this->bootKey; };
     };
 
 }

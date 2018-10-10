@@ -35,17 +35,21 @@
 namespace owper {
     systemHive::systemHive(const char* fileName, int hiveMode/* = HMODE_RO*/):
             hive(fileName, hiveMode) {
+        this->bootKey = NULL;
+
         if(this->getType() != HIVE_TYPE_SYSTEM) {
             this->closeHive();
             throw(new owpException("The filename given does not point to a SYSTEM type hive"));
         }
+
+        this->loadBootKey();
     }
 
     int systemHive::getDefaultControlSet() {
         return ntreg::get_dword(this->regHive, 0, (char*)"\\Select\\Default", 0);
     }
 
-    unsigned char* systemHive::getBootKey() {
+    void systemHive::loadBootKey() {
         int currentControlSet = getDefaultControlSet();
         char *keyNames[] = {(char*)"JD", (char*)"Skew1", (char*)"GBG", (char*)"Data"};
 
@@ -88,7 +92,7 @@ namespace owper {
         }
         std::cout << std::endl;
 
-        return sortedBootKey;
+        this->bootKey = sortedBootKey;
     }
 
     void systemHive::sortBootKey(unsigned char* unsortedBootKey, unsigned char* sortedBootKey) {
@@ -117,5 +121,12 @@ namespace owper {
 
         ntreg::cheap_uni2ascii((char*)(this->regHive->buffer + classNameOffset), className, shortestLength);
         return className;
+    }
+
+    systemHive::~systemHive() {
+        if(this->bootKey) {
+            delete[] this->bootKey;
+            this->bootKey = NULL;
+        }
     }
 }
