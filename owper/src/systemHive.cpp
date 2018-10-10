@@ -71,8 +71,22 @@ namespace owper {
             curClassName = 0;
         }
 
+        // DEBUG
+        std::cout << "Unsorted boot key: ";
+        for(int i = 0; i < 0x10; ++i) {
+            printf("%.2x", unsortedBootKey[i]);
+        }
+        std::cout << std::endl;
+
         unsigned char *sortedBootKey = new unsigned char[0x10];
         this->sortBootKey(unsortedBootKey, sortedBootKey);
+
+        // DEBUG
+        std::cout << "Sorted boot key: ";
+        for(int i = 0; i < 0x10; ++i) {
+            printf("%.2x", sortedBootKey[i]);
+        }
+        std::cout << std::endl;
 
         return sortedBootKey;
     }
