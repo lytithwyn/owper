@@ -225,6 +225,13 @@ namespace owper {
         RC4_set_key(&rc4Key, 0x10, md5Hash);
         RC4(&rc4Key, 0x20, &fValue[0x80], hashedBootKey);
 
+        // DEBUG
+        std::cout << "Hashed boot key: ";
+        for(int i = 0; i < 0x20; ++i) {
+            printf("%.2x", hashedBootKey[i]);
+        }
+        std::cout << std::endl;
+
         return hashedBootKey;
     }
 
