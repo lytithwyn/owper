@@ -69,7 +69,7 @@ namespace owper {
 
         // syskey stuff
         unsigned char* decryptHash(int hashOffset, int hashLength, const char* extraHashInput);
-        bool hashIsEmpty(unsigned const char* hash, const char* emptyHashPreset);
+        bool hashIsEmpty(unsigned const char* hash, int hashLength, const char* emptyHashPreset);
         char* hashToString(unsigned const char* hash);
         int compareHash(unsigned const char* hash, const char* stringToCompare);
         void ridToKey1(unsigned long rid, unsigned char deskey[8]);

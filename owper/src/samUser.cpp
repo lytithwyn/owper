@@ -132,8 +132,11 @@ namespace owper {
         return decryptedHash;
     }
 
-    bool samUser::hashIsEmpty(unsigned const char* hash, const char* emptyHashPreset) {
-        // TODO: take the length of the hash as a param as an extra check and to prevent over-reading the hash
+    bool samUser::hashIsEmpty(unsigned const char* hash, int hashLength, const char* emptyHashPreset) {
+        if(hashLength < 0x14) {
+            return true;
+
+        }
         if(!hash) {
             //the hash contains nothing
             return true;
@@ -251,11 +254,11 @@ namespace owper {
             hasBlankPassword = false;
         } else {
             if(this->hashedBootKey) {
-                if(!hashIsEmpty(lmHash, "aad3b435b51404eeaad3b435b51404ee")) {
+                if(!hashIsEmpty(lmHash, vStruct->lmpw_len, "aad3b435b51404eeaad3b435b51404ee")) {
                     hasBlankPassword = false;
                 }
 
-                if(!hashIsEmpty(ntHash, "31d6cfe0d16ae931b73c59d7e0c089c0")) {
+                if(!hashIsEmpty(ntHash, vStruct->ntpw_len, "31d6cfe0d16ae931b73c59d7e0c089c0")) {
                     hasBlankPassword = false;
                 }
             } else {
