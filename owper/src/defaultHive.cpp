@@ -42,5 +42,8 @@ namespace owper {
     void defaultHive::deleteStoredIdentity(std::string identityName) {
         this->deleteKey(this->identityStoreNKOffset, (char*)identityName.c_str());
     }
+
+    defaultHive::~defaultHive() {
+    }
 }
 

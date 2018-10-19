@@ -31,6 +31,7 @@ namespace owper {
         public:
             defaultHive(const char* fileName, int hiveMode = HMODE_RW);
             void deleteStoredIdentity(std::string identityName);
+            ~defaultHive();
         private:
             reg_off identityStoreNKOffset;
     };
