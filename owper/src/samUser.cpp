@@ -50,7 +50,7 @@ namespace owper {
         }
 
         vStruct = (struct ntreg::user_V *)((char*)(&inVStructRegValue->data));
-        char* vBuffer = (char*)&(inVStructRegValue->data);
+        this->vBuffer = (char*)&(inVStructRegValue->data);
 
         fStruct = (struct ntreg::user_F *)((char*)(&inFStructRegValue->data));
 
@@ -72,8 +72,8 @@ namespace owper {
             throw(new owpException("VStruct has invalid full name field"));
         }
 
-        userName = this->getUserValue(vBuffer, userNameOffset, userNameLength);
-        fullName = this->getUserValue(vBuffer, fullNameOffset, fullNameLength);
+        userName = this->getUserValue(this->vBuffer, userNameOffset, userNameLength);
+        fullName = this->getUserValue(this->vBuffer, fullNameOffset, fullNameLength);
         this->msAccount = msAccount;
 
         if(hashedBootKey) {
@@ -106,7 +106,7 @@ namespace owper {
         MD5_Update(&md5Context, extraHashInput, 0xb);
         MD5_Final(md5Hash, &md5Context);
         RC4_set_key( &rc4Key, 0x10, md5Hash);
-        RC4( &rc4Key, 0x10, (const unsigned char*)vBuffer + hashOffset + 4, obfKey);
+        RC4( &rc4Key, 0x10, (const unsigned char*)(this->vBuffer) + hashOffset + 4, obfKey);
 
         //these keys are cached as member variables
         if(keySched1 == 0 || keySched2 == 0) {
