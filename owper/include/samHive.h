@@ -45,14 +45,14 @@ namespace owper {
         vector<samUser*> userList;
         unsigned char* hashedBootKey;
 
-        unsigned char* generateHashedBootKey(unsigned char* bootKey);
+        unsigned char* generateHashedBootKey(unsigned char* const bootKey);
         unsigned char* getGlobalFValue();
         void           loadUserList();
         int            getUserRID(char* userName);
         samUser*       getSamUser(int rid);
         string         getUserValue(char* dataBuffer, int valueOffset, int valueLength);
     public:
-        samHive(const char* fileName, unsigned char* bootKey, int hiveMode = HMODE_RW);
+        samHive(const char* fileName, unsigned char* const bootKey, int hiveMode = HMODE_RW);
         ~samHive();
         vector<samUser*> getUserList(){ return userList; };
         samUser*       getUserAtIndex(int index) { return this->userList.at(index); };

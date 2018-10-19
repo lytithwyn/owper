@@ -24,7 +24,7 @@
 #include "include/samHive.h"
 
 namespace owper {
-    samHive::samHive(const char* fileName, unsigned char* bootKey, int hiveMode/* = HMODE_RW*/):
+    samHive::samHive(const char* fileName, unsigned char* const bootKey, int hiveMode/* = HMODE_RW*/):
             hive(fileName, hiveMode) {
         if(this->getType() != HIVE_TYPE_SAM) {
             this->closeHive();
@@ -33,7 +33,7 @@ namespace owper {
 
         if(bootKey) {
             this->hashedBootKey = this->generateHashedBootKey(bootKey);
-            delete[] bootKey;
+            // don't delete bootKey - we don't own it!
         } else {
             this->hashedBootKey = NULL;
         }
@@ -205,7 +205,7 @@ namespace owper {
         return fValue;
     }
 
-    unsigned char* samHive::generateHashedBootKey(unsigned char* bootKey) {
+    unsigned char* samHive::generateHashedBootKey(unsigned char* const bootKey) {
         unsigned char aqwerty[] = "!@#$%^&*()qwertyUIOPAzxcvbnmQQQQQQQQQQQQ)(*@&%";
         unsigned char anum[] = "0123456789012345678901234567890123456789";
 
