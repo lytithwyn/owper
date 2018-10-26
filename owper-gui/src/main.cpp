@@ -55,16 +55,16 @@ void printUsage(char* progName) {
 // returns:
 //     0 - success
 //     1 - incorrect arguments supplied
-//     2 - file supplied is not a sam type file and a check was requested
+//     2 - the file path supplied does not contain at least a SAM file and the test was requested
 int main(int argc, char* argv[]) {
     gtk_init(&argc, &argv);
 
     string hiveFilePath = "";
     samHive* sam = NULL;
     if(argc == 2) {
-        // if we have 1 argument, we expect it to be a hive file to load
+        // if we have 1 argument, we expect it to be a hive path to load
         if(strncmp("--testhive", argv[1], 10) == 0) {
-            // --testhive was specified without a file to test
+            // --testhive was specified without a path to test
             printUsage(argv[0]);
             return 1;
         }
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
         hiveFilePath = argv[1];
     } else if(argc == 3) {
         // if we have 2 arguments, we expect 1 to be the --testhive parameter
-        // and the other the be the hive file to load
+        // and the other the be the hive path to test
         if(strncmp("--testhive", argv[1], 10) == 0) {
             hiveFilePath = argv[2];
         } else {
@@ -80,17 +80,22 @@ int main(int argc, char* argv[]) {
         }
 
         // we have been asked to test a path to see if it contains valid registry files or not
+        string samFileName;
+        string samFilePath;
         try {
-            string samFileName = fileManip::findFileCaseInsensitive(hiveFilePath, "sam");
+            samFileName = fileManip::findFileCaseInsensitive(hiveFilePath, "sam");
             if(samFileName.empty()) {
                 // the SAM file was not found - bail out
+                std::cerr << "Could not find a file named SAM in [ " << hiveFilePath << " ]" << std::endl;
                 return 2;
             }
-            string samFilePath = stringPrintf("%s/%s", hiveFilePath.c_str(), samFileName.c_str());
+
+            samFilePath = stringPrintf("%s/%s", hiveFilePath.c_str(), samFileName.c_str());
             sam = new samHive(samFilePath.c_str(), NULL);
             delete sam; // we're going to reload it with the bootkey from SYSTEM anyway
         } catch(owpException* e) {
             // this is NOT a sam hive - bail out
+            std::cerr << "Found file [ " << samFilePath << " ] but it is not a valid SAM file" << std::endl;
             delete e;
             return 2;
         }
