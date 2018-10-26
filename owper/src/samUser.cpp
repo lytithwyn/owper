@@ -194,8 +194,10 @@ namespace owper {
         }
 
         char *hashChars = hashToString(hash);
+        int compResult = strcmp(hashChars, stringToCompare);
+        delete[] hashChars;
 
-        return strcmp(hashChars, stringToCompare);
+        return compResult;
     }
 
     /**
