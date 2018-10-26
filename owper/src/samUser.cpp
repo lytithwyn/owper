@@ -39,6 +39,9 @@ namespace owper {
         vStructRegValue = inVStructRegValue;
         fStructPath = inFStructPath;
         fStructRegValue = inFStructRegValue;
+        lmHash = NULL;
+        ntHash = NULL;
+        hashedBootKey = NULL;
         keySched1 = NULL;
         keySched2 = NULL;
 
