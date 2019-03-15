@@ -283,7 +283,7 @@ namespace owper {
             return;
         }
 
-        ntreg::uint16_t acb = fStruct->ACB_bits;
+        uint16_t acb = fStruct->ACB_bits;
         acb |= ACB_PWNOEXP;
         acb &= ~ACB_DISABLED;
         acb &= ~ACB_AUTOLOCK;
@@ -297,7 +297,7 @@ namespace owper {
             return;
         }
 
-        ntreg::uint16_t acb = fStruct->ACB_bits;
+        uint16_t acb = fStruct->ACB_bits;
         acb |= ACB_DISABLED;
         fStruct->ACB_bits = acb;
         regDataChanged = true;

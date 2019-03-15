@@ -30,10 +30,10 @@
 #include <fcntl.h>
 
 
-#include "include/ntreg.h"
 #include "include/owpException.h"
 #include "include/stringManip.h"
 #include "include/fileManip.h"
+#include "include/ntreg.h"
 
 using stringManip::stringPrintf;
 
