@@ -117,23 +117,23 @@ namespace owper {
         //these keys are cached as member variables
         if(keySched1 == 0 || keySched2 == 0) {
             /* Get the two decrypt keys. */
-            keySched1 = new des_key_schedule;
-            keySched2 = new des_key_schedule;
-            des_cblock desKey1, desKey2;
+            keySched1 = new DES_key_schedule;
+            keySched2 = new DES_key_schedule;
+            DES_cblock desKey1, desKey2;
 
             ridToKey1(rid,(unsigned char *)desKey1);
-            des_set_key_checked((des_cblock *)desKey1, (*keySched1));
+            DES_set_key_checked((DES_cblock *)desKey1, keySched1);
             ridToKey2(rid,(unsigned char *)desKey2);
-            des_set_key_unchecked((des_cblock *)desKey2, (*keySched2));
+            DES_set_key_unchecked((DES_cblock *)desKey2, keySched2);
         }
 
         unsigned char *decryptedHash = new unsigned char[0x10];
 
         /* Decrypt the password hash as two 8 byte blocks. */
-        des_ecb_encrypt((des_cblock *)obfKey,
-                (des_cblock *)decryptedHash, (*keySched1), DES_DECRYPT);
-        des_ecb_encrypt((des_cblock *)(obfKey + 8),
-                (des_cblock *)&decryptedHash[8], (*keySched2), DES_DECRYPT);
+        DES_ecb_encrypt((DES_cblock *)obfKey,
+                (DES_cblock *)decryptedHash, keySched1, DES_DECRYPT);
+        DES_ecb_encrypt((DES_cblock *)(obfKey + 8),
+                (DES_cblock *)&decryptedHash[8], keySched2, DES_DECRYPT);
 
         return decryptedHash;
     }
@@ -318,7 +318,7 @@ namespace owper {
         for (i=0;i<8;i++) {
             key[i] = (key[i]<<1);
         }
-        des_set_odd_parity((des_cblock *)key);
+        DES_set_odd_parity((DES_cblock *)key);
     }
 
     void samUser::ridToKey1(unsigned long rid,unsigned char deskey[8])

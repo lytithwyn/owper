@@ -57,8 +57,8 @@ namespace owper {
         ntreg::user_F*    fStruct;
         unsigned char*    lmHash;
         unsigned char*    ntHash;
-        des_key_schedule* keySched1;
-        des_key_schedule* keySched2;
+        DES_key_schedule* keySched1;
+        DES_key_schedule* keySched2;
         unsigned char*    hashedBootKey;
         bool              regDataChanged;
 
