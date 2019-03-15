@@ -117,7 +117,7 @@ namespace owper {
     bool hive::writeHiveToFile(bool makeBackup) {
         if(makeBackup) {
             if(!this->backUpHiveFile()) {
-                std::cerr << "Failed to backup hive [ " << this->regHive->filename << "] before saving.  Bailed out!" << std::cerr;
+                std::cerr << "Failed to backup hive [ " << this->regHive->filename << "] before saving.  Bailed out!" << std::endl;
                 return false;
             }
         }
