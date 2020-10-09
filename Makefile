@@ -1,6 +1,6 @@
 include makeconfig.mk
 
-CFLAGS = -I ./owper -I ./owper-gui -g -Wall -Werror -Wno-unused-but-set-variable `pkg-config --cflags openssl`
+CFLAGS = -I ./owper -I ./owper-gui -g -Wall -Werror -Wno-unused-but-set-variable -Wno-deprecated-declarations `pkg-config --cflags openssl`
 LIBS = `pkg-config --libs openssl`
 GUICFLAGS = `pkg-config --cflags gtk+-2.0`
 GUILIBS = `pkg-config --libs gtk+-2.0`
