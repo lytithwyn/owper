@@ -2,7 +2,7 @@ include makeconfig.mk
 
 LIBS = `pkg-config --libs openssl`
 OBJS = *.o
-GUIROOT = owper-gui
+GUIROOT = gui
 GTK2GUIDIR = $(GUIROOT)/gtk2
 GTK2LIBS = `pkg-config --libs gtk+-2.0`
 CFLAGS = -I ./$(LIBOWPER_DIR) -I -g `pkg-config --cflags openssl`
