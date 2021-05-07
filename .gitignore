@@ -1,4 +1,5 @@
 owper
 *.o
 libowper/libowper.a
+owper-gui/gtk2/gtk2gui.a
 *.swp
