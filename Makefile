@@ -1,12 +1,14 @@
 include makeconfig.mk
 
 LIBOWPER_DIR = libowper
-CFLAGS = -I ./$(LIBOWPER_DIR) -I ./owper-gui -g -Wall -Werror -Wno-deprecated-declarations -Wno-unused-but-set-variable `pkg-config --cflags openssl`
 LIBS = `pkg-config --libs openssl`
-GUICFLAGS = `pkg-config --cflags gtk+-2.0`
-GUILIBS = `pkg-config --libs gtk+-2.0`
 OBJS = *.o
-GUISRCS = owper-gui/src/*.cpp
+GUIROOT = owper-gui
+GTK2GUIDIR = $(GUIROOT)/gtk2
+GTK2CFLAGS = `pkg-config --cflags gtk+-2.0`
+GTK2LIBS = `pkg-config --libs gtk+-2.0`
+GTK2SRCS = $(GTK2GUIDIR)/src/*.cpp
+CFLAGS = -I ./$(LIBOWPER_DIR) -I ./$(GTK2GUIDIR) -g -Wall -Werror -Wno-deprecated-declarations -Wno-unused-but-set-variable `pkg-config --cflags openssl`
 PROG = owper
 
 .PHONY: all clean
@@ -17,8 +19,8 @@ $(LIBOWPER):
 	$(ECHO) "Making all in $(LIBOWPER_DIR)"
 	cd $(LIBOWPER_DIR) ; $(MAKE)
 
-$(PROG): $(LIBOWPER) $(GUISRCS)
-	$(CPP) $(GUISRCS) $(CFLAGS) $(GUICFLAGS) $(GUILIBS) $(LIBOWPER_DIR)/$(LIBOWPER) $(LIBS) -o $(PROG)
+$(PROG): $(LIBOWPER) $(GTK2SRCS)
+	$(CPP) $(GTK2SRCS) $(CFLAGS) $(GTK2CFLAGS) $(GTK2LIBS) $(LIBOWPER_DIR)/$(LIBOWPER) $(LIBS) -o $(PROG)
 
 clean:
 	$(RM) $(PROG) $(OBJS) $(PROG).dSYM
