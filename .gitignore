@@ -1,4 +1,4 @@
-owpergui
+owper
 *.o
 libowper/libowper.a
 *.swp

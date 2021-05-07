@@ -7,7 +7,7 @@ GUICFLAGS = `pkg-config --cflags gtk+-2.0`
 GUILIBS = `pkg-config --libs gtk+-2.0`
 OBJS = *.o
 GUISRCS = owper-gui/src/*.cpp
-PROG = owpergui
+PROG = owper
 
 .PHONY: all clean
 
@@ -17,7 +17,7 @@ $(LIBOWPER):
 	$(ECHO) "Making all in $(LIBOWPER_DIR)"
 	cd $(LIBOWPER_DIR) ; $(MAKE)
 
-owpergui: $(LIBOWPER) $(GUISRCS)
+$(PROG): $(LIBOWPER) $(GUISRCS)
 	$(CPP) $(GUISRCS) $(CFLAGS) $(GUICFLAGS) $(GUILIBS) $(LIBOWPER_DIR)/$(LIBOWPER) $(LIBS) -o $(PROG)
 
 clean:
