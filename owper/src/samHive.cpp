@@ -73,9 +73,10 @@ namespace owper {
         samUser *newSamUser;
         try{
             newSamUser = new samUser(rid, userNKOffset, vValue, vValuePath, fValue, fValuePath, this->hashedBootKey, internetUserName);
-        }catch(owpException e) {
-            cerr << e.formattedMessage;
+        }catch(owpException* e) {
+            cerr << e->formattedMessage;
             newSamUser = NULL;
+            delete e;
         }
 
         return newSamUser;
