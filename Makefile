@@ -1,11 +1,11 @@
 include makeconfig.mk
 
-CFLAGS = -I ./owper -I ./owper-gui -g -Wall -Werror -Wno-deprecated-declarations -Wno-unused-but-set-variable `pkg-config --cflags openssl`
+LIBOWPER_DIR = libowper
+CFLAGS = -I ./$(LIBOWPER_DIR) -I ./owper-gui -g -Wall -Werror -Wno-deprecated-declarations -Wno-unused-but-set-variable `pkg-config --cflags openssl`
 LIBS = `pkg-config --libs openssl`
 GUICFLAGS = `pkg-config --cflags gtk+-2.0`
 GUILIBS = `pkg-config --libs gtk+-2.0`
 OBJS = *.o
-LIBOWPER_DIR = owper
 GUISRCS = owper-gui/src/*.cpp
 PROG = owpergui
 
