@@ -1,4 +1,6 @@
 owper
+owper_ncurses
+owper_gtk
 *.o
 libowper/libowper.a
 gui/gtk2/gtk2gui.a

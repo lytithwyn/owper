@@ -26,7 +26,9 @@
 #include <dirent.h>
 #include <vector>
 #include <algorithm>
-#include <gtk/gtk.h>
+#include <exception>
+#include <unistd.h>
+#include <libgen.h>
 
 #include "include/ntreg.h"
 #include "include/sam.h"
@@ -35,7 +37,6 @@
 #include "include/fileManip.h"
 #include "include/owpException.h"
 #include "include/samHive.h"
-#include "include/owperGUI.h"
 
 using std::cout;
 using std::endl;
@@ -47,18 +48,18 @@ using namespace owper;
 void printUsage(char* progName) {
     cout << progName << " [--testhive] [HIVEPATH]" << endl;
     cout << "\t--testhive - if this option is present, the program will simply test to see if the given directory contains valid registry hives." << std::endl;
-    cout << "\t             This may be useful for scanning multiple partitions on a system to find the hives, where some might \"dummy\" hives in recovery parititions." << std::endl;
+    cout << "\t             This may be useful for scanning multiple partitions on a system to find the hives; some systems have \"dummy\" hives in recovery parititions." << std::endl;
     cout << "\t[HIVEPATH] - the directory containing the system registry files (e.g., SAM, SYSTEM, DEFAULT, etc.)\n" << std::endl;
     cout << "Note: if --testhive is supplied, hivepath must be as well" << endl;
 }
+
+void updateExecSearchPath();
 
 // returns:
 //     0 - success
 //     1 - incorrect arguments supplied
 //     2 - the file path supplied does not contain at least a SAM file and the test was requested
 int main(int argc, char* argv[]) {
-    gtk_init(&argc, &argv);
-
     string hiveFilePath = "";
     samHive* sam = NULL;
     if(argc == 2) {
@@ -92,7 +93,8 @@ int main(int argc, char* argv[]) {
 
             samFilePath = stringPrintf("%s/%s", hiveFilePath.c_str(), samFileName.c_str());
             sam = new samHive(samFilePath.c_str(), NULL);
-            delete sam; // we're going to reload it with the bootkey from SYSTEM anyway
+            delete sam;
+            return 0;
         } catch(owpException* e) {
             // this is NOT a sam hive - bail out
             std::cerr << "Found file [ " << samFilePath << " ] but it is not a valid SAM file" << std::endl;
@@ -101,13 +103,47 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    owperGUI *passwordClearer;
-    passwordClearer = new owperGUI(hiveFilePath);
+    // We expect the UI-specific executables to be in the same directory with this one,
+    // so we add the current directory of this executable (not to be confused with the current working directory)
+    // to the PATH.
+    try {
+        updateExecSearchPath();
+    } catch(std::exception* e) {
+        std::cout << "Failed to update executable search path: " << e->what() << std::endl;
+        delete e;
+    }
 
-    gtk_main();
+    if(getenv("DISPLAY") != NULL) {
+        std::cout << "Would run GTK GUI" << std::endl;
+    } else {
+        std::cout << "Would run NCURSES TUI" << std::endl;
+    }
+    std::cout << "Path: " << getenv("PATH") << std::endl;
+}
 
-    delete passwordClearer;
+void updateExecSearchPath() {
+    // It is possible that PATH will not be defined, and for now we won't create it in that case, due to the fact
+    // that execve() and friends have a default search path that will include some system directories for that situation.
+    char* searchPath = getenv("PATH");
+    if(searchPath == NULL) {
+        throw(new std::runtime_error("PATH is not in the current environment"));
+    }
 
-    return 0;
+    // get the full path of the current executable
+    char exePath[PATH_MAX + 1] = {};
+    if(readlink("/proc/self/exe", exePath, PATH_MAX) == -1) {
+        throw(new std::runtime_error("Failed to run readlink on /proc/self/exe to get the current executable's full path"));
+    }
 
+    char *exeDirName = dirname(exePath);
+    size_t newPathSize = strlen(searchPath) + strlen(exeDirName) + 2; // need extra for colon and null
+    char updatedPath[newPathSize];
+    int pathCharsWritten = snprintf(updatedPath, newPathSize, "%s:%s", searchPath, exeDirName);
+    if(pathCharsWritten != (newPathSize - 1)) { // snprintf doesn't count the NULL it writes
+        std::cout << "Something weird happened with snprintf.  Wanted to write [ " << newPathSize << " ] chars, but wrote [ " << pathCharsWritten << " ]" << std::endl;
+    }
+
+    if(setenv("PATH", updatedPath, 1) != 0) {
+        throw(new std::runtime_error("Failed to add current executable's directory to PATH!"));
+    }
 }
