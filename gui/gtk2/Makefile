@@ -1,8 +1,8 @@
 include ../../makeconfig.mk
+include makeconfig.mk
 
 CPPOBJS = $(patsubst %.cpp,%.o,$(wildcard src/*.cpp))
 SRCS = src/*.cpp
-GTK2CFLAGS = `pkg-config --cflags gtk+-2.0`
 CXXFLAGS = -I ./  -I ../../$(LIBOWPER_DIR)/ -g -Wno-deprecated-declarations $(GTK2LIBS) $(GTK2CFLAGS)
 
 .PHONY: clean

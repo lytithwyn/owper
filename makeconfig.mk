@@ -6,4 +6,6 @@ RM = rm -rf
 ECHO = echo
 LIBOWPER = libowper.a
 LIBOWPER_DIR = libowper
+GUIROOT = gui
 GTK2GUIA = gtk2gui.a
+GTK2GUIDIR = gtk2
