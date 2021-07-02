@@ -1,12 +1,8 @@
 include makeconfig.mk
 
-LDFLAGS = `pkg-config --libs openssl`
+LDFLAGS = $(LIBOWPER_LDFLAGS)
 OBJS = *.o
-CFLAGS = -I ./$(LIBOWPER_DIR)  -g `pkg-config --cflags openssl`
 CXXFLAGS = -I ./$(LIBOWPER_DIR)
-PROG = owper
-
-include $(GUIROOT)/$(GTK2GUIDIR)/makeconfig.mk
 
 .PHONY: all clean
 
@@ -16,21 +12,18 @@ $(LIBOWPER):
 	$(ECHO) "Making all in $(LIBOWPER_DIR)"
 	cd $(LIBOWPER_DIR) ; $(MAKE)
 
-$(GTK2GUIA):
+$(PROG): $(LIBOWPER)
+	$(CPP) main.cpp $(CXXFLAGS) $(LIBOWPER_DIR)/$(LIBOWPER) $(LDFLAGS) -o $(PROG)
+
+gtk2: $(LIBOWPER)
 	$(ECHO) "Making all in $(GUIROOT)/$(GTK2GUIDIR)"
 	cd $(GUIROOT)/$(GTK2GUIDIR) ; $(MAKE)
-
-$(PROG): $(LIBOWPER) main.o
-	$(CPP) main.o $(CFLAGS) $(LIBOWPER_DIR)/$(LIBOWPER) $(LDFLAGS) -o $(PROG)
-
-gtk2: $(LIBOWPER) $(GTK2GUIA) main_gtk.cpp
-	$(CPP) main_gtk.cpp $(GUIROOT)/$(GTK2GUIDIR)/$(GTK2GUIA) $(CFLAGS) -I ./$(GUIROOT)/$(GTK2GUIDIR) $(GTK2CFLAGS) $(LIBOWPER_DIR)/$(LIBOWPER) $(GTK2LIBS) $(LDFLAGS) -o $(PROG)_gtk
 
 ncurses: $(LIBOWPER) main_ncurses.o
 	$(CPP) main_ncurses.o $(CFLAGS) $(LIBOWPER_DIR)/$(LIBOWPER) $(LDFLAGS) -o $(PROG)_ncurses
 
 clean:
-	$(RM) $(PROG) $(OBJS) $(PROG).dSYM
+	$(RM) $(PROG) $(PROG)_gtk $(OBJS) $(PROG).dSYM
 	$(ECHO) "Making clean in $(LIBOWPER_DIR)"
 	cd $(LIBOWPER_DIR) ; $(MAKE) clean
 	$(ECHO) "Making clean in $(GUIROOT)/$(GTK2GUIDIR)"
