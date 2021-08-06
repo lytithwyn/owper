@@ -7,3 +7,11 @@ owper_gtk
 *.o
 libowper/libowper.a
 *.swp
+.deps/
+config.log
+config.status
+gui/gtk2/src/.deps/
+gui/gtk2/src/.dirstamp
+libowper/src/.deps/
+libowper/src/.dirstamp
+libtool
