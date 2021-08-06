@@ -254,7 +254,7 @@ void owperGUI::clearPasswords(GtkWidget *widget, gpointer owperGUIInstance) {
         }
     }
 
-    applyChanges("Cleared passwords!", thisOwperGUI);
+    thisOwperGUI->applyChanges("Cleared passwords!");
 }
 
 void owperGUI::enableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
@@ -270,7 +270,7 @@ void owperGUI::enableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
         }
     }
 
-    applyChanges("Accounts enabled!", thisOwperGUI);
+    thisOwperGUI->applyChanges("Accounts enabled!");
 }
 
 void owperGUI::disableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
@@ -286,35 +286,35 @@ void owperGUI::disableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
         }
     }
 
-    applyChanges("Accounts disabled!", thisOwperGUI);
+    thisOwperGUI->applyChanges("Accounts disabled!");
 }
 
-void owperGUI::applyChanges(string successMessage, owperGUI *thisOwperGUI) {
-    if(!thisOwperGUI->sam->mergeChangesToHive()) {
-        reportMergeFailure(thisOwperGUI);
+void owperGUI::applyChanges(string successMessage) {
+    if(!this->sam->mergeChangesToHive()) {
+        this->reportMergeFailure();
         return;
     }
 
-    if(!thisOwperGUI->sam->writeHiveToFile(true)) {
-        reportSaveFailure(thisOwperGUI);
+    if(!this->sam->writeHiveToFile(true)) {
+        this->reportSaveFailure();
         return;
     }
 
-    if(thisOwperGUI->deflt) {
-        if(!thisOwperGUI->deflt->writeHiveToFile(true)) {
-            reportSaveFailure(thisOwperGUI);
+    if(this->deflt) {
+        if(!this->deflt->writeHiveToFile(true)) {
+            reportSaveFailure();
             return;
         }
     }
 
-    reportSuccess(successMessage, thisOwperGUI);
+    this->reportSuccess(successMessage);
 }
 
-void owperGUI::reportMergeFailure(owperGUI *thisOwperGUI) {
+void owperGUI::reportMergeFailure() {
     string errorMessage  = "Error! Not all data was successfully ";
     errorMessage        += "merged into the hive in memory.  We don't guarantee any particular ";
     errorMessage        += "results at this point.";
-    GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(thisOwperGUI->winMain),
+    GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
                                              GTK_DIALOG_DESTROY_WITH_PARENT,
                                              GTK_MESSAGE_ERROR,
                                              GTK_BUTTONS_CLOSE,
@@ -325,10 +325,10 @@ void owperGUI::reportMergeFailure(owperGUI *thisOwperGUI) {
     return;
 }
 
-void owperGUI::reportSaveFailure(owperGUI *thisOwperGUI){
+void owperGUI::reportSaveFailure(){
     string errorMessage  = "Error enabling accounts!  Could not write data to hive file on disk. ";
     errorMessage        += "We don't guarantee any particular results at this point.";
-    GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(thisOwperGUI->winMain),
+    GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
                                              GTK_DIALOG_DESTROY_WITH_PARENT,
                                              GTK_MESSAGE_ERROR,
                                              GTK_BUTTONS_CLOSE,
@@ -339,8 +339,8 @@ void owperGUI::reportSaveFailure(owperGUI *thisOwperGUI){
     return;
 }
 
-void owperGUI::reportSuccess(string taskDesc, owperGUI *thisOwperGUI) {
-    GtkWidget *infoDialog = gtk_message_dialog_new (GTK_WINDOW(thisOwperGUI->winMain),
+void owperGUI::reportSuccess(string taskDesc) {
+    GtkWidget *infoDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
                                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                                      GTK_MESSAGE_INFO,
                                                      GTK_BUTTONS_CLOSE,
