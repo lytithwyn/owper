@@ -26,31 +26,24 @@
 
 #include "include/samUser.h"
 #include "include/stringManip.h"
+#include "include/baseUserWidget.h" // from ../gui/base
 
 using namespace std;
 using owper::samUser;
 using stringManip::stringPrintf;
 
-class userWidget
+class userWidget : public baseUserWidget
 {
     private:
-        samUser *user;
-        unsigned int userIndex;
         GtkWidget* chkbtnUser;
 
     public:
         userWidget(samUser *inSamUser, unsigned int inUserIndex);
 
         void         resetLabel();
-        unsigned int getUserIndex()    { return userIndex; };
-        string       getUserName()     { return user->getUserName(); };
-        string       getFullName()     { return user->getFullName(); };
-        bool         passwordIsBlank() { return this->user->passwordIsBlank(); };
         bool         userIsSelected()  { return gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(chkbtnUser)); };
         GtkWidget   *getWidget()       { return this->chkbtnUser; };
         void         destroyWidget()   { gtk_widget_destroy(this->chkbtnUser); };
-        void         enableAccount()   { user->enableAccount(); };
-        void         disableAccount()  { user->disableAccount(); };
         void         selectUser()      { gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkbtnUser), true); };
         void         deselectUser()    { gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkbtnUser), false); };
 

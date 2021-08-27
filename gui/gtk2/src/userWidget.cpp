@@ -20,10 +20,8 @@
  */
 #include "include/userWidget.h"
 
-userWidget::userWidget(samUser *inSamUser, unsigned int inUserIndex)
+userWidget::userWidget(samUser *inSamUser, unsigned int inUserIndex) : baseUserWidget(inSamUser, inUserIndex)
 {
-    user = inSamUser;
-    userIndex = inUserIndex;
     chkbtnUser = gtk_check_button_new_with_label("");
     resetLabel();
 }
