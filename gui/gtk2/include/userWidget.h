@@ -26,7 +26,7 @@
 
 #include "include/samUser.h"
 #include "include/stringManip.h"
-#include "include/baseUserWidget.h" // from ../gui/base
+#include "include/baseUserWidget.h" // from ../../gui/base
 
 using namespace std;
 using owper::samUser;
