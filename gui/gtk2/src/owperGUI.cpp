@@ -20,15 +20,8 @@
  */
 #include "include/owperGUI.h"
 
-owperGUI::owperGUI(string initHivePath/*=""*/) {
-    sam = NULL;
-    system = NULL;
-    deflt = NULL;
-    loadGUI();
-
-    if(!initHivePath.empty()) {
-        changeHivePath(initHivePath);
-    }
+owperGUI::owperGUI(string initHivePath/*=""*/) : baseOwperGUI(initHivePath) {
+    this->loadGUI();
 }
 
 void owperGUI::loadGUI() {
@@ -121,73 +114,23 @@ void owperGUI::hive_path_browse_event(GtkWidget *widget, gpointer owperGUIInstan
     gtk_widget_destroy (fileChooser);
 }
 
-bool owperGUI::changeHivePath(string newPath) {
+HIVE_LOAD_RESULT owperGUI::changeHivePath(string newPath) {
     gtk_entry_set_text(GTK_ENTRY(this->entryHivePath), "");
-    this->clearUsers();
+    HIVE_LOAD_RESULT loadResult = 0;
 
-    if(this->sam) {
-        delete this->sam;
-        this->sam = NULL;
-    }
-
-    if(this->system) {
-        delete this->system;
-        this->system = NULL;
-    }
-
-    if(this->deflt) {
-        delete this->deflt;
-        this->deflt = NULL;
-    }
-
-    string samFilePath = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "sam").c_str());
-    string systemFilePath = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "system").c_str());
-    string defaultFilePath = stringPrintf("%s/%s", newPath.c_str(), findFileCaseInsensitive(newPath, "default").c_str());
-
-    unsigned char* bootKey = NULL;
     try {
-        try {
-            this->system = new systemHive(systemFilePath.c_str());
-            bootKey = this->system->getBootKey();
-        } catch(owpException *e) {
-            // we don't have a system file...that's OK
-            this->system = NULL;
-            delete e;
-        }
-
-        this->sam = new samHive(samFilePath.c_str(), bootKey);
-
-        try {
-            this->deflt = new defaultHive(defaultFilePath.c_str());
-        } catch(owpException *exception) {
-            // we don't have a default file...we can't clear MS accounts, but otherwise is OK
+        loadResult = baseOwperGUI::changeHivePath(newPath); // will only throw an exception if we fail to load the SAM
+        gtk_entry_set_text(GTK_ENTRY(entryHivePath), newPath.c_str());
+        if(!(loadResult & HIVE_LOAD_HAS_DEFAULT)) {
             GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
                                              GTK_DIALOG_DESTROY_WITH_PARENT,
                                              GTK_MESSAGE_ERROR,
                                              GTK_BUTTONS_CLOSE,
-                                             "DEFAULT hive could not be opened: \n%s\nClearing Microsoft Account passwords will be disabled",
-                                             exception->errorMessage.c_str());
+                                             "DEFAULT hive could not be opened: Clearing Microsoft Account passwords will be disabled");
             gtk_dialog_run (GTK_DIALOG (errorDialog));
             gtk_widget_destroy (errorDialog);
-            this->deflt = NULL;
-            delete exception;
         }
-    } catch(owpException *exception) {
-        if(this->sam) {
-            delete this->sam;
-            this->sam = NULL;
-        }
-
-        if(this->system) {
-            delete this->system;
-            this->system = NULL;
-        }
-
-        if(this->deflt) {
-            delete this->deflt;
-            this->deflt = NULL;
-        }
-
+    } catch (owpException *exception) {
         GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
                                          GTK_DIALOG_DESTROY_WITH_PARENT,
                                          GTK_MESSAGE_ERROR,
@@ -196,13 +139,9 @@ bool owperGUI::changeHivePath(string newPath) {
                                          exception->errorMessage.c_str());
         gtk_dialog_run (GTK_DIALOG (errorDialog));
         gtk_widget_destroy (errorDialog);
-        delete exception;
-        return false;
     }
 
-    gtk_entry_set_text(GTK_ENTRY(entryHivePath), newPath.c_str());
-    loadUsers();
-    return true;
+    return loadResult;
 }
 
 void owperGUI::loadUsers() {
@@ -227,7 +166,7 @@ void owperGUI::clearUsers(bool isShutdown/* = false */) {
     for(unsigned int i = 0; i < vectUserWidgets.size(); i++) {
         if(vectUserWidgets.at(i)) {
             if(!isShutdown) {
-                vectUserWidgets.at(i)->destroyWidget();
+                dynamic_cast<userWidget*>(vectUserWidgets.at(i))->destroyWidget(); // TODO convert this to a virtual function - we'll probably need it in other gui toolkits
             }
             delete vectUserWidgets.at(i);
             vectUserWidgets.at(i) = NULL;
@@ -241,7 +180,7 @@ void owperGUI::clearPasswords(GtkWidget *widget, gpointer owperGUIInstance) {
     owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
 
     for(unsigned int i = 0; i < thisOwperGUI->vectUserWidgets.size(); i++) {
-        userWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
+        baseUserWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
         cout << curUserWidget->getUserName() << endl << flush;
         if(curUserWidget->userIsSelected()) {
             string msAccount = thisOwperGUI->sam->getUserAtIndex(i)->getMSAccount();
@@ -261,7 +200,7 @@ void owperGUI::enableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
     owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
 
     for(unsigned int i = 0; i < thisOwperGUI->vectUserWidgets.size(); i++) {
-        userWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
+        baseUserWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
         cout << curUserWidget->getUserName() << endl << flush;
         if(curUserWidget->userIsSelected()) {
             curUserWidget->enableAccount();
@@ -277,7 +216,7 @@ void owperGUI::disableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
     owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
 
     for(unsigned int i = 0; i < thisOwperGUI->vectUserWidgets.size(); i++) {
-        userWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
+        baseUserWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
         cout << curUserWidget->getUserName() << endl << flush;
         if(curUserWidget->userIsSelected()) {
             curUserWidget->disableAccount();
@@ -287,27 +226,6 @@ void owperGUI::disableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
     }
 
     thisOwperGUI->applyChanges("Accounts disabled!");
-}
-
-void owperGUI::applyChanges(string successMessage) {
-    if(!this->sam->mergeChangesToHive()) {
-        this->reportMergeFailure();
-        return;
-    }
-
-    if(!this->sam->writeHiveToFile(true)) {
-        this->reportSaveFailure();
-        return;
-    }
-
-    if(this->deflt) {
-        if(!this->deflt->writeHiveToFile(true)) {
-            reportSaveFailure();
-            return;
-        }
-    }
-
-    this->reportSuccess(successMessage);
 }
 
 void owperGUI::reportMergeFailure() {
@@ -353,16 +271,5 @@ void owperGUI::reportSuccess(string taskDesc) {
 owperGUI::~owperGUI() {
     this->clearUsers(true);
 
-    if(this->sam) {
-        delete sam;
-    }
-
-    if(this->system) {
-        delete system;
-    }
-
-    if(this->deflt) {
-        delete deflt;
-    }
 }
 

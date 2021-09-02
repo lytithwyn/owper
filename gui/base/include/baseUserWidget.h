@@ -19,16 +19,16 @@ class baseUserWidget
     public:
         baseUserWidget(samUser *inSamUser, unsigned int inUserIndex) { this->user = inSamUser; this->userIndex = inUserIndex; };
 
-        void         resetLabel()      { };
+        virtual void resetLabel()      { };
         unsigned int getUserIndex()    { return userIndex; };
         string       getUserName()     { return user->getUserName(); };
         string       getFullName()     { return user->getFullName(); };
         bool         passwordIsBlank() { return this->user->passwordIsBlank(); };
-        bool         userIsSelected()  { return false; };
+        virtual bool userIsSelected()  { return false; };
         void         enableAccount()   { user->enableAccount(); };
         void         disableAccount()  { user->disableAccount(); };
-        void         selectUser()      { };
-        void         deselectUser()    { };
+        virtual void selectUser()      { };
+        virtual void deselectUser()    { };
 
 };
 

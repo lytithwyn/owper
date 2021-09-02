@@ -31,12 +31,13 @@
 #include "include/defaultHive.h"
 #include "include/userWidget.h"
 #include "include/fileManip.h"
+#include "include/baseOwperGUI.h" // from ../../gui/base
 
 using namespace std;
 using namespace owper;
 using namespace fileManip;
 
-class owperGUI
+class owperGUI : public baseOwperGUI
 {
     private:
         GtkWidget *winMain;
@@ -52,12 +53,7 @@ class owperGUI
         GtkWidget *buttonEnableAccounts;
         GtkWidget *buttonDisableAccounts;
 
-        string stringHivePath;
-        samHive     *sam;
-        systemHive  *system;
-        defaultHive *deflt;
-        vector<userWidget*> vectUserWidgets;
-
+    protected:
         void loadGUI();
 
     public:
@@ -67,13 +63,12 @@ class owperGUI
         static void delete_event(GtkWidget *widget, GdkEvent  *event, gpointer data);
         static void destroy(GtkWidget *widget, gpointer data);
         static void hive_path_browse_event(GtkWidget *widget, gpointer owperGUIInstance);
-        bool changeHivePath(string newPath);
+        HIVE_LOAD_RESULT changeHivePath(string newPath);
         void clearUsers(bool isShutdown = false);
         void loadUsers();
         static void clearPasswords(GtkWidget *widget, gpointer owperGUIInstance);
         static void enableAccounts(GtkWidget *widget, gpointer owperGUIInstance);
         static void disableAccounts(GtkWidget *widget, gpointer owperGUIInstance);
-        void applyChanges(string successMessage);
         void reportSuccess(string successMessage);
         void reportMergeFailure();
         void reportSaveFailure();
