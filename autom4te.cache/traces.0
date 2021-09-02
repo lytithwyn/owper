@@ -2125,7 +2125,7 @@ m4trace:configure.ac:4: -1- _LT_COMPILER_OPTION([if $compiler PIC flag $_LT_TAGV
 m4trace:configure.ac:4: -1- _LT_LINKER_OPTION([if $compiler static flag $lt_tmp_static_flag works], [lt_cv_prog_compiler_static_works_CXX], [$lt_tmp_static_flag], [], [_LT_TAGVAR(lt_prog_compiler_static, CXX)=])
 m4trace:configure.ac:4: -1- m4_pattern_allow([^LT_SYS_LIBRARY_PATH$])
 m4trace:configure.ac:5: -1- _AM_CONFIG_MACRO_DIRS([m4])
-m4trace:configure.ac:7: -1- PKG_CHECK_MODULES([OPENSSL], [openssl])
+m4trace:configure.ac:7: -1- PKG_CHECK_MODULES([OpenSSL], [openssl])
 m4trace:configure.ac:7: -1- PKG_PROG_PKG_CONFIG
 m4trace:configure.ac:7: -1- m4_pattern_forbid([^_?PKG_[A-Z_]+$])
 m4trace:configure.ac:7: -1- m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
@@ -2134,19 +2134,19 @@ m4trace:configure.ac:7: -1- m4_pattern_allow([^PKG_CONFIG$])
 m4trace:configure.ac:7: -1- m4_pattern_allow([^PKG_CONFIG_PATH$])
 m4trace:configure.ac:7: -1- m4_pattern_allow([^PKG_CONFIG_LIBDIR$])
 m4trace:configure.ac:7: -1- m4_pattern_allow([^PKG_CONFIG$])
-m4trace:configure.ac:7: -1- m4_pattern_allow([^OPENSSL_CFLAGS$])
-m4trace:configure.ac:7: -1- m4_pattern_allow([^OPENSSL_LIBS$])
-m4trace:configure.ac:7: -1- PKG_CHECK_EXISTS([openssl], [pkg_cv_[]OPENSSL_CFLAGS=`$PKG_CONFIG --[]cflags "openssl" 2>/dev/null`
+m4trace:configure.ac:7: -1- m4_pattern_allow([^OpenSSL_CFLAGS$])
+m4trace:configure.ac:7: -1- m4_pattern_allow([^OpenSSL_LIBS$])
+m4trace:configure.ac:7: -1- PKG_CHECK_EXISTS([openssl], [pkg_cv_[]OpenSSL_CFLAGS=`$PKG_CONFIG --[]cflags "openssl" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
-m4trace:configure.ac:7: -1- PKG_CHECK_EXISTS([openssl], [pkg_cv_[]OPENSSL_LIBS=`$PKG_CONFIG --[]libs "openssl" 2>/dev/null`
+m4trace:configure.ac:7: -1- PKG_CHECK_EXISTS([openssl], [pkg_cv_[]OpenSSL_LIBS=`$PKG_CONFIG --[]libs "openssl" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
 m4trace:configure.ac:7: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:8: -1- PKG_CHECK_MODULES([GTK2], [gtk+-2.0])
-m4trace:configure.ac:8: -1- m4_pattern_allow([^GTK2_CFLAGS$])
-m4trace:configure.ac:8: -1- m4_pattern_allow([^GTK2_LIBS$])
-m4trace:configure.ac:8: -1- PKG_CHECK_EXISTS([gtk+-2.0], [pkg_cv_[]GTK2_CFLAGS=`$PKG_CONFIG --[]cflags "gtk+-2.0" 2>/dev/null`
+m4trace:configure.ac:8: -1- PKG_CHECK_MODULES([gtk2], [gtk+-2.0])
+m4trace:configure.ac:8: -1- m4_pattern_allow([^gtk2_CFLAGS$])
+m4trace:configure.ac:8: -1- m4_pattern_allow([^gtk2_LIBS$])
+m4trace:configure.ac:8: -1- PKG_CHECK_EXISTS([gtk+-2.0], [pkg_cv_[]gtk2_CFLAGS=`$PKG_CONFIG --[]cflags "gtk+-2.0" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
-m4trace:configure.ac:8: -1- PKG_CHECK_EXISTS([gtk+-2.0], [pkg_cv_[]GTK2_LIBS=`$PKG_CONFIG --[]libs "gtk+-2.0" 2>/dev/null`
+m4trace:configure.ac:8: -1- PKG_CHECK_EXISTS([gtk+-2.0], [pkg_cv_[]gtk2_LIBS=`$PKG_CONFIG --[]libs "gtk+-2.0" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
 m4trace:configure.ac:8: -1- _PKG_SHORT_ERRORS_SUPPORTED
 m4trace:configure.ac:9: -1- m4_pattern_allow([^LIB@&t@OBJS$])

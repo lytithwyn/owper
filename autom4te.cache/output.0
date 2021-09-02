@@ -635,10 +635,10 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIB@&t@OBJS
-GTK2_LIBS
-GTK2_CFLAGS
-OPENSSL_LIBS
-OPENSSL_CFLAGS
+gtk2_LIBS
+gtk2_CFLAGS
+OpenSSL_LIBS
+OpenSSL_CFLAGS
 PKG_CONFIG_LIBDIR
 PKG_CONFIG_PATH
 PKG_CONFIG
@@ -794,10 +794,10 @@ CXXCPP
 PKG_CONFIG
 PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
-OPENSSL_CFLAGS
-OPENSSL_LIBS
-GTK2_CFLAGS
-GTK2_LIBS'
+OpenSSL_CFLAGS
+OpenSSL_LIBS
+gtk2_CFLAGS
+gtk2_LIBS'
 
 
 # Initialize some variables set by options.
@@ -1470,12 +1470,12 @@ Some influential environment variables:
               directories to add to pkg-config's search path
   PKG_CONFIG_LIBDIR 
               path overriding pkg-config's built-in search path
-  OPENSSL_CFLAGS 
-              C compiler flags for OPENSSL, overriding pkg-config
-  OPENSSL_LIBS 
-              linker flags for OPENSSL, overriding pkg-config
-  GTK2_CFLAGS C compiler flags for GTK2, overriding pkg-config
-  GTK2_LIBS   linker flags for GTK2, overriding pkg-config
+  OpenSSL_CFLAGS 
+              C compiler flags for OpenSSL, overriding pkg-config
+  OpenSSL_LIBS 
+              linker flags for OpenSSL, overriding pkg-config
+  gtk2_CFLAGS C compiler flags for gtk2, overriding pkg-config
+  gtk2_LIBS   linker flags for gtk2, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -15865,11 +15865,11 @@ $as_echo "no" >&6; }
 fi
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for OPENSSL" >&5
-$as_echo_n "checking for OPENSSL... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for OpenSSL" >&5
+$as_echo_n "checking for OpenSSL... " >&6; }
 
-if test -n "$OPENSSL_CFLAGS"; then
-    pkg_cv_OPENSSL_CFLAGS="$OPENSSL_CFLAGS"
+if test -n "$OpenSSL_CFLAGS"; then
+    pkg_cv_OpenSSL_CFLAGS="$OpenSSL_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"openssl\""; } >&5
@@ -15877,7 +15877,7 @@ if test -n "$OPENSSL_CFLAGS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_OPENSSL_CFLAGS=`$PKG_CONFIG --cflags "openssl" 2>/dev/null`
+  pkg_cv_OpenSSL_CFLAGS=`$PKG_CONFIG --cflags "openssl" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes 
 else
   pkg_failed=yes
@@ -15885,8 +15885,8 @@ fi
  else
     pkg_failed=untried
 fi
-if test -n "$OPENSSL_LIBS"; then
-    pkg_cv_OPENSSL_LIBS="$OPENSSL_LIBS"
+if test -n "$OpenSSL_LIBS"; then
+    pkg_cv_OpenSSL_LIBS="$OpenSSL_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"openssl\""; } >&5
@@ -15894,7 +15894,7 @@ if test -n "$OPENSSL_LIBS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_OPENSSL_LIBS=`$PKG_CONFIG --libs "openssl" 2>/dev/null`
+  pkg_cv_OpenSSL_LIBS=`$PKG_CONFIG --libs "openssl" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes 
 else
   pkg_failed=yes
@@ -15915,22 +15915,22 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        OPENSSL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "openssl" 2>&1`
+	        OpenSSL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "openssl" 2>&1`
         else 
-	        OPENSSL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "openssl" 2>&1`
+	        OpenSSL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "openssl" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
-	echo "$OPENSSL_PKG_ERRORS" >&5
+	echo "$OpenSSL_PKG_ERRORS" >&5
 
 	as_fn_error $? "Package requirements (openssl) were not met:
 
-$OPENSSL_PKG_ERRORS
+$OpenSSL_PKG_ERRORS
 
 Consider adjusting the PKG_CONFIG_PATH environment variable if you
 installed software in a non-standard prefix.
 
-Alternatively, you may set the environment variables OPENSSL_CFLAGS
-and OPENSSL_LIBS to avoid the need to call pkg-config.
+Alternatively, you may set the environment variables OpenSSL_CFLAGS
+and OpenSSL_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details." "$LINENO" 5        
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -15941,26 +15941,26 @@ as_fn_error $? "The pkg-config script could not be found or is too old.  Make su
 is in your PATH or set the PKG_CONFIG environment variable to the full
 path to pkg-config.
 
-Alternatively, you may set the environment variables OPENSSL_CFLAGS
-and OPENSSL_LIBS to avoid the need to call pkg-config.
+Alternatively, you may set the environment variables OpenSSL_CFLAGS
+and OpenSSL_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details.
 
 To get pkg-config, see <http://pkg-config.freedesktop.org/>.
 See \`config.log' for more details" "$LINENO" 5; }        
 else
-	OPENSSL_CFLAGS=$pkg_cv_OPENSSL_CFLAGS
-	OPENSSL_LIBS=$pkg_cv_OPENSSL_LIBS
+	OpenSSL_CFLAGS=$pkg_cv_OpenSSL_CFLAGS
+	OpenSSL_LIBS=$pkg_cv_OpenSSL_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 	
 fi
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GTK2" >&5
-$as_echo_n "checking for GTK2... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for gtk2" >&5
+$as_echo_n "checking for gtk2... " >&6; }
 
-if test -n "$GTK2_CFLAGS"; then
-    pkg_cv_GTK2_CFLAGS="$GTK2_CFLAGS"
+if test -n "$gtk2_CFLAGS"; then
+    pkg_cv_gtk2_CFLAGS="$gtk2_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-2.0\""; } >&5
@@ -15968,7 +15968,7 @@ if test -n "$GTK2_CFLAGS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_GTK2_CFLAGS=`$PKG_CONFIG --cflags "gtk+-2.0" 2>/dev/null`
+  pkg_cv_gtk2_CFLAGS=`$PKG_CONFIG --cflags "gtk+-2.0" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes 
 else
   pkg_failed=yes
@@ -15976,8 +15976,8 @@ fi
  else
     pkg_failed=untried
 fi
-if test -n "$GTK2_LIBS"; then
-    pkg_cv_GTK2_LIBS="$GTK2_LIBS"
+if test -n "$gtk2_LIBS"; then
+    pkg_cv_gtk2_LIBS="$gtk2_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtk+-2.0\""; } >&5
@@ -15985,7 +15985,7 @@ if test -n "$GTK2_LIBS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_GTK2_LIBS=`$PKG_CONFIG --libs "gtk+-2.0" 2>/dev/null`
+  pkg_cv_gtk2_LIBS=`$PKG_CONFIG --libs "gtk+-2.0" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes 
 else
   pkg_failed=yes
@@ -16006,22 +16006,22 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GTK2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gtk+-2.0" 2>&1`
+	        gtk2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gtk+-2.0" 2>&1`
         else 
-	        GTK2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gtk+-2.0" 2>&1`
+	        gtk2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gtk+-2.0" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
-	echo "$GTK2_PKG_ERRORS" >&5
+	echo "$gtk2_PKG_ERRORS" >&5
 
 	as_fn_error $? "Package requirements (gtk+-2.0) were not met:
 
-$GTK2_PKG_ERRORS
+$gtk2_PKG_ERRORS
 
 Consider adjusting the PKG_CONFIG_PATH environment variable if you
 installed software in a non-standard prefix.
 
-Alternatively, you may set the environment variables GTK2_CFLAGS
-and GTK2_LIBS to avoid the need to call pkg-config.
+Alternatively, you may set the environment variables gtk2_CFLAGS
+and gtk2_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details." "$LINENO" 5        
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
@@ -16032,15 +16032,15 @@ as_fn_error $? "The pkg-config script could not be found or is too old.  Make su
 is in your PATH or set the PKG_CONFIG environment variable to the full
 path to pkg-config.
 
-Alternatively, you may set the environment variables GTK2_CFLAGS
-and GTK2_LIBS to avoid the need to call pkg-config.
+Alternatively, you may set the environment variables gtk2_CFLAGS
+and gtk2_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details.
 
 To get pkg-config, see <http://pkg-config.freedesktop.org/>.
 See \`config.log' for more details" "$LINENO" 5; }        
 else
-	GTK2_CFLAGS=$pkg_cv_GTK2_CFLAGS
-	GTK2_LIBS=$pkg_cv_GTK2_LIBS
+	gtk2_CFLAGS=$pkg_cv_gtk2_CFLAGS
+	gtk2_LIBS=$pkg_cv_gtk2_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 	
