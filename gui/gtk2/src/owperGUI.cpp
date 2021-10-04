@@ -67,17 +67,17 @@ void owperGUI::loadGUI() {
 
     buttonClearPasswords = gtk_button_new_with_mnemonic("_Clear Passwords");
     g_signal_connect (G_OBJECT (buttonClearPasswords), "clicked",
-            G_CALLBACK(clearPasswords), (gpointer)this);
+            G_CALLBACK(handleClearPasswords), (gpointer)this);
     gtk_box_pack_end(GTK_BOX(hboxCommands), buttonClearPasswords, false, false, 0);
 
     buttonEnableAccounts = gtk_button_new_with_mnemonic("_Enable Accounts");
     g_signal_connect (G_OBJECT (buttonEnableAccounts), "clicked",
-            G_CALLBACK(enableAccounts), (gpointer)this);
+            G_CALLBACK(handleEnableAccounts), (gpointer)this);
     gtk_box_pack_end(GTK_BOX(hboxCommands), buttonEnableAccounts, false, false, 0);
 
     buttonDisableAccounts = gtk_button_new_with_mnemonic("_Disable Accounts");
     g_signal_connect (G_OBJECT (buttonDisableAccounts), "clicked",
-            G_CALLBACK(disableAccounts), (gpointer)this);
+            G_CALLBACK(handleDisableAccounts), (gpointer)this);
     gtk_box_pack_end(GTK_BOX(hboxCommands), buttonDisableAccounts, false, false, 0);
 
     gtk_container_add(GTK_CONTAINER (winMain), vboxMain);
@@ -176,56 +176,19 @@ void owperGUI::clearUsers(bool isShutdown/* = false */) {
     vectUserWidgets.clear();
 }
 
-void owperGUI::clearPasswords(GtkWidget *widget, gpointer owperGUIInstance) {
+void owperGUI::handleClearPasswords(GtkWidget *widget, gpointer owperGUIInstance) {
     owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
-
-    for(unsigned int i = 0; i < thisOwperGUI->vectUserWidgets.size(); i++) {
-        baseUserWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
-        cout << curUserWidget->getUserName() << endl << flush;
-        if(curUserWidget->userIsSelected()) {
-            string msAccount = thisOwperGUI->sam->getUserAtIndex(i)->getMSAccount();
-            if(!msAccount.empty()) {
-                thisOwperGUI->deflt->deleteStoredIdentity(msAccount);
-            }
-            thisOwperGUI->sam->clearPassword(i);
-            curUserWidget->deselectUser();
-            curUserWidget->resetLabel();
-        }
-    }
-
-    thisOwperGUI->applyChanges("Cleared passwords!");
+    thisOwperGUI->clearPasswords();
 }
 
-void owperGUI::enableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
+void owperGUI::handleEnableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
     owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
-
-    for(unsigned int i = 0; i < thisOwperGUI->vectUserWidgets.size(); i++) {
-        baseUserWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
-        cout << curUserWidget->getUserName() << endl << flush;
-        if(curUserWidget->userIsSelected()) {
-            curUserWidget->enableAccount();
-            curUserWidget->deselectUser();
-            curUserWidget->resetLabel();
-        }
-    }
-
-    thisOwperGUI->applyChanges("Accounts enabled!");
+    thisOwperGUI->enableAccounts();
 }
 
-void owperGUI::disableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
+void owperGUI::handleDisableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
     owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
-
-    for(unsigned int i = 0; i < thisOwperGUI->vectUserWidgets.size(); i++) {
-        baseUserWidget *curUserWidget = thisOwperGUI->vectUserWidgets.at(i);
-        cout << curUserWidget->getUserName() << endl << flush;
-        if(curUserWidget->userIsSelected()) {
-            curUserWidget->disableAccount();
-            curUserWidget->deselectUser();
-            curUserWidget->resetLabel();
-        }
-    }
-
-    thisOwperGUI->applyChanges("Accounts disabled!");
+    thisOwperGUI->disableAccounts();
 }
 
 void owperGUI::reportMergeFailure() {

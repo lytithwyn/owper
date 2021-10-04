@@ -32,6 +32,9 @@ class baseOwperGUI {
         virtual HIVE_LOAD_RESULT changeHivePath(string newPath);
         virtual void clearUsers(bool isShutdown = false){ };
         virtual void loadUsers(){ };
+        void clearPasswords();
+        void enableAccounts();
+        void disableAccounts();
         void applyChanges(string successMessage);
         virtual void reportSuccess(string successMessage){ };
         virtual void reportMergeFailure(){ };

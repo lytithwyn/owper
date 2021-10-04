@@ -66,9 +66,9 @@ class owperGUI : public baseOwperGUI
         HIVE_LOAD_RESULT changeHivePath(string newPath);
         void clearUsers(bool isShutdown = false);
         void loadUsers();
-        static void clearPasswords(GtkWidget *widget, gpointer owperGUIInstance);
-        static void enableAccounts(GtkWidget *widget, gpointer owperGUIInstance);
-        static void disableAccounts(GtkWidget *widget, gpointer owperGUIInstance);
+        static void handleClearPasswords(GtkWidget *widget, gpointer owperGUIInstance);
+        static void handleEnableAccounts(GtkWidget *widget, gpointer owperGUIInstance);
+        static void handleDisableAccounts(GtkWidget *widget, gpointer owperGUIInstance);
         void reportSuccess(string successMessage);
         void reportMergeFailure();
         void reportSaveFailure();

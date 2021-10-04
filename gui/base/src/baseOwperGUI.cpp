@@ -83,6 +83,52 @@ HIVE_LOAD_RESULT baseOwperGUI::changeHivePath(string newPath) {
     return loadResult;
 }
 
+void baseOwperGUI::clearPasswords() {
+    for(unsigned int i = 0; i < this->vectUserWidgets.size(); i++) {
+        baseUserWidget *curUserWidget = this->vectUserWidgets.at(i);
+//        cout << curUserWidget->getUserName() << endl << flush;
+        if(curUserWidget->userIsSelected()) {
+            string msAccount = this->sam->getUserAtIndex(i)->getMSAccount();
+            if(!msAccount.empty()) {
+                this->deflt->deleteStoredIdentity(msAccount);
+            }
+            this->sam->clearPassword(i);
+            curUserWidget->deselectUser();
+            curUserWidget->resetLabel();
+        }
+    }
+
+    this->applyChanges("Cleared passwords!");
+}
+
+void baseOwperGUI::enableAccounts() {
+    for(unsigned int i = 0; i < this->vectUserWidgets.size(); i++) {
+        baseUserWidget *curUserWidget = this->vectUserWidgets.at(i);
+        cout << curUserWidget->getUserName() << endl << flush;
+        if(curUserWidget->userIsSelected()) {
+            curUserWidget->enableAccount();
+            curUserWidget->deselectUser();
+            curUserWidget->resetLabel();
+        }
+    }
+
+    this->applyChanges("Accounts enabled!");
+}
+
+void baseOwperGUI::disableAccounts() {
+    for(unsigned int i = 0; i < this->vectUserWidgets.size(); i++) {
+        baseUserWidget *curUserWidget = this->vectUserWidgets.at(i);
+        cout << curUserWidget->getUserName() << endl << flush;
+        if(curUserWidget->userIsSelected()) {
+            curUserWidget->disableAccount();
+            curUserWidget->deselectUser();
+            curUserWidget->resetLabel();
+        }
+    }
+
+    this->applyChanges("Accounts disabled!");
+}
+
 void baseOwperGUI::applyChanges(string successMessage) {
     if(!this->sam->mergeChangesToHive()) {
         this->reportMergeFailure();
