@@ -87,6 +87,7 @@ namespace owper {
         void clearMSAccount() { this->msAccount = ""; };
         bool passwordIsBlank();
         bool accountIsDisabled() const;
+        // TODO: move enable/disable account to SAM?
         void enableAccount();
         void disableAccount();
         void hasChanges(bool dataChanged){ regDataChanged = dataChanged; };
