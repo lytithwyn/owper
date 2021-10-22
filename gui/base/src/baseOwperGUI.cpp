@@ -83,10 +83,6 @@ HIVE_LOAD_RESULT baseOwperGUI::changeHivePath(string newPath) {
     return loadResult;
 }
 
-//TODO: Refactor the following three methods so that they call one method that contains
-//the loop, which itself accepts a closure to perform the requested modifications.
-//The closure should accept a baseWidget* and the index of that widget in the list.
-
 void baseOwperGUI::modifyUsers(const std::function<void(baseUserWidget*, unsigned int)> &modifierFunc, std::string successMessage) {
     for(unsigned int i = 0; i < this->vectUserWidgets.size(); i++) {
         baseUserWidget *curUserWidget = this->vectUserWidgets.at(i);
