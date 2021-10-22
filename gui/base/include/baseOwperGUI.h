@@ -1,6 +1,9 @@
 #ifndef BASE_GUI_H
 #define BASE_GUI_H
 
+#include <functional>
+#include <string>
+
 #include "include/samHive.h"
 #include "include/systemHive.h"
 #include "include/defaultHive.h"
@@ -25,6 +28,7 @@ class baseOwperGUI {
         static const HIVE_LOAD_RESULT HIVE_LOAD_HAS_DEFAULT = 1<<2;
 
         virtual void loadGUI(){ };
+        void modifyUsers(const std::function<void(baseUserWidget*, unsigned int)> &modifierFunc, std::string successMessage);
     public:
         baseOwperGUI(string stringInitHivePath = "");
         ~baseOwperGUI();

@@ -83,50 +83,49 @@ HIVE_LOAD_RESULT baseOwperGUI::changeHivePath(string newPath) {
     return loadResult;
 }
 
-void baseOwperGUI::clearPasswords() {
+//TODO: Refactor the following three methods so that they call one method that contains
+//the loop, which itself accepts a closure to perform the requested modifications.
+//The closure should accept a baseWidget* and the index of that widget in the list.
+
+void baseOwperGUI::modifyUsers(const std::function<void(baseUserWidget*, unsigned int)> &modifierFunc, std::string successMessage) {
     for(unsigned int i = 0; i < this->vectUserWidgets.size(); i++) {
         baseUserWidget *curUserWidget = this->vectUserWidgets.at(i);
-//        cout << curUserWidget->getUserName() << endl << flush;
         if(curUserWidget->userIsSelected()) {
-            string msAccount = this->sam->getUserAtIndex(i)->getMSAccount();
-            if(!msAccount.empty()) {
-                this->deflt->deleteStoredIdentity(msAccount);
-            }
-            this->sam->clearPassword(i);
+            modifierFunc(curUserWidget, i);
             curUserWidget->deselectUser();
             curUserWidget->resetLabel();
         }
     }
 
-    this->applyChanges("Cleared passwords!");
+    this->applyChanges(successMessage);
+}
+
+void baseOwperGUI::clearPasswords() {
+    auto func = [this](baseUserWidget* curUserWidget, unsigned int i) {
+        string msAccount = this->sam->getUserAtIndex(i)->getMSAccount();
+        if(!msAccount.empty()) {
+            this->deflt->deleteStoredIdentity(msAccount);
+        }
+        this->sam->clearPassword(i);
+    };
+
+    this->modifyUsers(func, "Cleared Passwords!");
 }
 
 void baseOwperGUI::enableAccounts() {
-    for(unsigned int i = 0; i < this->vectUserWidgets.size(); i++) {
-        baseUserWidget *curUserWidget = this->vectUserWidgets.at(i);
-        cout << curUserWidget->getUserName() << endl << flush;
-        if(curUserWidget->userIsSelected()) {
-            curUserWidget->enableAccount();
-            curUserWidget->deselectUser();
-            curUserWidget->resetLabel();
-        }
-    }
+    auto func = [](baseUserWidget* curUserWidget, unsigned int i) {
+        curUserWidget->enableAccount();
+    };
 
-    this->applyChanges("Accounts enabled!");
+    this->modifyUsers(func, "Accounts enabled!");
 }
 
 void baseOwperGUI::disableAccounts() {
-    for(unsigned int i = 0; i < this->vectUserWidgets.size(); i++) {
-        baseUserWidget *curUserWidget = this->vectUserWidgets.at(i);
-        cout << curUserWidget->getUserName() << endl << flush;
-        if(curUserWidget->userIsSelected()) {
-            curUserWidget->disableAccount();
-            curUserWidget->deselectUser();
-            curUserWidget->resetLabel();
-        }
-    }
+    auto func = [](baseUserWidget* curUserWidget, unsigned int i) {
+        curUserWidget->disableAccount();
+    };
 
-    this->applyChanges("Accounts disabled!");
+    this->modifyUsers(func, "Accounts disabled!");
 }
 
 void baseOwperGUI::applyChanges(string successMessage) {

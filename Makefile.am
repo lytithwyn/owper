@@ -1,6 +1,5 @@
 AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = libowper gui/base gui/gtk2
-ACLOCAL_AMFLAGS = -I m4
 
 bin_PROGRAMS = owper
 owper_SOURCES = main.cpp
