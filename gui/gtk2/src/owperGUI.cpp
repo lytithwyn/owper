@@ -160,13 +160,17 @@ void owperGUI::loadUsers() {
     }
 }
 
+// TODO Once we have some other GUI variants, see if we can pull this method
+// out into baseOwperGUI.
+// Right now I'm concerned about the whole deal with only destroying the widgets
+// when shutdown is set to false.
 void owperGUI::clearUsers(bool isShutdown/* = false */) {
     //we are using a vector of pointers, thus the destructors
     //do NOT get called by vector.clear
     for(unsigned int i = 0; i < vectUserWidgets.size(); i++) {
         if(vectUserWidgets.at(i)) {
             if(!isShutdown) {
-                dynamic_cast<userWidget*>(vectUserWidgets.at(i))->destroyWidget(); // TODO convert this to a virtual function - we'll probably need it in other gui toolkits
+                vectUserWidgets.at(i)->destroyWidget();
             }
             delete vectUserWidgets.at(i);
             vectUserWidgets.at(i) = NULL;
