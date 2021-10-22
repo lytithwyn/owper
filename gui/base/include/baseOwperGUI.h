@@ -29,6 +29,11 @@ class baseOwperGUI {
 
         virtual void loadGUI(){ };
         void modifyUsers(const std::function<void(baseUserWidget*, unsigned int)> &modifierFunc, std::string successMessage);
+
+        static const char* WIN_TITLE;
+        static const char* ERR_MSG_SAVE_FAIL;
+        static const char* ERR_MSG_MERGE_FAIL;
+        static const char* WARN_DFLT_HIVE_MISSING;
     public:
         baseOwperGUI(string stringInitHivePath = "");
         ~baseOwperGUI();

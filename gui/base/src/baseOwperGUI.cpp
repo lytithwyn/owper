@@ -1,5 +1,10 @@
 #include "include/baseOwperGUI.h"
 
+const char* baseOwperGUI::WIN_TITLE = "OWPEr - Manage Windows User Accounts";
+const char* baseOwperGUI::ERR_MSG_MERGE_FAIL = "Error! Not all data was successfully merged into the hive in memory.  We don't guarantee any particular results at this point.";
+const char* baseOwperGUI::ERR_MSG_SAVE_FAIL = "Error! Could not write data to hive file on disk. We don't guarantee any particular results at this point.";
+const char* baseOwperGUI::WARN_DFLT_HIVE_MISSING = "DEFAULT hive could not be opened: Clearing Microsoft Account passwords will be disabled";
+
 baseOwperGUI::baseOwperGUI(string initHivePath/*=""*/) {
     sam = NULL;
     system = NULL;
