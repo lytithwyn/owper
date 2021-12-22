@@ -45,7 +45,7 @@ void owperGUI::loadGUI() {
 
     entryHivePath = gtk_entry_new();
     gtk_entry_set_width_chars(GTK_ENTRY(entryHivePath), 30);
-    gtk_entry_set_editable(GTK_ENTRY(entryHivePath), false);
+    gtk_editable_set_editable(GTK_EDITABLE(entryHivePath), false);
     gtk_box_pack_start(GTK_BOX(hboxHivePath), entryHivePath, true, true, 5);
 
     buttonBrowseHivePath = gtk_button_new_with_mnemonic("_Browse");
