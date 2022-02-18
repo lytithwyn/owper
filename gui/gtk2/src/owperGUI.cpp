@@ -107,8 +107,9 @@ void owperGUI::hive_path_browse_event(GtkWidget *widget, gpointer owperGUIInstan
 
     if (gtk_dialog_run(GTK_DIALOG(fileChooser)) == GTK_RESPONSE_ACCEPT)
     {
-        string filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (fileChooser));
+        char* filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (fileChooser));
         thisOwperGUI->changeHivePath(filename);
+        g_free(filename);
     }
 
     gtk_widget_destroy (fileChooser);
@@ -126,6 +127,7 @@ HIVE_LOAD_RESULT owperGUI::changeHivePath(string newPath) {
                                              GTK_DIALOG_DESTROY_WITH_PARENT,
                                              GTK_MESSAGE_ERROR,
                                              GTK_BUTTONS_CLOSE,
+                                             "%s",
                                              baseOwperGUI::WARN_DFLT_HIVE_MISSING);
             gtk_dialog_run (GTK_DIALOG (errorDialog));
             gtk_widget_destroy (errorDialog);

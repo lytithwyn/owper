@@ -51,9 +51,8 @@ HIVE_LOAD_RESULT baseOwperGUI::changeHivePath(string newPath) {
         findFileCaseInsensitive(newPath, "default").c_str()
     );
 
-    unsigned char* bootKey = NULL;
     try {
-        this->sam = new samHive(samFilePath.c_str(), bootKey);
+        this->sam = new samHive(samFilePath.c_str(), NULL);
     } catch(owpException *e) {
         // make 100% sure SAM is not set and rethrow
         this->sam = NULL;
@@ -63,14 +62,19 @@ HIVE_LOAD_RESULT baseOwperGUI::changeHivePath(string newPath) {
     loadResult = HIVE_LOAD_SUCCESS;
     try {
         this->system = new systemHive(systemFilePath.c_str());
-        bootKey = this->system->getBootKey();
+        // the bootkey encryption thingy is currently disabled
+        // for one thing, this is in the wrong order - we'd have to load
+        // SYSTEM before SAM to make this work
+        // for another thing, MS changed how this works in Windows 10 at some point
+        // so it's just not worth bothering with
+        //
+        // bootKey = this->system->getBootKey();
         loadResult |= HIVE_LOAD_HAS_SYSTEM;
     } catch(owpException *e) {
         // we don't have a system file...that's OK
         this->system = NULL;
         delete e;
     }
-
 
     try {
         this->deflt = new defaultHive(defaultFilePath.c_str());
