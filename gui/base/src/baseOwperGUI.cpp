@@ -150,6 +150,19 @@ void baseOwperGUI::applyChanges(string successMessage) {
     this->reportSuccess(successMessage);
 }
 
+void baseOwperGUI::clearUsers(bool shutdown/*=false*/) {
+    //we are using a vector of pointers, thus the destructors
+    //do NOT get called by vector.clear
+    for(unsigned int i = 0; i < vectUserWidgets.size(); i++) {
+        if(vectUserWidgets.at(i)) {
+            delete vectUserWidgets.at(i);
+            vectUserWidgets.at(i) = NULL;
+        }
+    }
+
+    vectUserWidgets.clear();
+}
+
 baseOwperGUI::~baseOwperGUI() {
     if(this->sam) {
         delete sam;

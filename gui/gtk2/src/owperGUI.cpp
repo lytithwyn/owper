@@ -160,24 +160,19 @@ void owperGUI::loadUsers() {
     }
 }
 
-// TODO Once we have some other GUI variants, see if we can pull this method
-// out into baseOwperGUI.
-// Right now I'm concerned about the whole deal with only destroying the widgets
-// when shutdown is set to false.
 void owperGUI::clearUsers(bool isShutdown/* = false */) {
-    //we are using a vector of pointers, thus the destructors
-    //do NOT get called by vector.clear
-    for(unsigned int i = 0; i < vectUserWidgets.size(); i++) {
-        if(vectUserWidgets.at(i)) {
-            if(!isShutdown) {
-                vectUserWidgets.at(i)->destroyWidget();
-            }
-            delete vectUserWidgets.at(i);
-            vectUserWidgets.at(i) = NULL;
+    // When the close button is clicked on the window, gtk starts destroying
+    // all the widgets and child widgets.
+    // This will cause a double free if we manually destroy the user widgets
+    // during that process, so we set "shutdown" to true when calling from the
+    // main window's destructor
+    if(!isShutdown) {
+        for(unsigned int i = 0; i < vectUserWidgets.size(); i++) {
+            vectUserWidgets.at(i)->destroyWidget();
         }
     }
 
-    vectUserWidgets.clear();
+    baseOwperGUI::clearUsers(isShutdown);
 }
 
 void owperGUI::handleClearPasswords(GtkWidget *widget, gpointer owperGUIInstance) {

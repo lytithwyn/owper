@@ -39,7 +39,7 @@ class baseOwperGUI {
         ~baseOwperGUI();
 
         virtual HIVE_LOAD_RESULT changeHivePath(string newPath);
-        virtual void clearUsers(bool isShutdown = false){ };
+        virtual void clearUsers(bool isShutdown = false);
         virtual void loadUsers(){ };
         void clearPasswords();
         void enableAccounts();
