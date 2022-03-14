@@ -18,13 +18,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include "include/owperGUI.h"
+#include "include/owper_gtk.h"
 
-owperGUI::owperGUI(string initHivePath/*=""*/) : baseOwperGUI(initHivePath) {
+owper_gtk::owper_gtk(string initHivePath/*=""*/) : baseOwperGUI(initHivePath) {
     this->loadGUI();
 }
 
-void owperGUI::loadGUI() {
+void owper_gtk::loadGUI() {
     winMain = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(winMain), baseOwperGUI::WIN_TITLE);
     gtk_container_set_border_width(GTK_CONTAINER(winMain), 5);
@@ -85,19 +85,19 @@ void owperGUI::loadGUI() {
     gtk_widget_show_all(winMain);
 }
 
-void owperGUI::delete_event(GtkWidget *widget, GdkEvent  *event, gpointer data)
+void owper_gtk::delete_event(GtkWidget *widget, GdkEvent  *event, gpointer data)
 {
     return gtk_main_quit ();
 }
 
-void owperGUI::destroy(GtkWidget *widget, gpointer data )
+void owper_gtk::destroy(GtkWidget *widget, gpointer data )
 {
     gtk_main_quit ();
 }
 
-void owperGUI::hive_path_browse_event(GtkWidget *widget, gpointer owperGUIInstance)
+void owper_gtk::hive_path_browse_event(GtkWidget *widget, gpointer owperGUIInstance)
 {
-    owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
+    owper_gtk *thisOwperGUI = (owper_gtk*)owperGUIInstance;
 
     GtkWidget *fileChooser = gtk_file_chooser_dialog_new ("Select directory containing registry files",
                                 GTK_WINDOW(thisOwperGUI->winMain),
@@ -115,7 +115,7 @@ void owperGUI::hive_path_browse_event(GtkWidget *widget, gpointer owperGUIInstan
     gtk_widget_destroy (fileChooser);
 }
 
-HIVE_LOAD_RESULT owperGUI::changeHivePath(string newPath) {
+HIVE_LOAD_RESULT owper_gtk::changeHivePath(string newPath) {
     gtk_entry_set_text(GTK_ENTRY(this->entryHivePath), "");
     HIVE_LOAD_RESULT loadResult = 0;
 
@@ -146,7 +146,7 @@ HIVE_LOAD_RESULT owperGUI::changeHivePath(string newPath) {
     return loadResult;
 }
 
-void owperGUI::loadUsers() {
+void owper_gtk::loadUsers() {
     vector<samUser*> samUserList = sam->getUserList();
 
     for(unsigned int i = 0; i < samUserList.size(); i++) {
@@ -162,7 +162,7 @@ void owperGUI::loadUsers() {
     }
 }
 
-void owperGUI::clearUsers(bool isShutdown/* = false */) {
+void owper_gtk::clearUsers(bool isShutdown/* = false */) {
     // When the close button is clicked on the window, gtk starts destroying
     // all the widgets and child widgets.
     // This will cause a double free if we manually destroy the user widgets
@@ -177,22 +177,22 @@ void owperGUI::clearUsers(bool isShutdown/* = false */) {
     baseOwperGUI::clearUsers(isShutdown);
 }
 
-void owperGUI::handleClearPasswords(GtkWidget *widget, gpointer owperGUIInstance) {
-    owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
+void owper_gtk::handleClearPasswords(GtkWidget *widget, gpointer owperGUIInstance) {
+    owper_gtk *thisOwperGUI = (owper_gtk*)owperGUIInstance;
     thisOwperGUI->clearPasswords();
 }
 
-void owperGUI::handleEnableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
-    owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
+void owper_gtk::handleEnableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
+    owper_gtk *thisOwperGUI = (owper_gtk*)owperGUIInstance;
     thisOwperGUI->enableAccounts();
 }
 
-void owperGUI::handleDisableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
-    owperGUI *thisOwperGUI = (owperGUI*)owperGUIInstance;
+void owper_gtk::handleDisableAccounts(GtkWidget *widget, gpointer owperGUIInstance) {
+    owper_gtk *thisOwperGUI = (owper_gtk*)owperGUIInstance;
     thisOwperGUI->disableAccounts();
 }
 
-void owperGUI::reportMergeFailure() {
+void owper_gtk::reportMergeFailure() {
     GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
                                              GTK_DIALOG_DESTROY_WITH_PARENT,
                                              GTK_MESSAGE_ERROR,
@@ -204,7 +204,7 @@ void owperGUI::reportMergeFailure() {
     return;
 }
 
-void owperGUI::reportSaveFailure(){
+void owper_gtk::reportSaveFailure(){
     GtkWidget *errorDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
                                              GTK_DIALOG_DESTROY_WITH_PARENT,
                                              GTK_MESSAGE_ERROR,
@@ -216,7 +216,7 @@ void owperGUI::reportSaveFailure(){
     return;
 }
 
-void owperGUI::reportSuccess(string taskDesc) {
+void owper_gtk::reportSuccess(string taskDesc) {
     GtkWidget *infoDialog = gtk_message_dialog_new (GTK_WINDOW(this->winMain),
                                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                                      GTK_MESSAGE_INFO,
@@ -227,7 +227,7 @@ void owperGUI::reportSuccess(string taskDesc) {
     gtk_widget_destroy (infoDialog);
 }
 
-owperGUI::~owperGUI() {
+owper_gtk::~owper_gtk() {
     this->clearUsers(true);
 
 }

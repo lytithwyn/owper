@@ -22,7 +22,7 @@
 #include <iostream>
 #include <cstring>
 
-#include "include/owperGUI.h"
+#include "include/owper_gtk.h"
 
 using std::cout;
 using std::endl;
@@ -38,8 +38,8 @@ int main(int argc, char* argv[]) {
         hiveFilePath = argv[1];
     }
 
-    owperGUI *passwordClearer;
-    passwordClearer = new owperGUI(hiveFilePath);
+    owper_gtk *passwordClearer;
+    passwordClearer = new owper_gtk(hiveFilePath);
 
     gtk_main();
 

@@ -104,7 +104,7 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_owper_gtk_OBJECTS = src/main_gtk.$(OBJEXT) src/owperGUI.$(OBJEXT) \
+am_owper_gtk_OBJECTS = src/main_gtk.$(OBJEXT) src/owper_gtk.$(OBJEXT) \
 	src/userWidget.$(OBJEXT)
 owper_gtk_OBJECTS = $(am_owper_gtk_OBJECTS)
 owper_gtk_LDADD = $(LDADD)
@@ -128,7 +128,7 @@ DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = src/$(DEPDIR)/main_gtk.Po \
-	src/$(DEPDIR)/owperGUI.Po src/$(DEPDIR)/userWidget.Po
+	src/$(DEPDIR)/owper_gtk.Po src/$(DEPDIR)/userWidget.Po
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -306,7 +306,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = subdir-objects
-owper_gtk_SOURCES = src/main_gtk.cpp  src/owperGUI.cpp src/userWidget.cpp
+owper_gtk_SOURCES = src/main_gtk.cpp  src/owper_gtk.cpp src/userWidget.cpp
 AM_CPPFLAGS = -I$(top_srcdir)/libowper -I$(top_srcdir)/gui/base $(gtk2_CFLAGS) -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE
 AM_LDFLAGS = $(top_srcdir)/gui/base/libbaseowpergui.a $(top_srcdir)/libowper/libowper.a $(gtk2_LIBS) $(OpenSSL_LIBS)
 all: all-am
@@ -399,7 +399,7 @@ src/$(DEPDIR)/$(am__dirstamp):
 	@: > src/$(DEPDIR)/$(am__dirstamp)
 src/main_gtk.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/owperGUI.$(OBJEXT): src/$(am__dirstamp) \
+src/owper_gtk.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 src/userWidget.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
@@ -416,7 +416,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/main_gtk.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/owperGUI.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/owper_gtk.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/userWidget.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -585,7 +585,7 @@ clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 		-rm -f src/$(DEPDIR)/main_gtk.Po
-	-rm -f src/$(DEPDIR)/owperGUI.Po
+	-rm -f src/$(DEPDIR)/owper_gtk.Po
 	-rm -f src/$(DEPDIR)/userWidget.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -633,7 +633,7 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f src/$(DEPDIR)/main_gtk.Po
-	-rm -f src/$(DEPDIR)/owperGUI.Po
+	-rm -f src/$(DEPDIR)/owper_gtk.Po
 	-rm -f src/$(DEPDIR)/userWidget.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

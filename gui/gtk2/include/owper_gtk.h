@@ -37,7 +37,7 @@ using namespace std;
 using namespace owper;
 using namespace fileManip;
 
-class owperGUI : public baseOwperGUI
+class owper_gtk : public baseOwperGUI
 {
     private:
         GtkWidget *winMain;
@@ -57,8 +57,8 @@ class owperGUI : public baseOwperGUI
         void loadGUI();
 
     public:
-        owperGUI(string stringInitHivePath = "");
-        ~owperGUI();
+        owper_gtk(string stringInitHivePath = "");
+        ~owper_gtk();
 
         static void delete_event(GtkWidget *widget, GdkEvent  *event, gpointer data);
         static void destroy(GtkWidget *widget, gpointer data);
