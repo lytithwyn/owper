@@ -635,8 +635,12 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+HAVE_GTK3_FALSE
+HAVE_GTK3_TRUE
 gtk3_LIBS
 gtk3_CFLAGS
+HAVE_GTK2_FALSE
+HAVE_GTK2_TRUE
 gtk2_LIBS
 gtk2_CFLAGS
 OpenSSL_LIBS
@@ -16640,6 +16644,8 @@ $as_echo "yes" >&6; }
 
 fi
 
+# gtk2
+
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gtk2" >&5
 $as_echo_n "checking for gtk2... " >&6; }
@@ -16698,38 +16704,28 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$gtk2_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (gtk+-2.0) were not met:
-
-$gtk2_PKG_ERRORS
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables gtk2_CFLAGS
-and gtk2_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details." "$LINENO" 5
+	HAVE_GTK2="no"
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables gtk2_CFLAGS
-and gtk2_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See \`config.log' for more details" "$LINENO" 5; }
+	HAVE_GTK2="no"
 else
 	gtk2_CFLAGS=$pkg_cv_gtk2_CFLAGS
 	gtk2_LIBS=$pkg_cv_gtk2_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-
+	HAVE_GTK2="yes"
 fi
+ if test "x$HAVE_GTK2" = "xyes"; then
+  HAVE_GTK2_TRUE=
+  HAVE_GTK2_FALSE='#'
+else
+  HAVE_GTK2_TRUE='#'
+  HAVE_GTK2_FALSE=
+fi
+
+
+# gtk3
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gtk3" >&5
@@ -16789,38 +16785,33 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$gtk3_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (gtk+-3.0) were not met:
-
-$gtk3_PKG_ERRORS
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables gtk3_CFLAGS
-and gtk3_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details." "$LINENO" 5
+	HAVE_GTK3="no"
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables gtk3_CFLAGS
-and gtk3_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See \`config.log' for more details" "$LINENO" 5; }
+	HAVE_GTK3="no"
 else
 	gtk3_CFLAGS=$pkg_cv_gtk3_CFLAGS
 	gtk3_LIBS=$pkg_cv_gtk3_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
+	HAVE_GTK3="yes"
+fi
+ if test "x$HAVE_GTK3" = "xyes"; then
+  HAVE_GTK3_TRUE=
+  HAVE_GTK3_FALSE='#'
+else
+  HAVE_GTK3_TRUE='#'
+  HAVE_GTK3_FALSE=
+fi
+
+
+if test "x$HAVE_GTK2" = "xno" -a "x$HAVE_GTK3" = "xno"; then :
+
+       as_fn_error $? "Dev files could not be found for any supported GUI!" "$LINENO" 5
 
 fi
+
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -16992,6 +16983,14 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCC\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_GTK2_TRUE}" && test -z "${HAVE_GTK2_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_GTK2\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_GTK3_TRUE}" && test -z "${HAVE_GTK3_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_GTK3\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

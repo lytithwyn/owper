@@ -88,6 +88,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@HAVE_GTK2_TRUE@am__append_1 = gui/gtk2
+@HAVE_GTK3_TRUE@am__append_2 = gui/gtk3
 bin_PROGRAMS = owper$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -194,7 +196,7 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
-DIST_SUBDIRS = $(SUBDIRS)
+DIST_SUBDIRS = libowper gui/base gui/gtk2 gui/gtk3
 am__DIST_COMMON = $(srcdir)/Makefile.in AUTHORS COPYING ChangeLog \
 	INSTALL NEWS README compile config.guess config.sub depcomp \
 	install-sh ltmain.sh missing
@@ -372,7 +374,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = subdir-objects
-SUBDIRS = libowper gui/base gui/gtk2 gui/gtk3
+SUBDIRS = libowper gui/base $(am__append_1) $(am__append_2)
 owper_SOURCES = main.cpp
 owper_DEPENDENCIES = libowper
 owper_CPPFLAGS = -I ./libowper
