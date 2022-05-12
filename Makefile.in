@@ -88,8 +88,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@HAVE_GTK2_TRUE@am__append_1 = gui/gtk2
-@HAVE_GTK3_TRUE@am__append_2 = gui/gtk3
+@HAVE_GTK3_TRUE@am__append_1 = gui/gtk3
+@HAVE_GTK2_TRUE@@HAVE_GTK3_FALSE@am__append_2 = gui/gtk2
 bin_PROGRAMS = owper$(EXEEXT)
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -196,7 +196,7 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
-DIST_SUBDIRS = libowper gui/base gui/gtk2 gui/gtk3
+DIST_SUBDIRS = libowper gui/base gui/gtk3 gui/gtk2
 am__DIST_COMMON = $(srcdir)/Makefile.in AUTHORS COPYING ChangeLog \
 	INSTALL NEWS README compile config.guess config.sub depcomp \
 	install-sh ltmain.sh missing

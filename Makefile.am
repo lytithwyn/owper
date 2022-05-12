@@ -1,12 +1,12 @@
 AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = libowper gui/base
 
+if HAVE_GTK3
+SUBDIRS += gui/gtk3
+else
 if HAVE_GTK2
 SUBDIRS += gui/gtk2
 endif
-
-if HAVE_GTK3
-SUBDIRS += gui/gtk3
 endif
 
 bin_PROGRAMS = owper
