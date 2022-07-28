@@ -39,7 +39,11 @@ int main(int argc, char* argv[]) {
     }
 
     owper_gtk *passwordClearer;
-    passwordClearer = new owper_gtk(hiveFilePath);
+    passwordClearer = new owper_gtk();
+
+    if(!hiveFilePath.empty()) {
+        passwordClearer->changeHivePath(hiveFilePath);
+    }
 
     gtk_main();
 

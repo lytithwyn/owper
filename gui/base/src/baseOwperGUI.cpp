@@ -5,14 +5,10 @@ const char* baseOwperGUI::ERR_MSG_MERGE_FAIL = "Error! Not all data was successf
 const char* baseOwperGUI::ERR_MSG_SAVE_FAIL = "Error! Could not write data to hive file on disk. We don't guarantee any particular results at this point.";
 const char* baseOwperGUI::WARN_DFLT_HIVE_MISSING = "DEFAULT hive could not be opened: Clearing Microsoft Account passwords will be disabled";
 
-baseOwperGUI::baseOwperGUI(string initHivePath/*=""*/) {
+baseOwperGUI::baseOwperGUI() {
     sam = NULL;
     system = NULL;
     deflt = NULL;
-
-    if(!initHivePath.empty()) {
-        this->changeHivePath(initHivePath);
-    }
 }
 
 // throws an exception if we fail to load the SAM, but continues

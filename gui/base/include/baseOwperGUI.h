@@ -18,6 +18,7 @@ using namespace fileManip;
 class baseOwperGUI {
     protected:
         string stringHivePath;
+
         samHive     *sam;
         systemHive  *system;
         defaultHive *deflt;
@@ -27,7 +28,7 @@ class baseOwperGUI {
         static const HIVE_LOAD_RESULT HIVE_LOAD_HAS_SYSTEM = 1<<1;
         static const HIVE_LOAD_RESULT HIVE_LOAD_HAS_DEFAULT = 1<<2;
 
-        virtual void loadGUI(){ };
+        void loadGUI(){ };
         void modifyUsers(const std::function<void(baseUserWidget*, unsigned int)> &modifierFunc, std::string successMessage);
 
         static const char* WIN_TITLE;
@@ -35,7 +36,7 @@ class baseOwperGUI {
         static const char* ERR_MSG_MERGE_FAIL;
         static const char* WARN_DFLT_HIVE_MISSING;
     public:
-        baseOwperGUI(string stringInitHivePath = "");
+        baseOwperGUI();
         ~baseOwperGUI();
 
         virtual HIVE_LOAD_RESULT changeHivePath(string newPath);

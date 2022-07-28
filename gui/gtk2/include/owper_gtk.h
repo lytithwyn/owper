@@ -57,7 +57,7 @@ class owper_gtk : public baseOwperGUI
         void loadGUI();
 
     public:
-        owper_gtk(string stringInitHivePath = "");
+        owper_gtk();
         ~owper_gtk();
 
         static void delete_event(GtkWidget *widget, GdkEvent  *event, gpointer data);

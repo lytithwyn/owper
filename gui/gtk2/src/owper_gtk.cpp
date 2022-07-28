@@ -20,7 +20,7 @@
  */
 #include "include/owper_gtk.h"
 
-owper_gtk::owper_gtk(string initHivePath/*=""*/) : baseOwperGUI(initHivePath) {
+owper_gtk::owper_gtk() : baseOwperGUI() {
     this->loadGUI();
 }
 
