@@ -84,7 +84,6 @@ void owper_ncurses::loadUsers() {
     this->userItems = (ITEM **)calloc(samUserList.size() + 1, sizeof(ITEM *));
     for(unsigned int i = 0; i < samUserList.size(); i++) {
         userWidget *curUserWidget = new userWidget(samUserList.at(i), i);
-        std::cout << (char*)item_name(curUserWidget->getMenuItem()) << std::endl;
         this->userItems[i] = curUserWidget->getMenuItem();
 
         if(this->deflt == NULL && !(samUserList.at(i)->getMSAccount().empty())) {
