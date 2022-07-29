@@ -11,11 +11,8 @@ libowper/libowper.a
 config.log
 config.status
 gui/gtk2/src/.deps/
-gui/gtk2/src/.dirstamp
-gui/base/src/.dirstamp
-gui/gtk3/src/.dirstamp
+*.dirstamp
 gui/base/libbaseowpergui.a
 libowper/src/.deps/
-libowper/src/.dirstamp
 libtool
 autom4te.cache
