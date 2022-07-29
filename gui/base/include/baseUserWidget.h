@@ -18,6 +18,7 @@ class baseUserWidget
 
     public:
         baseUserWidget(samUser *inSamUser, unsigned int inUserIndex) { this->user = inSamUser; this->userIndex = inUserIndex; };
+        virtual ~baseUserWidget(){ };
 
         virtual void resetLabel()      { };
         unsigned int getUserIndex()    { return userIndex; };

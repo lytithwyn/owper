@@ -9,6 +9,10 @@ SUBDIRS += gui/gtk2
 endif
 endif
 
+if HAVE_NCURSES
+SUBDIRS += gui/ncurses
+endif
+
 bin_PROGRAMS = owper
 owper_SOURCES = main.cpp
 owper_DEPENDENCIES = libowper

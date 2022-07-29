@@ -3,7 +3,7 @@ AM_INIT_AUTOMAKE([])
 AC_PROG_CXX
 LT_INIT
 AC_CONFIG_MACRO_DIRS([m4])
-AC_CONFIG_FILES([Makefile libowper/Makefile gui/base/Makefile gui/gtk2/Makefile gui/gtk3/Makefile])
+AC_CONFIG_FILES([Makefile libowper/Makefile gui/base/Makefile gui/gtk2/Makefile gui/gtk3/Makefile gui/ncurses/Makefile])
 AX_CXX_COMPILE_STDCXX(11)
 PKG_CHECK_MODULES(OpenSSL, openssl)
 
@@ -15,7 +15,11 @@ AM_CONDITIONAL(HAVE_GTK2, [test "x$HAVE_GTK2" = "xyes"])
 PKG_CHECK_MODULES(gtk3, gtk+-3.0, HAVE_GTK3="yes", HAVE_GTK3="no")
 AM_CONDITIONAL(HAVE_GTK3, [test "x$HAVE_GTK3" = "xyes"])
 
-AS_IF([test "x$HAVE_GTK2" = "xno" -a "x$HAVE_GTK3" = "xno"], [
+# ncurses
+PKG_CHECK_MODULES(ncurses, ncurses panel menu, HAVE_NCURSES="yes", HAVE_NCURSES="no")
+AM_CONDITIONAL(HAVE_NCURSES, [test "x$HAVE_NCURSES" = "xyes"])
+
+AS_IF([test "x$HAVE_GTK2" = "xno" -a "x$HAVE_GTK3" = "xno" -a "xHAVE_NCURSES" = "xno"], [
        AC_MSG_ERROR([Dev files could not be found for any supported GUI!])
 ])
 

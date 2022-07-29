@@ -635,6 +635,10 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+HAVE_NCURSES_FALSE
+HAVE_NCURSES_TRUE
+ncurses_LIBS
+ncurses_CFLAGS
 HAVE_GTK3_FALSE
 HAVE_GTK3_TRUE
 gtk3_LIBS
@@ -806,7 +810,9 @@ OpenSSL_LIBS
 gtk2_CFLAGS
 gtk2_LIBS
 gtk3_CFLAGS
-gtk3_LIBS'
+gtk3_LIBS
+ncurses_CFLAGS
+ncurses_LIBS'
 
 
 # Initialize some variables set by options.
@@ -1487,6 +1493,10 @@ Some influential environment variables:
   gtk2_LIBS   linker flags for gtk2, overriding pkg-config
   gtk3_CFLAGS C compiler flags for gtk3, overriding pkg-config
   gtk3_LIBS   linker flags for gtk3, overriding pkg-config
+  ncurses_CFLAGS
+              C compiler flags for ncurses, overriding pkg-config
+  ncurses_LIBS
+              linker flags for ncurses, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -15752,7 +15762,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-ac_config_files="$ac_config_files Makefile libowper/Makefile gui/base/Makefile gui/gtk2/Makefile gui/gtk3/Makefile"
+ac_config_files="$ac_config_files Makefile libowper/Makefile gui/base/Makefile gui/gtk2/Makefile gui/gtk3/Makefile gui/ncurses/Makefile"
 
   ax_cxx_compile_alternatives="11 0x"    ax_cxx_compile_cxx11_required=true
   ac_ext=cpp
@@ -16806,7 +16816,88 @@ else
 fi
 
 
-if test "x$HAVE_GTK2" = "xno" -a "x$HAVE_GTK3" = "xno"; then :
+# ncurses
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ncurses" >&5
+$as_echo_n "checking for ncurses... " >&6; }
+
+if test -n "$ncurses_CFLAGS"; then
+    pkg_cv_ncurses_CFLAGS="$ncurses_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"ncurses panel menu\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "ncurses panel menu") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_ncurses_CFLAGS=`$PKG_CONFIG --cflags "ncurses panel menu" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$ncurses_LIBS"; then
+    pkg_cv_ncurses_LIBS="$ncurses_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"ncurses panel menu\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "ncurses panel menu") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_ncurses_LIBS=`$PKG_CONFIG --libs "ncurses panel menu" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        ncurses_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "ncurses panel menu" 2>&1`
+        else
+	        ncurses_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "ncurses panel menu" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$ncurses_PKG_ERRORS" >&5
+
+	HAVE_NCURSES="no"
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	HAVE_NCURSES="no"
+else
+	ncurses_CFLAGS=$pkg_cv_ncurses_CFLAGS
+	ncurses_LIBS=$pkg_cv_ncurses_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	HAVE_NCURSES="yes"
+fi
+ if test "x$HAVE_NCURSES" = "xyes"; then
+  HAVE_NCURSES_TRUE=
+  HAVE_NCURSES_FALSE='#'
+else
+  HAVE_NCURSES_TRUE='#'
+  HAVE_NCURSES_FALSE=
+fi
+
+
+if test "x$HAVE_GTK2" = "xno" -a "x$HAVE_GTK3" = "xno" -a "xHAVE_NCURSES" = "xno"; then :
 
        as_fn_error $? "Dev files could not be found for any supported GUI!" "$LINENO" 5
 
@@ -16991,6 +17082,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_GTK3_TRUE}" && test -z "${HAVE_GTK3_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_GTK3\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_NCURSES_TRUE}" && test -z "${HAVE_NCURSES_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_NCURSES\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -17953,6 +18048,7 @@ do
     "gui/base/Makefile") CONFIG_FILES="$CONFIG_FILES gui/base/Makefile" ;;
     "gui/gtk2/Makefile") CONFIG_FILES="$CONFIG_FILES gui/gtk2/Makefile" ;;
     "gui/gtk3/Makefile") CONFIG_FILES="$CONFIG_FILES gui/gtk3/Makefile" ;;
+    "gui/ncurses/Makefile") CONFIG_FILES="$CONFIG_FILES gui/ncurses/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
