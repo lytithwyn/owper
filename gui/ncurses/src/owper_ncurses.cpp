@@ -107,6 +107,7 @@ void owper_ncurses::clearUsers(bool isShutdown/*=false*/) {
     if(owperMenu) {
         unpost_menu(owperMenu);
         free_menu(owperMenu); // must delete menu BEFORE items
+        delwin(owperMenuWin);
         baseOwperGUI::clearUsers(isShutdown); // deletes user widgets, which deletes menu items
         owperMenu = NULL;
     } else {
@@ -116,7 +117,7 @@ void owper_ncurses::clearUsers(bool isShutdown/*=false*/) {
 
 owper_ncurses::~owper_ncurses() {
     this->clearUsers(true);
+    free(this->userItems);
     endwin();
     delscreen(this->owperScreen);
-    free(this->userItems);
 }
