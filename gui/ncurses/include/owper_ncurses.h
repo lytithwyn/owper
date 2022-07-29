@@ -25,9 +25,6 @@
 #include <string>
 #include <vector>
 #include <cstdio>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 
 // ncurses stuff
 #include <menu.h>
