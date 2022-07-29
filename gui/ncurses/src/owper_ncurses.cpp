@@ -46,7 +46,7 @@ void owper_ncurses::loadGUI() {
 	keypad(stdscr, TRUE);
 
     /* print title */
-    const char* title = "Open Windows Password ERadicator";
+    const char* title = baseOwperGUI::WIN_TITLE;
     mvprintw(1, (COLS - strlen(title)) / 2, "%s", title);
 
     /* create the menu */
