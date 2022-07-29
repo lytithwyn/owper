@@ -16826,12 +16826,12 @@ if test -n "$ncurses_CFLAGS"; then
     pkg_cv_ncurses_CFLAGS="$ncurses_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"ncurses panel menu\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "ncurses panel menu") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"panel menu ncurses\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "panel menu ncurses") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_ncurses_CFLAGS=`$PKG_CONFIG --cflags "ncurses panel menu" 2>/dev/null`
+  pkg_cv_ncurses_CFLAGS=`$PKG_CONFIG --cflags "panel menu ncurses" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -16843,12 +16843,12 @@ if test -n "$ncurses_LIBS"; then
     pkg_cv_ncurses_LIBS="$ncurses_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"ncurses panel menu\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "ncurses panel menu") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"panel menu ncurses\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "panel menu ncurses") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_ncurses_LIBS=`$PKG_CONFIG --libs "ncurses panel menu" 2>/dev/null`
+  pkg_cv_ncurses_LIBS=`$PKG_CONFIG --libs "panel menu ncurses" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -16869,9 +16869,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        ncurses_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "ncurses panel menu" 2>&1`
+	        ncurses_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "panel menu ncurses" 2>&1`
         else
-	        ncurses_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "ncurses panel menu" 2>&1`
+	        ncurses_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "panel menu ncurses" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$ncurses_PKG_ERRORS" >&5

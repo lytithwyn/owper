@@ -16,7 +16,7 @@ PKG_CHECK_MODULES(gtk3, gtk+-3.0, HAVE_GTK3="yes", HAVE_GTK3="no")
 AM_CONDITIONAL(HAVE_GTK3, [test "x$HAVE_GTK3" = "xyes"])
 
 # ncurses
-PKG_CHECK_MODULES(ncurses, ncurses panel menu, HAVE_NCURSES="yes", HAVE_NCURSES="no")
+PKG_CHECK_MODULES(ncurses,panel menu ncurses, HAVE_NCURSES="yes", HAVE_NCURSES="no")
 AM_CONDITIONAL(HAVE_NCURSES, [test "x$HAVE_NCURSES" = "xyes"])
 
 AS_IF([test "x$HAVE_GTK2" = "xno" -a "x$HAVE_GTK3" = "xno" -a "xHAVE_NCURSES" = "xno"], [
