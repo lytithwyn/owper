@@ -40,9 +40,13 @@ int main(int argc, char* argv[]) {
 
     owper_ncurses *passwordClearer;
     passwordClearer = new owper_ncurses();
-    passwordClearer->changeHivePath(hiveFilePath);
+    HIVE_LOAD_RESULT loadResult = passwordClearer->changeHivePath(hiveFilePath);
 
-    passwordClearer->main();
+    if(loadResult & baseOwperGUI::HIVE_LOAD_SUCCESS) {
+        passwordClearer->main();
+    } else {
+        std::cout << "No SAM hive file found at: " << hiveFilePath <<  std::endl;
+    }
 
     delete passwordClearer;
 

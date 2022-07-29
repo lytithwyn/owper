@@ -72,8 +72,15 @@ void owper_ncurses::loadGUI() {
 }
 
 HIVE_LOAD_RESULT owper_ncurses::changeHivePath(string newPath) {
-    // TODO catch the exception that might be thrown here and tell the user what the result of the load was
-    HIVE_LOAD_RESULT loadResult = baseOwperGUI::changeHivePath(newPath); // calls loadUsers
+    // TODO tell the user what the result of the load was
+    HIVE_LOAD_RESULT loadResult = 0;
+    try {
+        loadResult = baseOwperGUI::changeHivePath(newPath); // calls loadUsers on success
+    } catch(owpException* e) {
+        delete e;
+        return 0;
+    }
+
     this->loadGUI();
     return loadResult;
 }
