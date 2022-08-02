@@ -170,7 +170,7 @@ void owper_gtk::clearUsers(bool isShutdown/* = false */) {
     // main window's destructor
     if(!isShutdown) {
         for(unsigned int i = 0; i < vectUserWidgets.size(); i++) {
-            vectUserWidgets.at(i)->destroyWidget();
+            ((userWidget*)vectUserWidgets.at(i))->destroyWidget();
         }
     }
 

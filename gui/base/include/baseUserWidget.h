@@ -30,7 +30,6 @@ class baseUserWidget
         void         disableAccount()  { user->disableAccount(); };
         virtual void selectUser()      { };
         virtual void deselectUser()    { };
-        virtual void destroyWidget()   { };
 
 };
 
