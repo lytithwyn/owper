@@ -25,6 +25,7 @@
 #include <string>
 #include <vector>
 #include <cstdio>
+#include <cstdlib>
 
 // ncurses stuff
 #include <menu.h>
@@ -41,8 +42,8 @@ class owper_ncurses : public baseOwperGUI
     private:
     ITEM**  userItems;
     WINDOW* owperMenuWin;
-	MENU*   owperMenu;
-	ITEM*   curUserItem;
+    WINDOW* owperMenuSubWin;
+    MENU*   owperMenu;
     SCREEN* owperScreen;
 
     protected:
@@ -63,6 +64,7 @@ class owper_ncurses : public baseOwperGUI
         void reportSuccess(string successMessage) { return; }; // TODO - actually code this
         void reportMergeFailure() { return; }; // TODO - actually code this
         void reportSaveFailure() { return; }; // TODO - actually code this
+        void displayMessage(char* message); // can't be called until after loadGUI()
 };
 
 
