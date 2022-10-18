@@ -32,6 +32,7 @@ class baseOwperGUI {
         static const char* ERR_MSG_MERGE_FAIL;
         static const char* WARN_DFLT_HIVE_MISSING;
     public:
+        static const HIVE_LOAD_RESULT HIVE_LOAD_RESULT_UNDEF = 0;
         static const HIVE_LOAD_RESULT HIVE_LOAD_SUCCESS = 1;
         static const HIVE_LOAD_RESULT HIVE_LOAD_HAS_SYSTEM = 1<<1;
         static const HIVE_LOAD_RESULT HIVE_LOAD_HAS_DEFAULT = 1<<2;
