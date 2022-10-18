@@ -46,7 +46,7 @@ class userWidget : public baseUserWidget
 
         void         resetLabel();
         ITEM*        getMenuItem() { return this->menuItem; };
-        bool         userIsSelected()  { return false; }; // TODO - actually do something
+        bool         userIsSelected()  { return item_value(this->menuItem); };
         void         destroyWidget()   {  };
         void         selectUser()      {  };
         void         deselectUser()    {  };

@@ -47,6 +47,8 @@ class owper_ncurses : public baseOwperGUI
     SCREEN* owperScreen;
     HIVE_LOAD_RESULT hiveLoadResult;
 
+    void reloadUsers();
+
     protected:
         void loadGUI();
 
@@ -59,9 +61,6 @@ class owper_ncurses : public baseOwperGUI
         HIVE_LOAD_RESULT changeHivePath(string newPath);
         void clearUsers(bool isShutdown = false);
         void loadUsers();
-        static void handleClearPasswords() { return; }; // TODO - actually code this
-        static void handleEnableAccounts() { return; }; // TODO - actually code this
-        static void handleDisableAccounts() { return; }; // TODO - actually code this
         void reportSuccess(string successMessage) { this->displayMessage("", successMessage.c_str()); };
         void reportMergeFailure() { this->displayMessage("Error", baseOwperGUI::ERR_MSG_MERGE_FAIL); };
         void reportSaveFailure() { this->displayMessage("Error", baseOwperGUI::ERR_MSG_SAVE_FAIL); };

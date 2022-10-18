@@ -28,7 +28,8 @@ void owper_ncurses::main() {
                 break;
             case 'c':
             case 'C':
-                this->displayMessage("DEBUG", "Would clear password");
+                this->clearPasswords();
+                this->reloadUsers();
                 break;
             case ' ':
                 menu_driver(this->owperMenu, REQ_TOGGLE_ITEM);
@@ -136,6 +137,15 @@ void owper_ncurses::clearUsers(bool isShutdown/*=false*/) {
     if(this->userItems != NULL) {
         free(this->userItems); // clearUsers deletes the menu items, but doesn't free the array itself
     }
+}
+
+void owper_ncurses::reloadUsers() {
+    this->clearUsers();
+    this->loadUsers();
+    unpost_menu(this->owperMenu);
+    set_menu_items(this->owperMenu, this->userItems);
+    post_menu(this->owperMenu);
+    wrefresh(this->owperMenuWin);
 }
 
 // bad things will happen if we pass in VERY long messages
