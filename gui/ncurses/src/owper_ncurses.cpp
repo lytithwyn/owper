@@ -24,7 +24,13 @@ void owper_ncurses::main() {
                 break;
             case 'e':
             case 'E':
-                this->displayMessage("DEBUG", "Would enable user");
+                this->enableAccounts();
+                this->reloadUsers();
+                break;
+            case 'd':
+            case 'D':
+                this->disableAccounts();
+                this->reloadUsers();
                 break;
             case 'c':
             case 'C':
@@ -45,7 +51,7 @@ void owper_ncurses::main() {
 
 void owper_ncurses::loadGUI() {
     int TOP_BORDER = 3;
-    int BOTTOM_BORDER = 4;
+    int BOTTOM_BORDER = 5;
     int VERT_BORDER_SPACE = TOP_BORDER + BOTTOM_BORDER;
     int LEFT_BORDER = 1;
     int RIGHT_BORDER = 1;
@@ -82,10 +88,11 @@ void owper_ncurses::loadGUI() {
     mvwprintw(this->owperMenuWin, 0, 10, "%s", " User Accounts ");
 
     /* print the commands at the bottom */
-    mvprintw(LINES - 4, LEFT_BORDER, "Use the Up and Down arrow keys to navigate (q to Exit)");
-    mvprintw(LINES - 3, LEFT_BORDER, "Use SPACE to select or deselect a user");
-    mvprintw(LINES - 2, LEFT_BORDER, "Press C to clear password(s)");
-    mvprintw(LINES - 1, LEFT_BORDER, "Press E to toggle account(s) enabled/disabled");
+    mvprintw(LINES - 5, LEFT_BORDER, "Use the Up and Down arrow keys to navigate (q to Exit)");
+    mvprintw(LINES - 4, LEFT_BORDER, "Use SPACE to select or deselect a user");
+    mvprintw(LINES - 3, LEFT_BORDER, "Press C to clear password(s)");
+    mvprintw(LINES - 2, LEFT_BORDER, "Press E to enable account(s)");
+    mvprintw(LINES - 1, LEFT_BORDER, "Press D to disnable account(s)");
 
     refresh();
     post_menu(owperMenu);
