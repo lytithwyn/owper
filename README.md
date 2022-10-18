@@ -16,7 +16,7 @@ Build Requirements
      * GTK 2
      * GTK 3
      * ncurses
- * on FreeBSD I had to have autotools and aclocal-archive install, as it never seemed happy to accept the files generated in Linux (Makefile.in, etc.)
+ * on FreeBSD I had to have autotools and aclocal-archive installed, as it never seemed happy to accept the files generated in Linux (Makefile.in, etc.)
 
 Build Instructions
 -------------------
