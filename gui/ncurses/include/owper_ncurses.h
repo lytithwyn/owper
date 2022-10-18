@@ -45,6 +45,7 @@ class owper_ncurses : public baseOwperGUI
     WINDOW* owperMenuSubWin;
     MENU*   owperMenu;
     SCREEN* owperScreen;
+    HIVE_LOAD_RESULT hiveLoadResult;
 
     protected:
         void loadGUI();
@@ -61,10 +62,11 @@ class owper_ncurses : public baseOwperGUI
         static void handleClearPasswords() { return; }; // TODO - actually code this
         static void handleEnableAccounts() { return; }; // TODO - actually code this
         static void handleDisableAccounts() { return; }; // TODO - actually code this
-        void reportSuccess(string successMessage) { return; }; // TODO - actually code this
-        void reportMergeFailure() { return; }; // TODO - actually code this
-        void reportSaveFailure() { return; }; // TODO - actually code this
-        void displayMessage(char* message); // can't be called until after loadGUI()
+        void reportSuccess(string successMessage) { this->displayMessage("", successMessage.c_str()); };
+        void reportMergeFailure() { this->displayMessage("Error", baseOwperGUI::ERR_MSG_MERGE_FAIL); };
+        void reportSaveFailure() { this->displayMessage("Error", baseOwperGUI::ERR_MSG_SAVE_FAIL); };
+        void displayMessage(const char* title, const char* message); // can't be called until after loadGUI()
+        void refreshMainGUI();
 };
 
 

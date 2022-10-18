@@ -6,6 +6,7 @@ owper_ncurses::owper_ncurses():baseOwperGUI() {
     this->owperMenuSubWin = NULL;
     this->owperMenu = NULL;
     this->owperScreen = NULL;
+    this->hiveLoadResult = HIVE_LOAD_RESULT_UNDEF;
 }
 
 void owper_ncurses::main() {
@@ -19,12 +20,22 @@ void owper_ncurses::main() {
                 menu_driver(this->owperMenu, REQ_UP_ITEM);
                 break;
             case 10: /* Enter */
-                this->displayMessage("Here is a message to test");
-                touchwin(this->owperMenuWin);
-                wrefresh(this->owperMenuSubWin);
-                pos_menu_cursor(this->owperMenu);
+                this->displayMessage("", "Here is a message to test that is probably a bit longer than our box is wide.  So deal with it!");
+                break;
+            case 'e':
+            case 'E':
+                this->displayMessage("DEBUG", "Would enable user");
+                break;
+            case 'c':
+            case 'C':
+                this->displayMessage("DEBUG", "Would clear password");
                 break;
         }
+
+        // go ahead and repaint because we probably did some stuff
+        touchwin(this->owperMenuWin);
+        wrefresh(this->owperMenuSubWin);
+        pos_menu_cursor(this->owperMenu);
     }
 }
 
@@ -74,20 +85,27 @@ void owper_ncurses::loadGUI() {
     refresh();
     post_menu(owperMenu);
     wrefresh(owperMenuWin);
+
+    if(!(this->hiveLoadResult & HIVE_LOAD_HAS_DEFAULT)) {
+        this->displayMessage("Warning", baseOwperGUI::WARN_DFLT_HIVE_MISSING);
+        touchwin(this->owperMenuWin);
+        wrefresh(this->owperMenuSubWin);
+    }
 }
 
 HIVE_LOAD_RESULT owper_ncurses::changeHivePath(string newPath) {
-    // TODO tell the user what the result of the load was
-    HIVE_LOAD_RESULT loadResult = 0;
     try {
-        loadResult = baseOwperGUI::changeHivePath(newPath); // calls loadUsers on success
+        // We can't check for the default hive and warn this user if it is missing here, since
+        // we can't show messages until the GUI is loaded but it is not yet.
+        // We warn them in loadGUI()
+        this->hiveLoadResult = baseOwperGUI::changeHivePath(newPath); // calls loadUsers on success
     } catch(owpException* e) {
         delete e;
         return 0;
     }
 
     this->loadGUI();
-    return loadResult;
+    return this->hiveLoadResult;
 }
 
 void owper_ncurses::loadUsers() {
@@ -120,27 +138,29 @@ void owper_ncurses::clearUsers(bool isShutdown/*=false*/) {
 // or if our ncurses window is VERY small
 // TODO do checks to make sure none of the calculations
 // done in this method result in things like negative sizes
-void owper_ncurses::displayMessage(char* message) {
+void owper_ncurses::displayMessage(const char* title, const char* message) {
     int TOP_BOTTOM_BORDER = 5;
     int SIDE_BORDER = 20;
     int TEXT_PADDING = 1;
-    int BOX_WIDTH = COLS - (2*SIDE_BORDER);
-    int TEXT_AREA_WIDTH = BOX_WIDTH - (2*TEXT_PADDING);
+    int VISUAL_BOX_THICKNESS = 1; // we must accomdate for this manually: ncurses will totally write text over the border lines
+    int BOX_WIDTH = COLS - (2 * SIDE_BORDER);
+    int TEXT_AREA_WIDTH = BOX_WIDTH - (2 * TEXT_PADDING) - (2 * VISUAL_BOX_THICKNESS);
     int POS_LINE = TOP_BOTTOM_BORDER;
     int POS_COL = SIDE_BORDER;
 
     int messageLength = static_cast<int>(strlen(message)); // this cast could technically overflow
     div_t divResult = div(messageLength, TEXT_AREA_WIDTH);
-    int messageNumLines = divResult.quot + (divResult.rem > 0)?(1):(0);
-    int BOX_HEIGHT = messageNumLines;
+    int messageNumLines = divResult.quot + ((divResult.rem > 0)?(1):(0)) + 2; // add 2 extra lines for "press enter" message
+    int BOX_HEIGHT = messageNumLines + (2 * VISUAL_BOX_THICKNESS);
 
-    WINDOW* messageWindow = newwin(BOX_HEIGHT + (2 * TEXT_PADDING), BOX_WIDTH, POS_LINE, POS_COL);
+    WINDOW* messageWindow = newwin(BOX_HEIGHT, BOX_WIDTH, POS_LINE, POS_COL);
     keypad(messageWindow, TRUE);
     box(messageWindow, 0, 0);
 
     int messageCharIndex = 0;
     int lineIndex = 0;
     char lineToWrite[BOX_WIDTH - (2 * TEXT_PADDING) + 1] = {0};
+    mvwprintw(messageWindow, 0, TEXT_PADDING + VISUAL_BOX_THICKNESS, "%s", title);
     while(messageCharIndex < messageLength) {
         bzero(lineToWrite, BOX_WIDTH + 1);
         int charsToCopy = TEXT_AREA_WIDTH;
@@ -154,11 +174,16 @@ void owper_ncurses::displayMessage(char* message) {
         strncpy(lineToWrite, &(message[messageCharIndex]), charsToCopy);
         messageCharIndex += charsToCopy;
 
-        mvwprintw(messageWindow, TEXT_PADDING, TEXT_PADDING, "%s", lineToWrite);
+        mvwprintw(messageWindow, lineIndex + VISUAL_BOX_THICKNESS, TEXT_PADDING + VISUAL_BOX_THICKNESS, "%s", lineToWrite);
+        ++lineIndex;
     }
 
+    char* pressEnterMessage = "Press Enter to Continue";
+    int hposCenteredMessage = TEXT_PADDING + VISUAL_BOX_THICKNESS + ((TEXT_AREA_WIDTH - strlen(pressEnterMessage))/2);
+    mvwprintw(messageWindow, lineIndex + VISUAL_BOX_THICKNESS + 1, hposCenteredMessage, "%s", pressEnterMessage);
+
     wrefresh(messageWindow);
-    wgetch(messageWindow); // wait for any keypress
+    while(wgetch(messageWindow) != 10) { }; // wait for user to press Enter
     werase(messageWindow);
     delwin(messageWindow);
 }
