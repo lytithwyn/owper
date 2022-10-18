@@ -30,6 +30,9 @@ void owper_ncurses::main() {
             case 'C':
                 this->displayMessage("DEBUG", "Would clear password");
                 break;
+            case ' ':
+                menu_driver(this->owperMenu, REQ_TOGGLE_ITEM);
+                break;
         }
 
         // go ahead and repaint because we probably did some stuff
@@ -65,7 +68,8 @@ void owper_ncurses::loadGUI() {
     mvprintw(1, (COLS - strlen(title)) / 2, "%s", title);
 
     /* create the menu */
-    owperMenu = new_menu((ITEM **)(this->userItems));
+    this->owperMenu = new_menu((ITEM **)(this->userItems));
+    menu_opts_off(this->owperMenu, O_ONEVALUE);
 
     /* Create window for menu */
     this->owperMenuWin = newwin(LINES - VERT_BORDER_SPACE, COLS - HORIZ_BORDER_SPACE, TOP_BORDER, LEFT_BORDER);
