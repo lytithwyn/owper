@@ -159,7 +159,8 @@ void owper_ncurses::displayMessage(const char* title, const char* message) {
 
     int messageCharIndex = 0;
     int lineIndex = 0;
-    char lineToWrite[BOX_WIDTH - (2 * TEXT_PADDING) + 1] = {0};
+    size_t lineSize = BOX_WIDTH - (2 * TEXT_PADDING) + 1; // plus 1 is for NULL
+    char *lineToWrite = (char*)calloc(lineSize, sizeof(char));
     mvwprintw(messageWindow, 0, TEXT_PADDING + VISUAL_BOX_THICKNESS, "%s", title);
     while(messageCharIndex < messageLength) {
         bzero(lineToWrite, BOX_WIDTH + 1);
@@ -177,8 +178,9 @@ void owper_ncurses::displayMessage(const char* title, const char* message) {
         mvwprintw(messageWindow, lineIndex + VISUAL_BOX_THICKNESS, TEXT_PADDING + VISUAL_BOX_THICKNESS, "%s", lineToWrite);
         ++lineIndex;
     }
+    free(lineToWrite);
 
-    char* pressEnterMessage = "Press Enter to Continue";
+    const char* pressEnterMessage = "Press Enter to Continue";
     int hposCenteredMessage = TEXT_PADDING + VISUAL_BOX_THICKNESS + ((TEXT_AREA_WIDTH - strlen(pressEnterMessage))/2);
     mvwprintw(messageWindow, lineIndex + VISUAL_BOX_THICKNESS + 1, hposCenteredMessage, "%s", pressEnterMessage);
 
