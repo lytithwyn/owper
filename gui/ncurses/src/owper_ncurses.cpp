@@ -53,11 +53,11 @@ void owper_ncurses::loadGUI() {
     /* LINES is defined by ncurses */
 
     /* Initialize curses */
-    // the registry library pukes stuff onto stdout and stderr
-    // so we have to create a new "screen" for ncurses to output on.
-    // honestly, I copied and pasted the bit about /dev/tty from linuxquestions so I just hope it's right
-    FILE* termFS = fopen("/dev/tty", "r+"); // create a new file stream for ncurses to use for output
-    this->owperScreen = newterm(NULL, termFS, termFS); // create a new screen for ncurses to output to base on this file stream
+    // The registry library pukes stuff onto stdout and stderr, so we have to juggle here
+    freopen("/dev/null", "w", stdout); // point stdout to /dev/null
+    freopen("/dev/null", "w", stderr); // point stdin to /dev/null
+    FILE* termFS = fopen("/dev/tty", "r+"); // get an explicit file pointer to our current terminal
+    this->owperScreen = newterm(NULL, termFS, termFS); // create a new screen for ncurses to use, pointed to our new stream
     start_color();
     cbreak();
     noecho();
